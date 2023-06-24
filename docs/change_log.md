@@ -2,5 +2,8 @@
 
 - 添加了
   - `nuitka.compile`
+    - `CompilerHelper`
   - `types.options`
+    - `Options`
   - `types.version`
+    - `Version`

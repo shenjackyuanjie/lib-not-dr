@@ -20,6 +20,11 @@ def _add_cmd(cmd: List[str], string: Optional[str]) -> List[str]:
 
 
 class CompilerHelper(Options):
+    """
+    用于帮助生成 nuitka 构建脚本的类
+    Use to help generate nuitka build script
+    
+    """
     name = 'Nuitka Compiler Helper'
 
     output_path: Path = Path('./build')
@@ -75,11 +80,32 @@ class CompilerHelper(Options):
         return self.as_markdown()
 
     def as_markdown(self, longest: Optional[int] = None) -> str:
+        """
+        输出编译器帮助信息
+        Output compiler help information
+        
+        Args:
+            longest (Optional[int], optional): 
+                输出信息的最大长度限制 The maximum length of output information. 
+                Defaults to None.
+
+        Returns:
+            str: 以 markdown 格式输出的编译器帮助信息
+                Compile helper information in markdown format
+        """
         front = super().as_markdown(longest)
         gen_cmd = self.gen_subprocess_cmd()
         return f"{front}\n\n```bash\n{' '.join(gen_cmd)}\n```"
 
     def gen_subprocess_cmd(self) -> List[str]:
+        """生成 nuitka 构建脚本
+        Generate nuitka build script
+
+        Returns:
+            List[str]: 
+                生成的 nuitka 构建脚本
+                Generated nuitka build script
+        """
         cmd_list = [self.python_cmd, '-m', 'nuitka']
         # macos 和 非 macos icon 参数不同
         if platform.system() == 'Darwin':
@@ -123,9 +149,3 @@ class CompilerHelper(Options):
 
         cmd_list.append(f"{self.src_file}")
         return cmd_list
-
-
-if __name__ == '__main__':
-    cp = CompilerHelper(src_file = Path('test.py'))
-    print(cp)
-
