@@ -1,5 +1,5 @@
 [project]
-version = "0.0.3"
+version = "0.0.4"
 name = "lib-not-dr"
 
 description = "A python lib created from Difficult Rocket development"
@@ -16,3 +16,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 license = { file = "LICENSE" }
+
+[project.urls]
+Homepage = "https://github.com/shenjackyuanjie/lib-not-dr"
+Repository = "https://github.com/shenjackyuanjie/lib-not-dr"
+Changelog = "https://github.com/shenjackyuanjie/lib-not-dr/blob/main/docs/change_log.md"
+
