@@ -101,7 +101,6 @@ class Options:
             """ 如果子类定义了这个函数，则会在 __init__ 之后调用这个函数
             返回值为 True 则不会调用 load_file 函数
             """
-            #
 
         def load_file(self) -> bool:
             """如果子类定义了这个函数，则会在 __init__ 和 init 之后再调用这个函数
