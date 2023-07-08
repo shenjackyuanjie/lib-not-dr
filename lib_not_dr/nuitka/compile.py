@@ -6,11 +6,12 @@
 
 # 用于使用 nuitka 构建 DR
 import platform
+import warnings
 import traceback
 from pathlib import Path
 from typing import List, Tuple, Optional
 
-from lib_not_dr.types import Options, Version
+from lib_not_dr.types import Options, Version, VersionRequirement
 
 
 def _add_cmd(cmd: List[str], string: Optional[str]) -> List[str]:
@@ -31,8 +32,10 @@ class CompilerHelper(Options):
     src_file: Path
 
     python_cmd: str = 'python'
+    compat_nuitka_version: VersionRequirement = VersionRequirement("~1.7.1")  # STATIC VERSION
 
     # 以下为 nuitka 的参数
+    # nuitka options below
     use_lto: bool = False  # --lto=yes (no is faster)
     use_clang: bool = True  # --clang
     use_msvc: bool = True  # --msvc=latest
@@ -47,6 +50,7 @@ class CompilerHelper(Options):
     xml_path: Path = Path('build/compile_data.xml')
 
     download_confirm: bool = True  # --assume-yes-for-download
+    run_after_build: bool = False  # --run
 
     company_name: Optional[str] = ''
     product_name: Optional[str] = ''
@@ -68,6 +72,12 @@ class CompilerHelper(Options):
     disable_plugin: List[str] = []  # --disable-plugin=xxx,xxx
 
     def init(self, **kwargs) -> None:
+        if (compat_version := kwargs.get('compat_nuitka_version')) is not None:
+            if not self.compat_nuitka_version.accept(compat_version):
+                warnings.warn(
+                    f"Nuitka version may not compat with {compat_version}\n"
+                    "requirement: {self.compat_nuitka_version}"
+                )
         # 非 windows 平台不使用 msvc
         if platform.system() != 'Windows':
             self.use_msvc = False
@@ -126,6 +136,7 @@ class CompilerHelper(Options):
         _add_cmd(cmd_list, '--show-progress' if self.show_progress else None)
         _add_cmd(cmd_list, '--show-memory' if self.show_memory else None)
         _add_cmd(cmd_list, '--assume-yes-for-download' if self.download_confirm else None)
+        _add_cmd(cmd_list, '--run' if self.run_after_build else None)
         _add_cmd(cmd_list, '--enable-console' if self.enable_console else '--disable-console')
 
         _add_cmd(cmd_list, f'--xml={self.xml_path.absolute()}' if self.save_xml else None)
@@ -147,5 +158,5 @@ class CompilerHelper(Options):
         if self.include_packages:
             cmd_list += [f"--include-package={package}" for package in self.include_packages]
 
-        cmd_list.append(f"{self.src_file}")
+        cmd_list.append(f"--main={self.src_file}")
         return cmd_list
