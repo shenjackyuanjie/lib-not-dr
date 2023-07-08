@@ -51,13 +51,17 @@ compiler = CompilerHelper("main.py", run_after_build=True)
 
 print(compiler)
 
+if '-y' in sys.argv or '--yes' in sys.argv:
+    do_run = True
+elif '-n' in sys.argv or '--no' in sys.argv:
+    do_run = False
+else: # do_run is None
+    while (do_run := input("compile? [y/n]").lower()) not in ["y", "n", "yes", "no"]:
+        # 获取用户输入是否编译
+        # get user confirmation to compile or not
+    do_run = True if do_run[0] == "y" else False
 
-
-while (do := input("compile? [y/n]").lower()) not in ["y", "n", "yes", "no"]:
-    # 获取用户输入是否编译
-    # get user confirmation to compile or not
-
-
-do = do[0]
+if do_run:
+    subprocess.run(compiler.gen_subprocess_cmd())
 
 ```
