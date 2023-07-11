@@ -31,9 +31,10 @@ pip install lib-not-dr
 
 ```python
 import subprocess
-from lib_not_dr.nuitka import CompilerHelper
+from pathlib import Path
+from lib_not_dr.nuitka.compile import CompilerHelper
 
-compiler = CompilerHelper("main.py")
+compiler = CompilerHelper(src_file = Path("main.py"))
 
 print(compiler)
 subprocess.run(compiler.gen_subprocess_cmd())
@@ -45,9 +46,10 @@ subprocess.run(compiler.gen_subprocess_cmd())
 ```python
 import sys
 import subprocess
-from lib_not_dr.nuitka import CompilerHelper
+from pathlib import Path
+from lib_not_dr.nuitka.compile import CompilerHelper
 
-compiler = CompilerHelper("main.py", run_after_build=True)
+compiler = CompilerHelper(src_file = Path("main.py"), run_after_build=True)
 
 print(compiler)
 

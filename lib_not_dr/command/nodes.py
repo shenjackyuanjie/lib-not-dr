@@ -6,6 +6,9 @@
 
 import re
 from typing import Callable, List, Optional, Union
+
+from .descriptor import CallBackDescriptor
+
 try:
     from typing import Self
 except ImportError:
@@ -26,6 +29,15 @@ EMPTY_WORDS = re.compile(r"\s", re.I)
 
 
 def check_once(cls, name) -> None:
+    """
+    Check whether the attribute has been set.
+    if so, it will raise exception `AttributeError`.
+    检查属性是否已经被设置。
+    如果已经被设置，将会抛出 `AttributeError` 异常。
+    :param cls: class object
+    :param name: attribute name
+    :return: None
+    """
     if hasattr(cls, name):
         if getattr(cls, name) is not None:
             raise AttributeError(f"Attribute '{name}' has been set.")
@@ -65,6 +77,10 @@ class Flag:
 
 
 class Literal:
+    _tip = CallBackDescriptor("_tip")
+    _func = CallBackDescriptor("_func")
+    _err_callback = CallBackDescriptor("_err_callback")
+
     def __init__(self, name: str):
         self.name: str = name
         self.sub: List[Self] = []
