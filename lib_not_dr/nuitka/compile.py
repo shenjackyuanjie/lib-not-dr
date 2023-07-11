@@ -4,10 +4,8 @@
 #  All rights reserved
 #  -------------------------------
 
-# 用于使用 nuitka 构建 DR
 import platform
 import warnings
-import traceback
 from pathlib import Path
 from typing import List, Tuple, Optional
 

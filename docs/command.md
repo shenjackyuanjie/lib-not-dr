@@ -5,7 +5,7 @@
 ## Usage
 
 ```python
-from typing import Callable, Self
+from typing import Callable, Self, Optional, List
 
 class Literal:
     def __init__(self, name: str):
@@ -17,13 +17,13 @@ class Literal:
         self.sub += nodes
         return self
     
-    def run(self, func: Callable[[list[str]], None]) -> Self:
+    def run(self, func: Callable[[List[str]], None]) -> Self:
         return self
     
     def tip(self, tip: str) -> Self:
         return self
     
-    def arg(self, parse_func: Callable[[str], type | None]) -> Self:
+    def arg(self, parse_func: Callable[[str], Optional[type]]) -> Self:
         return self
     
     def error(self, callback: Callable[[str], None]) -> Self:
@@ -66,7 +66,7 @@ pub enum ArgumentType {
     Float(f64),
 }
 
-pub type CallBackFunc = Fn(Vec<ArgumentType>) -> bool;
+pub type CallBackFunc = Fn(Vec<(String, ArgumentType)>) -> bool;
 
 pub enum CallBack {
     Fn(CallBackFunc),

@@ -22,3 +22,15 @@ Homepage = "https://github.com/shenjackyuanjie/lib-not-dr"
 Repository = "https://github.com/shenjackyuanjie/lib-not-dr"
 Changelog = "https://github.com/shenjackyuanjie/lib-not-dr/blob/main/docs/change_log.md"
 
+
+[tool.ruff]
+
+target-version = "py38"
+
+line-length = 150
+
+src = [
+    "lib_not_dr"
+]
+
+format = "grouped"
