@@ -5,18 +5,18 @@
 #  -------------------------------
 
 import re
-from dataclasses import dataclass
-from typing import Callable, List, Optional, Union
+from typing import Callable, List, Optional, Union, Set
 
+from .data import Option, Argument, Flag, Parsed
 from .descriptor import CallBackDescriptor
 
 try:
     from typing import Self
 except ImportError:
     from typing import TypeVar
-    Self = TypeVar("Self")
+    Self = TypeVar("Self")  # NOQA
 
-from .exception import IllegalArgumentName
+from .exception import IllegalName
 
 CallBack = Union[Callable[[str], None], str]  # Equals to `Callable[[str], None] | str`
 # 可调用对象或字符串作为回调
@@ -27,21 +27,6 @@ ParseArgFunc = Callable[[str], Optional[type]]
 # function to parse argument, return None when failed
 
 EMPTY_WORDS = re.compile(r"\s", re.I)
-
-
-def check_once(cls, name) -> None:
-    """
-    Check whether the attribute has been set.
-    if so, it will raise exception `AttributeError`.
-    检查属性是否已经被设置。
-    如果已经被设置，将会抛出 `AttributeError` 异常。
-    :param cls: class object
-    :param name: attribute name
-    :return: None
-    """
-    if hasattr(cls, name):
-        if getattr(cls, name) is not None:
-            raise AttributeError(f"Attribute '{name}' has been set.")
 
 
 def check_name(name: Union[str, List[str]]) -> None:
@@ -56,29 +41,11 @@ def check_name(name: Union[str, List[str]]) -> None:
     :return: None
     """
     if isinstance(name, str) and EMPTY_WORDS.search(name):
-        raise IllegalArgumentName("The name of argument must not contains empty words.")
+        raise IllegalName("The name of argument must not contains empty words.")
     elif isinstance(name, list) and all((not isinstance(i, str)) and EMPTY_WORDS.search(i) for i in name):
-        raise IllegalArgumentName("The name of shortcut must be 'str', and must not contains empty words.")
+        raise IllegalName("The name of shortcut must be 'str', and must not contains empty words.")
     else:
         raise TypeError("The type of name must be 'str' or 'list[str]'.")
-
-
-class Parsed:
-    ...
-
-
-@dataclass
-class Argument:
-    name: str
-    shortcuts: List[str]
-    optional: bool
-    type: type
-
-
-@dataclass
-class Flag:
-    name: str
-    shortcuts: List[str]
 
 
 class Literal:
@@ -89,13 +56,13 @@ class Literal:
     def __init__(self, name: str):
         self.name: str = name
         self.sub: List[Self] = []
-
-        self._doc: Optional[str] = None
         self._tip: Optional[CallBack] = None
         self._func: Optional[CallBack] = None
         self._err_callback: Optional[CallBack] = None
+
+        self._opts: List[Option] = []
         self._args: List[Argument] = []
-        self._flags: List[Argument]
+        self._flags: List[Flag] = []
 
     def __call__(self, *nodes) -> Self:
         self.sub += nodes
@@ -105,32 +72,40 @@ class Literal:
         attrs = (k for k in self.__dict__ if not (k.startswith("__") and k.endswith("__")))
         return f"{self.__class__.__name__}({', '.join(f'{k}={v!r}' for k in attrs if (v := self.__dict__[k]))})"
 
-    def arg(
+    def arg(self, name: str, types: Optional[Set[type]] = None) -> Self:
+        Argument(name=name, types=types)
+        return self
+
+    def opt(
             self,
             name: str,
             shortcuts: Optional[List[str]] = None,
             optional: bool = True,
-            type: Optional[type] = None
+            types: Optional[Set[type]] = None
     ) -> Self:
         check_name(name)
         if shortcuts is not None and len(shortcuts) != 0:
             check_name(shortcuts)
-        Argument(name=name, shortcuts=shortcuts, optional=optional, type=type)
+        self._opts.append(
+            Option(name=name, shortcuts=shortcuts, optional=optional, types=types)
+        )
         return self
 
-    def arg_group(self, args: List[Argument], exclusive: bool = False):
+    def opt_group(self, opts: List[Option], exclusive: bool = False):
         ...
 
     def flag(self, name: str, shortcuts: Optional[List[str]] = None) -> Self:
         check_name(name)
         if shortcuts is not None and len(shortcuts) != 0:
             check_name(shortcuts)
-        # Flag(...)
+        Flag(name=name, shortcuts=shortcuts)
         ...
         return self
 
-    def flag_group(self, flags: List[Flag], exclusive: bool = False):
+    def flag_group(self, flags: List[Flag], exclusive: bool = False) -> Self:
+
         ...
+        return self
 
     def error(self, callback: CallBack) -> Self:
         self._err_callback = callback
@@ -149,8 +124,6 @@ class Literal:
 
     def to_doc(self) -> str:
         ...
-        self._doc = ...
-        return self._doc
 
 
 def builder(node: Literal) -> Literal:

@@ -1,21 +1,21 @@
 [project]
 version = "0.1.0"
 name = "lib-not-dr"
-
 description = "A python lib created from Difficult Rocket development"
-
 readme = "README.md"
-
 authors = [
     {name = "shenjackyuanjie", email = "3695888@qq.com"}
 ]
 requires-python = ">=3.8"
-
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 license = { file = "LICENSE" }
+
+dependencies = [
+    "nepattern>=0.5.10",
+]
 
 [project.urls]
 Homepage = "https://github.com/shenjackyuanjie/lib-not-dr"
@@ -24,13 +24,9 @@ Changelog = "https://github.com/shenjackyuanjie/lib-not-dr/blob/main/docs/change
 
 
 [tool.ruff]
-
 target-version = "py38"
-
 line-length = 150
-
 src = [
     "lib_not_dr"
 ]
-
 format = "grouped"
