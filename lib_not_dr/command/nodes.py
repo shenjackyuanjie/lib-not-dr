@@ -5,6 +5,7 @@
 #  -------------------------------
 
 import re
+from dataclasses import dataclass
 from typing import Callable, List, Optional, Union
 
 from .descriptor import CallBackDescriptor
@@ -56,7 +57,7 @@ def check_name(name: Union[str, List[str]]) -> None:
     """
     if isinstance(name, str) and EMPTY_WORDS.search(name):
         raise IllegalArgumentName("The name of argument must not contains empty words.")
-    elif isinstance(name, list) and all([(not isinstance(i, str)) and EMPTY_WORDS.search(i) for i in name]):
+    elif isinstance(name, list) and all((not isinstance(i, str)) and EMPTY_WORDS.search(i) for i in name):
         raise IllegalArgumentName("The name of shortcut must be 'str', and must not contains empty words.")
     else:
         raise TypeError("The type of name must be 'str' or 'list[str]'.")
@@ -66,14 +67,18 @@ class Parsed:
     ...
 
 
+@dataclass
 class Argument:
-    def __init__(self, name, shortcut, optional):
-        ...
+    name: str
+    shortcuts: List[str]
+    optional: bool
+    type: type
 
 
+@dataclass
 class Flag:
-    def __init__(self, name, shortcut):
-        ...
+    name: str
+    shortcuts: List[str]
 
 
 class Literal:
@@ -84,13 +89,21 @@ class Literal:
     def __init__(self, name: str):
         self.name: str = name
         self.sub: List[Self] = []
-        self._tip: Optional[str] = None
+
+        self._doc: Optional[str] = None
+        self._tip: Optional[CallBack] = None
         self._func: Optional[CallBack] = None
         self._err_callback: Optional[CallBack] = None
+        self._args: List[Argument] = []
+        self._flags: List[Argument]
 
     def __call__(self, *nodes) -> Self:
         self.sub += nodes
         return self
+
+    def __repr__(self):
+        attrs = (k for k in self.__dict__ if not (k.startswith("__") and k.endswith("__")))
+        return f"{self.__class__.__name__}({', '.join(f'{k}={v!r}' for k in attrs if (v := self.__dict__[k]))})"
 
     def arg(
             self,
@@ -102,38 +115,42 @@ class Literal:
         check_name(name)
         if shortcuts is not None and len(shortcuts) != 0:
             check_name(shortcuts)
-        Argument(...)
-        ...
+        Argument(name=name, shortcuts=shortcuts, optional=optional, type=type)
         return self
+
+    def arg_group(self, args: List[Argument], exclusive: bool = False):
+        ...
 
     def flag(self, name: str, shortcuts: Optional[List[str]] = None) -> Self:
         check_name(name)
         if shortcuts is not None and len(shortcuts) != 0:
             check_name(shortcuts)
-        Flag(...)
+        # Flag(...)
         ...
         return self
 
+    def flag_group(self, flags: List[Flag], exclusive: bool = False):
+        ...
+
     def error(self, callback: CallBack) -> Self:
-        check_once(self, "_err_callback")
         self._err_callback = callback
         return self
 
     def run(self, func: CallBack) -> Self:
-        check_once(self, "_func")
         self._func = func
         return self
 
     def tip(self, tip: CallBack) -> Self:
-        check_once(self, "_tip")
         self._tip = tip
         return self
 
-    def parse(self) -> Parsed:
+    def parse(self, cmd: Union[str, List[str]]) -> Parsed:
         ...
 
     def to_doc(self) -> str:
         ...
+        self._doc = ...
+        return self._doc
 
 
 def builder(node: Literal) -> Literal:

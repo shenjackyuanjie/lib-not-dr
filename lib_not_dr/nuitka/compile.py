@@ -11,7 +11,6 @@ from typing import List, Tuple, Optional
 
 from lib_not_dr.types import Options, Version, VersionRequirement
 
-
 def _add_cmd(cmd: List[str], string: Optional[str]) -> List[str]:
     if string is not None and string:
         cmd.append(string)

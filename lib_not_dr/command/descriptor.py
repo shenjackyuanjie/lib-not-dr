@@ -7,7 +7,8 @@ class CallBackDescriptor:
         instance.__dict__[self.callback_name] = value
 
     def __get__(self, instance, owner):
-        if instance is None:
-            return self
-        else:
-            return instance.__dict__[self.callback_name]
+        return (
+            self
+            if instance is None
+            else instance.__dict__.get(self.callback_name)
+        )
