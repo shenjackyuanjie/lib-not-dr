@@ -37,6 +37,12 @@ class CommandTest(unittest.TestCase):
     def test_command_flag(self):  # NOQA
         Literal("test").flag("flag1", None, "tip for flag1")
 
+    def test_command_run(self):
+        def run():
+            print("test run")
+        command = Literal("test").run(run)
+        self.assertEqual(command._func, run)
+
 
 if __name__ == '__main__':
     unittest.main()
