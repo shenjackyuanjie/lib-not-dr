@@ -48,10 +48,12 @@ def check_name(name: Union[str, List[str]]) -> None:
     :param name: arguments
     :return: None
     """
-    if isinstance(name, str) and EMPTY_WORDS.search(name):
-        raise IllegalName("The name of argument must not contains empty words.")
-    elif isinstance(name, list) and all((not isinstance(i, str)) and EMPTY_WORDS.search(i) for i in name):
-        raise IllegalName("The name of shortcut must be 'str', and must not contains empty words.")
+    if isinstance(name, str):
+        if EMPTY_WORDS.search(name) is not None:
+            raise IllegalName("The name of argument must not contains empty words.")
+    elif isinstance(name, list):
+        if any((not isinstance(i, str)) or EMPTY_WORDS.search(i) is not None for i in name):
+            raise IllegalName("The name of shortcut must be 'str', and must not contains empty words.")
     else:
         raise TypeError("The type of name must be 'str' or 'list[str]'.")
 
