@@ -10,5 +10,6 @@ from lib_not_dr.command.nodes import Literal
 
 
 class CommandTest(unittest.TestCase):
-    ...
-    # def test1_
+
+    def test_basic_command(self):
+        Literal("test")
