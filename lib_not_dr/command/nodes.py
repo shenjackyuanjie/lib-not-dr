@@ -167,7 +167,7 @@ class Literal:
 
     def error(self, callback: CallBack) -> Self:
         """
-
+        添加错误回调函数
         :param callback:
         :return:
         """
@@ -176,7 +176,7 @@ class Literal:
 
     def run(self, func: CallBack) -> Self:
         """
-
+        添加回调函数
         :param func: 回调函数
         :return:
         """
@@ -185,7 +185,7 @@ class Literal:
 
     def tip(self, tip: CallBack) -> Self:
         """
-
+        添加提示
         :param tip: 提示
         :return:
         """
@@ -194,7 +194,7 @@ class Literal:
 
     def parse(self, cmd: Union[str, List[str]]) -> Parsed:
         """
-
+        解析命令
         :param cmd:
         :return:
         """
