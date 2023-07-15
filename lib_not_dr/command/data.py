@@ -1,40 +1,38 @@
-from dataclasses import dataclass, field
-from typing import Set, List
+from dataclasses import field
+from typing import Set, List, Optional
+from lib_not_dr.types.options import Options
 
 
 class Parsed:
     ...
 
 
-@dataclass
-class Option:
+class CommandOption(Options):
     name: str
     shortcuts: List[str]
     optional: bool
     types: Set[type] = field(default_factory=lambda: {str})
+    tip: Optional[str] = None
 
 
-@dataclass
-class OptionGroup:
-    options: List[Option]
+class CommandOptionGroup(Options):
+    options: List[CommandOption]
     optional: bool = True
     exclusive: bool = False
 
 
-@dataclass
-class Argument:
+class CommandArgument(Options):
     name: str
     types: Set[type] = field(default_factory=lambda: {str})
+    tip: Optional[str] = None
 
 
-@dataclass
-class Flag:
+class CommandFlag(Options):
     name: str
     shortcuts: List[str]
+    tip: Optional[str] = None
 
 
-@dataclass
-class FlagGroup:
-    flags: List[Flag]
+class CommandFlagGroup(Options):
+    flags: List[CommandFlag]
     exclusive: bool = False
-

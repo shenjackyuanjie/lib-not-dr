@@ -1,13 +1,21 @@
 #  -------------------------------
 #  Difficult Rocket
 #  Copyright © 2020-2023 by shenjackyuanjie 3695888@qq.com
+#  and MSDNicrosoft
 #  All rights reserved
 #  -------------------------------
 
 import re
-from typing import Callable, List, Optional, Union, Set
+from typing import Callable, List, Optional, Union, Set, Any
 
-from .data import Option, Argument, Flag, Parsed
+from .data import (
+    CommandOption,
+    CommandArgument,
+    CommandFlag,
+    Parsed,
+    CommandOptionGroup,
+    CommandFlagGroup
+)
 from .descriptor import CallBackDescriptor
 
 try:
@@ -18,7 +26,7 @@ except ImportError:
 
 from .exception import IllegalName
 
-CallBack = Union[Callable[[str], None], str]  # Equals to `Callable[[str], None] | str`
+CallBack = Union[Callable[[], Any], str]  # Equals to `Callable[[str], None] | str`
 # 可调用对象或字符串作为回调
 # A callable or str as callback
 
@@ -32,10 +40,10 @@ EMPTY_WORDS = re.compile(r"\s", re.I)
 def check_name(name: Union[str, List[str]]) -> None:
     """
     Check the name or shortcuts of argument(s) or flag(s).
-    The name must not be empty str, and must not contains \\t or \\n or \\f or \\r.
+    The name must not be empty str, and must not contain empty words.
     If that not satisfy the requirements, it will raise exception `IllegalArgumentName`.
     检查 参数或标记 的 名称或快捷方式 是否符合要求。
-    名称必须是非空的字符串，且不能包含 \\t 或 \\n 或 \\f 或 \\r。
+    名称必须是非空的字符串，且不能包含各种空格。
     如果不符合要求，将会抛出 `IllegalArgumentName` 异常。
     :param name: arguments
     :return: None
@@ -60,9 +68,12 @@ class Literal:
         self._func: Optional[CallBack] = None
         self._err_callback: Optional[CallBack] = None
 
-        self._opts: List[Option] = []
-        self._args: List[Argument] = []
-        self._flags: List[Flag] = []
+        self._default_opts: List[CommandOption] = []
+        self._default_args: List[CommandArgument] = []
+        self._default_flags: List[CommandFlag] = []
+
+        self._opt_groups: List[CommandOptionGroup] = []
+        self._flag_groups: List[CommandFlagGroup] = []
 
     def __call__(self, *nodes) -> Self:
         self.sub += nodes
@@ -72,8 +83,18 @@ class Literal:
         attrs = (k for k in self.__dict__ if not (k.startswith("__") and k.endswith("__")))
         return f"{self.__class__.__name__}({', '.join(f'{k}={v!r}' for k in attrs if (v := self.__dict__[k]))})"
 
-    def arg(self, name: str, types: Optional[Set[type]] = None) -> Self:
-        Argument(name=name, types=types)
+    def arg(self, name: str, types: Optional[Set[type]] = None, tip: Optional[str] = None) -> Self:
+        """
+        添加参数
+        :param name: 名称
+        :param types: 参数的类型
+        :param tip: 帮助提示
+        :return:
+        """
+        check_name(name)
+        self._default_args.append(
+            CommandArgument(name=name, types=types, tip=tip)
+        )
         return self
 
     def opt(
@@ -81,50 +102,102 @@ class Literal:
             name: str,
             shortcuts: Optional[List[str]] = None,
             optional: bool = True,
-            types: Optional[Set[type]] = None
+            types: Optional[Set[type]] = None,
+            tip: Optional[CallBack] = None
     ) -> Self:
+        """
+        添加选项
+        :param name: 名称
+        :param shortcuts: 快捷名
+        :param optional: 是否可选
+        :param types: 选项的类型
+        :param tip: 帮助提示
+        :return:
+        """
         check_name(name)
         if shortcuts is not None and len(shortcuts) != 0:
             check_name(shortcuts)
-        self._opts.append(
-            Option(name=name, shortcuts=shortcuts, optional=optional, types=types)
+        self._default_opts.append(
+            CommandOption(name=name, shortcuts=shortcuts, optional=optional, types=types, tip=tip)
         )
         return self
 
-    def opt_group(self, opts: List[Option], exclusive: bool = False):
-        ...
+    def opt_group(self, opts: List[CommandOption], optional: bool = False, exclusive: bool = False) -> Self:
+        """
+        添加选项组
+        :param opts: 选项列表
+        :param optional: 选项组是否可选
+        :param exclusive: 选项组中的选项是否是互斥的
+        :return:
+        """
+        self._opt_groups.append(
+            CommandOptionGroup(options=opts, optional=optional, exclusive=exclusive)
+        )
+        return self
 
-    def flag(self, name: str, shortcuts: Optional[List[str]] = None) -> Self:
+    def flag(self, name: str, shortcuts: Optional[List[str]] = None, tip: Optional[CallBack] = None) -> Self:
+        """
+        添加标志参数
+        :param name: 名称
+        :param shortcuts: 快捷名称
+        :param tip: 帮助提示
+        :return:
+        """
         check_name(name)
         if shortcuts is not None and len(shortcuts) != 0:
             check_name(shortcuts)
-        Flag(name=name, shortcuts=shortcuts)
-        ...
+        self._default_flags.append(
+            CommandFlag(name=name, shortcuts=shortcuts, tip=tip)
+        )
         return self
 
-    def flag_group(self, flags: List[Flag], exclusive: bool = False) -> Self:
-
-        ...
+    def flag_group(self, flags: List[CommandFlag], exclusive: bool = False) -> Self:
+        """
+        添加标志组
+        :param flags: 标志列表
+        :param exclusive: 标志组中的标志是否互斥
+        :return:
+        """
+        self._flag_groups.append(
+            CommandFlagGroup(flags=flags, exclusive=exclusive)
+        )
         return self
 
     def error(self, callback: CallBack) -> Self:
+        """
+
+        :param callback:
+        :return:
+        """
         self._err_callback = callback
         return self
 
     def run(self, func: CallBack) -> Self:
+        """
+
+        :param func: 回调函数
+        :return:
+        """
         self._func = func
         return self
 
     def tip(self, tip: CallBack) -> Self:
+        """
+
+        :param tip: 提示
+        :return:
+        """
         self._tip = tip
         return self
 
     def parse(self, cmd: Union[str, List[str]]) -> Parsed:
+        """
+
+        :param cmd:
+        :return:
+        """
         ...
 
     def to_doc(self) -> str:
         ...
 
-
-def builder(node: Literal) -> Literal:
-    ...
