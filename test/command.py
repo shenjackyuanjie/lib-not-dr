@@ -21,9 +21,15 @@ class CommandTest(unittest.TestCase):
             Literal("lot_more")
         )
 
-    def test_command_tip(self):
+    def test_command_str_tip(self):
         command = Literal("test").tip('tip for test')
         self.assertEqual(command._tip, 'tip for test')
+
+    def test_command_callable_tip(self):
+        def tip():
+            return 'tip for test'
+        command = Literal("test").tip(tip)
+        self.assertEqual(command._tip, tip)
 
     def test_command_arg(self):  # NOQA
         Literal("test").arg("arg1", {int, }, "tip for arg1")
