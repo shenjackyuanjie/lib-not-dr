@@ -9,8 +9,8 @@ import unittest
 from lib_not_dr.command.nodes import Literal
 
 
-class CommandTest(unittest.TestCase):
-
+class CommandBuildTest(unittest.TestCase):
+    """ 仅测试命令的构建 """
     def test_basic_command(self):  # NOQA
         Literal("test")
 
@@ -42,6 +42,14 @@ class CommandTest(unittest.TestCase):
             print("test run")
         command = Literal("test").run(run)
         self.assertEqual(command._func, run)
+
+
+class CommandParseTest(unittest.TestCase):
+    """ 测试命令的解析 """
+    def test_basic_command(self):  # NOQA
+        command = Literal("test").tip("tip for test")
+        self.assertEqual("tip for test", command.parse("test"))
+        # 无 err run 默认返回 tip
 
 
 if __name__ == '__main__':
