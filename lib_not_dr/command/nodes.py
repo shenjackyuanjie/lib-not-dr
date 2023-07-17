@@ -194,7 +194,7 @@ class Literal:
 
     def parse(self, cmd: Union[str, List[str]]) -> Parsed:
         """
-        解析命令
+        递归的解析命令
         :param cmd:
         :return:
         """
