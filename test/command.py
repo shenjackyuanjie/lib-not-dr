@@ -6,6 +6,7 @@
 
 import unittest
 
+from lib_not_dr.command.data import Parsed
 from lib_not_dr.command.nodes import Literal
 
 

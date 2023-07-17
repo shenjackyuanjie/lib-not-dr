@@ -5,8 +5,7 @@
 #  All rights reserved
 #  -------------------------------
 
-import re
-from typing import Callable, List, Optional, Union, Set, Any
+from typing import List, Optional, Union, Set, Iterable
 
 from .data import (
     CommandOption,
@@ -14,7 +13,10 @@ from .data import (
     CommandFlag,
     Parsed,
     CommandOptionGroup,
-    CommandFlagGroup
+    CommandFlagGroup,
+    CallBack,
+ParseArgFunc,
+EMPTY_WORDS,
 )
 from .descriptor import CallBackDescriptor
 
@@ -22,22 +24,27 @@ try:
     from typing import Self
 except ImportError:
     from typing import TypeVar
+
     Self = TypeVar("Self")  # NOQA
 
 from .exception import IllegalName
 
-CallBack = Union[Callable[[], Any], str]  # Equals to `Callable[[str], None] | str`
-# 可调用对象或字符串作为回调
-# A callable or str as callback
-
-ParseArgFunc = Callable[[str], Optional[type]]
-# 解析参数的函数，返回值为 None 时表示解析失败
-# function to parse argument, return None when failed
-
-EMPTY_WORDS = re.compile(r"\s", re.I)
 
 
-def check_name(name: Union[str, List[str]]) -> None:
+def get_element(text: str) -> str:
+    """
+    Get the first element of text.
+    :param text: text
+    :return: the first element
+    """
+    pos = text.find(' ')
+    if pos == -1:
+        return text
+    else:
+        return text[:pos]
+
+
+def check_name(name: Union[str, Iterable[str]]) -> None:
     """
     Check the name or shortcuts of argument(s) or flag(s).
     The name must not be empty str, and must not contain empty words.
@@ -51,11 +58,11 @@ def check_name(name: Union[str, List[str]]) -> None:
     if isinstance(name, str):
         if EMPTY_WORDS.search(name) is not None:
             raise IllegalName("The name of argument must not contains empty words.")
-    elif isinstance(name, list):
+    elif isinstance(name, Iterable):
         if any((not isinstance(i, str)) or EMPTY_WORDS.search(i) is not None for i in name):
             raise IllegalName("The name of shortcut must be 'str', and must not contains empty words.")
     else:
-        raise TypeError("The type of name must be 'str' or 'list[str]'.")
+        raise TypeError("The type of name must be 'str' or 'Iterable[str]'.")
 
 
 class Literal:
@@ -63,8 +70,11 @@ class Literal:
     _func = CallBackDescriptor("_func")
     _err_callback = CallBackDescriptor("_err_callback")
 
-    def __init__(self, name: str):
-        self.name: str = name
+    def __init__(self, name: Union[str, Iterable[str]]):
+        if isinstance(name, str):
+            self.name = {name}
+        elif isinstance(name, Iterable):
+            self.name = set(name)
         self.sub: List[Self] = []
         self._tip: Optional[CallBack] = None
         self._func: Optional[CallBack] = None
@@ -139,7 +149,7 @@ class Literal:
 
     def flag(self, name: str, shortcuts: Optional[List[str]] = None, tip: Optional[CallBack] = None) -> Self:
         """
-        添加标志参数
+        添加标志参数 ( --xxx|-x )
         :param name: 名称
         :param shortcuts: 快捷名称
         :param tip: 帮助提示
@@ -192,6 +202,36 @@ class Literal:
         self._tip = tip
         return self
 
+    def _sub_parse(self, parsing: Parsed) -> Parsed:
+        """
+        当作为子节点时的命令解析
+        :param parsing: 解析命令
+        :return:
+        """
+
+    def _parse(self, cmd: str) -> Parsed:
+        """
+        解析单条命令
+        :param cmd: 命令
+        :return:
+        """
+        parsing = Parsed(original_text=cmd,
+                         pointer=0,)
+        first_ele = get_element(cmd)
+        parsing.pointer = len(first_ele)
+        if not first_ele == cmd:
+            parsing.current_text = cmd[len(first_ele):]
+        else:
+            parsing.current_text = ""
+        if first_ele in self.name:
+            # match literal
+            # match args
+            # match flags
+            # match opts
+            ...
+        else:
+            return Parsed()
+
     def parse(self, cmd: Union[str, List[str]]) -> Parsed:
         """
         递归的解析命令
@@ -202,4 +242,3 @@ class Literal:
 
     def to_doc(self) -> str:
         ...
-
