@@ -15,8 +15,8 @@ from .data import (
     CommandOptionGroup,
     CommandFlagGroup,
     CallBack,
-ParseArgFunc,
-EMPTY_WORDS,
+    ParseArgFunc,
+    EMPTY_WORDS,
 )
 from .descriptor import CallBackDescriptor
 
