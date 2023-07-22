@@ -66,6 +66,9 @@ def check_name(name: Union[str, Iterable[str]]) -> None:
 
 
 class Literal:
+    """
+    A literal node.
+    """
     _tip = CallBackDescriptor("_tip")
     _func = CallBackDescriptor("_func")
     _err_callback = CallBackDescriptor("_err_callback")
@@ -202,14 +205,14 @@ class Literal:
         self._tip = tip
         return self
 
-    def _sub_parse(self, parsing: Parsed) -> Parsed:
+    def _sub_parse(self, parsing: Parsed) -> Optional[Parsed]:
         """
         当作为子节点时的命令解析
         :param parsing: 解析命令
         :return:
         """
 
-    def _parse(self, cmd: str) -> Parsed:
+    def _parse(self, cmd: str) -> Optional[Parsed]:
         """
         解析单条命令
         :param cmd: 命令
@@ -225,12 +228,12 @@ class Literal:
             parsing.current_text = ""
         if first_ele in self.name:
             # match literal
-            # match args
-            # match flags
-            # match opts
-            ...
+            # 第一个节点不可能有 arguments / options
+            for node in self.sub:
+                if (parsed := node._sub_parse(parsing)) is not None:
+                    return parsed
         else:
-            return Parsed()
+            return None
 
     def parse(self, cmd: Union[str, List[str]]) -> Parsed:
         """

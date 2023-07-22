@@ -4,7 +4,7 @@ from typing import Set, List, Optional, Any, Union, Callable
 from lib_not_dr.types.options import Options
 
 
-CallBack = Union[Callable[[], Any], str]  # Equals to `Callable[[str], None] | str`
+CallBack = Union[Callable[["Parsed"], Any], str]  # Equals to `Callable[[str], None] | str`
 # 可调用对象或字符串作为回调
 # A callable or str as callback
 
