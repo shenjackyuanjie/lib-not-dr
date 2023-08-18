@@ -1,5 +1,10 @@
 # Change log / 更新日志
 
+## 0.1.1
+
+- 为 `CompilerHelper` 添加了 `remove_output` 的选项
+  - 用于删除编译后的过程文件
+
 ## 0.1.0
 
 - 添加了一些文档
