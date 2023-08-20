@@ -1,5 +1,12 @@
 # Change log / 更新日志
 
+## 0.1.2
+
+- 改进了 `types.Options`
+  - 现在 `as_markdown` 如果没有指定最长长度 会自动适配输出所用终端的宽度
+  - 同时如果指定最大长度, 也会更灵活的适配
+  - 补全了一些文档
+
 ## 0.1.1
 
 - 为 `CompilerHelper` 添加了 `remove_output` 的选项

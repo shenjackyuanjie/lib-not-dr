@@ -1,5 +1,5 @@
 [project]
-version = "0.1.1"
+version = "0.1.2"
 name = "lib-not-dr"
 description = "A python lib created from Difficult Rocket development"
 readme = "README.md"
