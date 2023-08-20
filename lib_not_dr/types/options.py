@@ -211,10 +211,13 @@ class Options:
             console_width = shutil.get_terminal_size(fallback=(100, 80)).columns
             console_width = max(console_width, shortest)
 
+        # 为每一栏 预分配 1/3 或者 需要的宽度 (如果不需要 1/3)
         option_len = min(option_len, console_width // 3)
         value_len = min(value_len, console_width // 3)
         value_type_len = min(value_type_len, console_width // 3)
+
         # 先指定每一个列的输出最窄宽度, 然后去尝试增加宽度
+        # 循环分配新空间之前 首先检查是否已经不需要多分配 (and 后面)
         while option_len + value_len + value_type_len + 16 < console_width\
                 and (option_len < value[1]
                      or value_len < value[2]
@@ -223,21 +226,21 @@ class Options:
             # 如果现在的输出长度小于原始长度
             # 并且长度 + 1 之后的总长度依然在允许范围内
             # 那么就 + 1
-            if option_len < value[1] and option_len + value_len + value_type_len + 1 + 15 < console_width:
+            if option_len < value[1] and option_len + value_len + value_type_len + 15 < console_width:
                 option_len += 1
-            if value_len < value[2] and option_len + value_len + value_type_len + 1 + 15 < console_width:
+            if value_len < value[2] and option_len + value_len + value_type_len + 15 < console_width:
                 value_len += 1
-            if value_type_len < value[3] and option_len + value_len + value_type_len + 1 + 15 < console_width:
+            if value_type_len < value[3] and option_len + value_len + value_type_len + 15 < console_width:
                 value_type_len += 1
         # 实际上 对于列表(可变对象) for 出来的这个值是一个引用
         # 所以可以直接修改 string
-        for string in value[0]:
-            if len(str(string[0])) > option_len:
-                string[0] = f'{str(string[0])[:value_len - 3]}...'
-            if len(str(string[1])) > value_len:
-                string[1] = f'{str(string[1])[:value_len - 3]}...'
-            if len(str(string[2])) > value_type_len:
-                string[2] = f'{str(string[2])[:value_len - 3]}...'
+        for v in value[0]:
+            if len(str(v[0])) > option_len:
+                v[0] = f'{str(v[0])[:value_len - 3]}...'
+            if len(str(v[1])) > value_len:
+                v[1] = f'{str(v[1])[:value_len - 3]}...'
+            if len(str(v[2])) > value_type_len:
+                v[2] = f'{str(v[2])[:value_len - 3]}..'
 
         cache.write(
             f"| Option{' ' * (option_len - 3)}| Value{' ' * (value_len - 2)}| Value Type{' ' * (value_type_len - 7)}|\n")
