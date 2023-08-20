@@ -215,7 +215,10 @@ class Options:
         value_len = min(value_len, console_width // 3)
         value_type_len = min(value_type_len, console_width // 3)
         # 先指定每一个列的输出最窄宽度, 然后去尝试增加宽度
-        while option_len + value_len + value_type_len + 16 < console_width:
+        while option_len + value_len + value_type_len + 16 < console_width\
+                and (option_len < value[1]
+                     or value_len < value[2]
+                     or value_type_len < value[3]):
             # 每一个部分的逻辑都是
             # 如果现在的输出长度小于原始长度
             # 并且长度 + 1 之后的总长度依然在允许范围内
@@ -226,14 +229,15 @@ class Options:
                 value_len += 1
             if value_type_len < value[3] and option_len + value_len + value_type_len + 1 + 15 < console_width:
                 value_type_len += 1
-
-        for k in range(len(value[0])):
-            if len(str(value[0][k][0])) > option_len:
-                value[0][k][0] = str(value[0][k][0])[:value_len - 3] + '..'
-            if len(str(value[0][k][1])) > value_len:
-                value[0][k][1] = str(value[0][k][1])[:value_len - 3] + '..'
-            if len(str(value[0][k][2])) > value_type_len:
-                value[0][k][2] = str(value[0][k][2])[:value_len - 3] + '..'
+        # 实际上 对于列表(可变对象) for 出来的这个值是一个引用
+        # 所以可以直接修改 string
+        for string in value[0]:
+            if len(str(string[0])) > option_len:
+                string[0] = f'{str(string[0])[:value_len - 3]}...'
+            if len(str(string[1])) > value_len:
+                string[1] = f'{str(string[1])[:value_len - 3]}...'
+            if len(str(string[2])) > value_type_len:
+                string[2] = f'{str(string[2])[:value_len - 3]}...'
 
         cache.write(
             f"| Option{' ' * (option_len - 3)}| Value{' ' * (value_len - 2)}| Value Type{' ' * (value_type_len - 7)}|\n")
