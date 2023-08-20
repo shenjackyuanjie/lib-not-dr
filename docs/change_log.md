@@ -1,5 +1,9 @@
 # Change log / 更新日志
 
+## 0.1.3
+
+- 修改了 `README.md` 内的版本号
+
 ## 0.1.2
 
 - 改进了 `types.Options`
