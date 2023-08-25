@@ -1,5 +1,10 @@
 # Change log / 更新日志
 
+## 0.1.5
+
+- 修复了 `types.Options` 中的 `as_markdown` 实现细节
+  - 现在不会长度溢出了
+
 ## 0.1.4
 
 - 更改了 `types.Options` 中的 `as_markdown` 实现方式
