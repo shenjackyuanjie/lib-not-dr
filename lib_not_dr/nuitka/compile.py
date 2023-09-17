@@ -152,12 +152,12 @@ class CompilerHelper(Options):
         cmd_list = [self.python_cmd, '-m', 'nuitka']
         # macos 和 非 macos icon 参数不同
         if platform.system() == 'Darwin':
-            cmd_list.append(f"--macos-app-version={self.product_version}")
-            _add_cmd(cmd_list, f'--macos-app-icon={self.icon_path.absolute()}' if self.icon_path else None)
+            cmd_list += format_cmd('--macos-app-version=', self.product_version, self.product_version)
+            cmd_list += format_cmd('--macos-app-icon=', self.icon_path.absolute(), self.icon_path)
         elif platform.system() == 'Windows':
-            _add_cmd(cmd_list, f'--windows-icon-from-ico={self.icon_path.absolute()}' if self.icon_path else None)
+            cmd_list += format_cmd('--windows-icon-from-ico=', self.icon_path.absolute(), self.icon_path)
         elif platform.system() == 'Linux':
-            _add_cmd(cmd_list, f'--linux-icon={self.icon_path.absolute()}' if self.icon_path else None)
+            cmd_list += format_cmd('--linux-icon=', self.icon_path.absolute(), self.icon_path)
 
         cmd_list += format_cmd('lto=', 'yes' if self.use_lto else 'no')
         cmd_list += format_cmd('--clang' if self.use_clang else None)
