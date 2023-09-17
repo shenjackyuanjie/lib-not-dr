@@ -23,7 +23,7 @@ def ensure_cmd_readable(cmd: str) -> str:
     return cmd
 
 
-def format_cmd(arg_name: Optional[str], arg_value: Optional[Union[str, List[str]]]) -> List[str]:
+def format_cmd(arg_name: Optional[str] = None, arg_value: Optional[Union[str, List[str]]] = None) -> List[str]:
     """
     用来格式化输出命令行参数
     :param arg_name: 类似 --show-memory 之类的主项
@@ -154,6 +154,7 @@ class CompilerHelper(Options):
         elif platform.system() == 'Linux':
             _add_cmd(cmd_list, f'--linux-icon={self.icon_path.absolute()}' if self.icon_path else None)
 
+        cmd_list += format_cmd('--follow-import-to' if self.follow_import else None)
         _add_cmd(cmd_list, '--lto=yes' if self.use_lto else '--lto=no')
         _add_cmd(cmd_list, '--clang' if self.use_clang else None)
         _add_cmd(cmd_list, '--msvc=latest' if self.use_msvc else None)
