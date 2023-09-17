@@ -174,7 +174,7 @@ class CompilerHelper(Options):
         cmd_list += format_cmd('--file-version=', str(self.file_version), self.file_version)
         cmd_list += format_cmd('--product-version=', str(self.product_version), self.product_version)
         cmd_list += format_cmd('--file-description=', self.file_description, self.file_description)
-        cmd_list += format_cmd('--copy-right=', self.copy_right, self.copy_right)
+        cmd_list += format_cmd('--copyright=', self.copy_right, self.copy_right)
 
         cmd_list += format_cmd('--follow-import-to=', self.follow_import, self.follow_import)
         cmd_list += format_cmd('--nofollow-import-to=', self.no_follow_import, self.no_follow_import)
