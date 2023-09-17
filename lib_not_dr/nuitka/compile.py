@@ -18,7 +18,7 @@ def ensure_cmd_readable(cmd: str) -> str:
     :param cmd: 要格式化的命令行参数
     :return: 格式化后的命令行参数
     """
-    if ' ' in cmd:
+    if ' ' in str(cmd):
         return f'"{cmd}"'
     return cmd
 
@@ -153,7 +153,7 @@ class CompilerHelper(Options):
         elif platform.system() == 'Linux':
             cmd_list += format_cmd('--linux-icon=', self.icon_path.absolute(), self.icon_path)
 
-        cmd_list += format_cmd('lto=', 'yes' if self.use_lto else 'no')
+        cmd_list += format_cmd('--lto=', 'yes' if self.use_lto else 'no')
         cmd_list += format_cmd('--clang' if self.use_clang else None)
         cmd_list += format_cmd('--msvc=latest' if self.use_msvc else None)
         cmd_list += format_cmd('--mingw64' if self.use_mingw else None)
@@ -168,7 +168,7 @@ class CompilerHelper(Options):
         cmd_list += format_cmd('--enable-console' if self.enable_console else '--disable-console')
 
         cmd_list += format_cmd('--xml=', str(self.xml_path.absolute()), self.save_xml)
-        cmd_list += format_cmd('--output_dir=', str(self.output_path.absolute()), self.output_path)
+        cmd_list += format_cmd('--output-dir=', str(self.output_path.absolute()), self.output_path)
         cmd_list += format_cmd('--company-name=', self.company_name, self.company_name)
         cmd_list += format_cmd('--product-name=', self.product_name, self.product_name)
         cmd_list += format_cmd('--file-version=', str(self.file_version), self.file_version)
