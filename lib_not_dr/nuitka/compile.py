@@ -7,7 +7,7 @@
 import platform
 import warnings
 from pathlib import Path
-from typing import List, Tuple, Optional, Union
+from typing import List, Tuple, Optional, Union, Any
 
 from lib_not_dr.types import Options, Version, VersionRequirement
 
@@ -25,7 +25,7 @@ def ensure_cmd_readable(cmd: str) -> str:
 
 def format_cmd(arg_name: Optional[str] = None,
                arg_value: Optional[Union[str, List[str]]] = None,
-               write: Optional[bool] = True) -> List[str]:
+               write: Optional[Any] = True) -> List[str]:
     """
     用来格式化输出命令行参数
     :param arg_name: 类似 --show-memory 之类的主项
@@ -174,27 +174,18 @@ class CompilerHelper(Options):
         cmd_list += format_cmd('--enable-console' if self.enable_console else '--disable-console')
 
         cmd_list += format_cmd('--xml=', str(self.xml_path.absolute()), self.save_xml)
-        cmd_list += format_cmd('--output_dir=', str(self.output_path.absolute()), bool(self.output_path))
-        cmd_list += format_cmd('--company-name=', self.company_name, bool(self.company_name))
-        cmd_list += format_cmd('--product-name=', self.product_name, bool(self.product_name))
-        cmd_list += format_cmd('--file-version=', str(self.file_version), bool(self.file_version))
-        cmd_list += format_cmd('--product-version=', str(self.product_version), bool(self.product_version))
-        cmd_list += format_cmd('--file-description=', self.file_description, bool(self.file_description))
-        cmd_list += format_cmd('--copy-right=', self.copy_right, bool(self.copy_right))
+        cmd_list += format_cmd('--output_dir=', str(self.output_path.absolute()), self.output_path)
+        cmd_list += format_cmd('--company-name=', self.company_name, self.company_name)
+        cmd_list += format_cmd('--product-name=', self.product_name, self.product_name)
+        cmd_list += format_cmd('--file-version=', str(self.file_version), self.file_version)
+        cmd_list += format_cmd('--product-version=', str(self.product_version), self.product_version)
+        cmd_list += format_cmd('--file-description=', self.file_description, self.file_description)
+        cmd_list += format_cmd('--copy-right=', self.copy_right, self.copy_right)
 
-        # _add_cmd(cmd_list, f'--xml={self.xml_path.absolute()}' if self.save_xml else None)
-        # _add_cmd(cmd_list, f'--output-dir={self.output_path.absolute()}' if self.output_path else None)
-        # _add_cmd(cmd_list, f'--company-name={self.company_name}' if self.company_name else None)
-        # _add_cmd(cmd_list, f'--product-name={self.product_name}' if self.product_name else None)
-        # _add_cmd(cmd_list, f'--file-version={self.file_version}' if self.file_version else None)
-        # _add_cmd(cmd_list, f'--product-version={self.product_version}' if self.product_version else None)
-        # _add_cmd(cmd_list, f'--file-description={self.file_description}' if self.file_description else None)
-        # _add_cmd(cmd_list, f'--copyright={self.copy_right}' if self.copy_right else None)
-
-        _add_cmd(cmd_list, f'--follow-import-to={",".join(self.follow_import)}' if self.follow_import else None)
-        _add_cmd(cmd_list, f'--nofollow-import-to={",".join(self.no_follow_import)}' if self.no_follow_import else None)
-        _add_cmd(cmd_list, f'--enable-plugin={",".join(self.enable_plugin)}' if self.enable_plugin else None)
-        _add_cmd(cmd_list, f'--disable-plugin={",".join(self.disable_plugin)}' if self.disable_plugin else None)
+        cmd_list += format_cmd('--follow-import-to=', self.follow_import, self.follow_import)
+        cmd_list += format_cmd('--nofollow-import-to=', self.no_follow_import, self.no_follow_import)
+        cmd_list += format_cmd('--enable-plugin=', self.enable_plugin, self.enable_plugin)
+        cmd_list += format_cmd('--disable-plugin=', self.disable_plugin, self.disable_plugin)
 
         if self.include_data_dir:
             cmd_list += [f"--include-data-dir={src}={dst}" for src, dst in self.include_data_dir]
