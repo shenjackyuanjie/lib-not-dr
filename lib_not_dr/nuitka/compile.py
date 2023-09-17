@@ -7,9 +7,39 @@
 import platform
 import warnings
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
 
 from lib_not_dr.types import Options, Version, VersionRequirement
+
+
+def ensure_cmd_readable(cmd: str) -> str:
+    """
+    保证 参数中 不含空格
+    :param cmd: 要格式化的命令行参数
+    :return: 格式化后的命令行参数
+    """
+    if ' ' in cmd:
+        return f'"{cmd}"'
+    return cmd
+
+
+def format_cmd(arg_name: Optional[str], arg_value: Optional[Union[str, List[str]]]) -> List[str]:
+    """
+    用来格式化输出命令行参数
+    :param arg_name: 类似 --show-memory 之类的主项
+    :param arg_value: 类似 xxx 类的内容
+    :return: 直接拼接好的命令行参数 不带 =
+    """
+    if arg_name is None:
+        return []
+    if arg_value is None:
+        return [arg_name]
+    if isinstance(arg_value, list):
+        arg_value = ','.join([ensure_cmd_readable(value) for value in arg_value])
+        return [f'{arg_name}{arg_value}']
+    arg_value = ensure_cmd_readable(arg_value)
+    return [f'{arg_name}{arg_value}']
+
 
 def _add_cmd(cmd: List[str], string: Optional[str]) -> List[str]:
     if string is not None and string:
