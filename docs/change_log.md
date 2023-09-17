@@ -1,5 +1,11 @@
 # Change log / 更新日志
 
+## 0.1.6
+
+- 优化了 `CompilerHelper` 的一些周围实现
+  - 参数喜加一
+   - `--report`
+
 ## 0.1.5
 
 - 修复了 `types.Options` 中的 `as_markdown` 实现细节
