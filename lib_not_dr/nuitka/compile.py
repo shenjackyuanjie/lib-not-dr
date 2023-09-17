@@ -46,12 +46,6 @@ def format_cmd(arg_name: Optional[str] = None,
     return [f'{arg_name}{arg_value}']
 
 
-def _add_cmd(cmd: List[str], string: Optional[str]) -> List[str]:
-    if string is not None and string:
-        cmd.append(string)
-    return cmd
-
-
 class CompilerHelper(Options):
     """
     用于帮助生成 nuitka 构建脚本的类
