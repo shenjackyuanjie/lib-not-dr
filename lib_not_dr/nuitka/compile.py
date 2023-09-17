@@ -23,13 +23,18 @@ def ensure_cmd_readable(cmd: str) -> str:
     return cmd
 
 
-def format_cmd(arg_name: Optional[str] = None, arg_value: Optional[Union[str, List[str]]] = None) -> List[str]:
+def format_cmd(arg_name: Optional[str] = None,
+               arg_value: Optional[Union[str, List[str]]] = None,
+               write: Optional[bool] = True) -> List[str]:
     """
     用来格式化输出命令行参数
     :param arg_name: 类似 --show-memory 之类的主项
     :param arg_value: 类似 xxx 类的内容
+    :param write: 是否写入
     :return: 直接拼接好的命令行参数 不带 =
     """
+    if not write:
+        return []
     if arg_name is None:
         return []
     if arg_value is None:
@@ -154,29 +159,30 @@ class CompilerHelper(Options):
         elif platform.system() == 'Linux':
             _add_cmd(cmd_list, f'--linux-icon={self.icon_path.absolute()}' if self.icon_path else None)
 
-        cmd_list += format_cmd('--follow-import-to' if self.follow_import else None)
-        _add_cmd(cmd_list, '--lto=yes' if self.use_lto else '--lto=no')
-        _add_cmd(cmd_list, '--clang' if self.use_clang else None)
-        _add_cmd(cmd_list, '--msvc=latest' if self.use_msvc else None)
-        _add_cmd(cmd_list, '--mingw64' if self.use_mingw else None)
-        _add_cmd(cmd_list, '--standalone' if self.standalone else None)
+        cmd_list += format_cmd('lto=', 'yes' if self.use_lto else 'no')
+        cmd_list += format_cmd('--clang' if self.use_clang else None)
+        cmd_list += format_cmd('--msvc=latest' if self.use_msvc else None)
+        cmd_list += format_cmd('--mingw64' if self.use_mingw else None)
+        cmd_list += format_cmd('--standalone' if self.standalone else None)
 
-        _add_cmd(cmd_list, '--disable-ccache' if not self.use_ccache else None)
-        _add_cmd(cmd_list, '--show-progress' if self.show_progress else None)
-        _add_cmd(cmd_list, '--show-memory' if self.show_memory else None)
-        _add_cmd(cmd_list, '--remove-output' if self.remove_output else None)
-        _add_cmd(cmd_list, '--assume-yes-for-download' if self.download_confirm else None)
-        _add_cmd(cmd_list, '--run' if self.run_after_build else None)
-        _add_cmd(cmd_list, '--enable-console' if self.enable_console else '--disable-console')
+        cmd_list += format_cmd('--disable-ccache' if not self.use_ccache else None)
+        cmd_list += format_cmd('--show-progress' if self.show_progress else None)
+        cmd_list += format_cmd('--show-memory' if self.show_memory else None)
+        cmd_list += format_cmd('--remove-output' if self.remove_output else None)
+        cmd_list += format_cmd('--assume-yes-for-download' if self.download_confirm else None)
+        cmd_list += format_cmd('--run' if self.run_after_build else None)
+        cmd_list += format_cmd('--enable-console' if self.enable_console else '--disable-console')
 
-        _add_cmd(cmd_list, f'--xml={self.xml_path.absolute()}' if self.save_xml else None)
-        _add_cmd(cmd_list, f'--output-dir={self.output_path.absolute()}' if self.output_path else None)
-        _add_cmd(cmd_list, f'--company-name={self.company_name}' if self.company_name else None)
-        _add_cmd(cmd_list, f'--product-name={self.product_name}' if self.product_name else None)
-        _add_cmd(cmd_list, f'--file-version={self.file_version}' if self.file_version else None)
-        _add_cmd(cmd_list, f'--product-version={self.product_version}' if self.product_version else None)
-        _add_cmd(cmd_list, f'--file-description={self.file_description}' if self.file_description else None)
-        _add_cmd(cmd_list, f'--copyright={self.copy_right}' if self.copy_right else None)
+        cmd_list += format_cmd('--xml=', str(self.xml_path.absolute()), self.save_xml)
+        cmd_list += format_cmd('--output_dir=', )
+        # _add_cmd(cmd_list, f'--xml={self.xml_path.absolute()}' if self.save_xml else None)
+        # _add_cmd(cmd_list, f'--output-dir={self.output_path.absolute()}' if self.output_path else None)
+        # _add_cmd(cmd_list, f'--company-name={self.company_name}' if self.company_name else None)
+        # _add_cmd(cmd_list, f'--product-name={self.product_name}' if self.product_name else None)
+        # _add_cmd(cmd_list, f'--file-version={self.file_version}' if self.file_version else None)
+        # _add_cmd(cmd_list, f'--product-version={self.product_version}' if self.product_version else None)
+        # _add_cmd(cmd_list, f'--file-description={self.file_description}' if self.file_description else None)
+        # _add_cmd(cmd_list, f'--copyright={self.copy_right}' if self.copy_right else None)
 
         _add_cmd(cmd_list, f'--follow-import-to={",".join(self.follow_import)}' if self.follow_import else None)
         _add_cmd(cmd_list, f'--nofollow-import-to={",".join(self.no_follow_import)}' if self.no_follow_import else None)
