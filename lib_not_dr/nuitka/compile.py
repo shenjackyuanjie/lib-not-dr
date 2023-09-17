@@ -174,7 +174,14 @@ class CompilerHelper(Options):
         cmd_list += format_cmd('--enable-console' if self.enable_console else '--disable-console')
 
         cmd_list += format_cmd('--xml=', str(self.xml_path.absolute()), self.save_xml)
-        cmd_list += format_cmd('--output_dir=', )
+        cmd_list += format_cmd('--output_dir=', str(self.output_path.absolute()), bool(self.output_path))
+        cmd_list += format_cmd('--company-name=', self.company_name, bool(self.company_name))
+        cmd_list += format_cmd('--product-name=', self.product_name, bool(self.product_name))
+        cmd_list += format_cmd('--file-version=', str(self.file_version), bool(self.file_version))
+        cmd_list += format_cmd('--product-version=', str(self.product_version), bool(self.product_version))
+        cmd_list += format_cmd('--file-description=', self.file_description, bool(self.file_description))
+        cmd_list += format_cmd('--copy-right=', self.copy_right, bool(self.copy_right))
+
         # _add_cmd(cmd_list, f'--xml={self.xml_path.absolute()}' if self.save_xml else None)
         # _add_cmd(cmd_list, f'--output-dir={self.output_path.absolute()}' if self.output_path else None)
         # _add_cmd(cmd_list, f'--company-name={self.company_name}' if self.company_name else None)
