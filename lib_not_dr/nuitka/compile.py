@@ -58,7 +58,7 @@ class CompilerHelper(Options):
     src_file: Path
 
     python_cmd: str = 'python'
-    compat_nuitka_version: VersionRequirement = VersionRequirement("~1.7.1")  # STATIC VERSION
+    compat_nuitka_version: VersionRequirement = VersionRequirement("~1.8.1")  # STATIC VERSION
 
     # 以下为 nuitka 的参数
     # nuitka options below
@@ -75,6 +75,8 @@ class CompilerHelper(Options):
     remove_output: bool = True  # --remove-output
     save_xml: bool = False  # --xml
     xml_path: Path = Path('build/compile_data.xml')
+    save_report: bool = True  # --report
+    report_path: Path = Path('build/compile_report.xml')
 
     download_confirm: bool = True  # --assume-yes-for-download
     run_after_build: bool = False  # --run
@@ -168,6 +170,7 @@ class CompilerHelper(Options):
         cmd_list += format_cmd('--enable-console' if self.enable_console else '--disable-console')
 
         cmd_list += format_cmd('--xml=', str(self.xml_path.absolute()), self.save_xml)
+        cmd_list += format_cmd('--output-dir=', str(self.output_path.absolute()), self.output_path)
         cmd_list += format_cmd('--output-dir=', str(self.output_path.absolute()), self.output_path)
         cmd_list += format_cmd('--company-name=', self.company_name, self.company_name)
         cmd_list += format_cmd('--product-name=', self.product_name, self.product_name)
