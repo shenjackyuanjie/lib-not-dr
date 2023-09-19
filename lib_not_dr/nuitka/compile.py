@@ -66,6 +66,9 @@ class CompilerHelper(Options):
     use_clang: bool = True  # --clang
     use_msvc: bool = True  # --msvc=latest
     use_mingw: bool = False  # --mingw64
+
+    onefile: bool = False  # --onefile
+    onefile_tempdir: Optional[str] = ''  # --onefile-tempdir-spec=
     standalone: bool = True  # --standalone
     use_ccache: bool = True  # not --disable-ccache
     enable_console: bool = True  # --enable-console / --disable-console
@@ -75,7 +78,7 @@ class CompilerHelper(Options):
     remove_output: bool = True  # --remove-output
     save_xml: bool = False  # --xml
     xml_path: Path = Path('build/compile_data.xml')
-    save_report: bool = True  # --report
+    save_report: bool = False  # --report
     report_path: Path = Path('build/compile_report.xml')
 
     download_confirm: bool = True  # --assume-yes-for-download
@@ -160,6 +163,8 @@ class CompilerHelper(Options):
         cmd_list += format_cmd('--msvc=latest' if self.use_msvc else None)
         cmd_list += format_cmd('--mingw64' if self.use_mingw else None)
         cmd_list += format_cmd('--standalone' if self.standalone else None)
+        cmd_list += format_cmd('--onefile' if self.onefile else None)
+        cmd_list += format_cmd('--onefile-tempdir-spec=', self.onefile_tempdir, self.onefile_tempdir)
 
         cmd_list += format_cmd('--disable-ccache' if not self.use_ccache else None)
         cmd_list += format_cmd('--show-progress' if self.show_progress else None)
@@ -170,7 +175,7 @@ class CompilerHelper(Options):
         cmd_list += format_cmd('--enable-console' if self.enable_console else '--disable-console')
 
         cmd_list += format_cmd('--xml=', str(self.xml_path.absolute()), self.save_xml)
-        cmd_list += format_cmd('--output-dir=', str(self.output_path.absolute()), self.output_path)
+        cmd_list += format_cmd('--report=', str(self.report_path.absolute()), self.save_report)
         cmd_list += format_cmd('--output-dir=', str(self.output_path.absolute()), self.output_path)
         cmd_list += format_cmd('--company-name=', self.company_name, self.company_name)
         cmd_list += format_cmd('--product-name=', self.product_name, self.product_name)
