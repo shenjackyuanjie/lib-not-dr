@@ -58,7 +58,7 @@ class CompilerHelper(Options):
     src_file: Path
 
     python_cmd: str = 'python'
-    compat_nuitka_version: VersionRequirement = VersionRequirement("~1.8.1")  # STATIC VERSION
+    compat_nuitka_version: VersionRequirement = VersionRequirement("~1.8.0")  # STATIC VERSION
 
     # 以下为 nuitka 的参数
     # nuitka options below
