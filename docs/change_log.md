@@ -1,5 +1,13 @@
 # Change log / 更新日志
 
+## 0.1.7
+
+- 修复了 `CompilerHelper` 中的问题
+  - 重复添加 `--output-dir` 参数
+- 参数喜加 2
+  - `--onefile`
+  - `--onefile-tempdir-spec`
+
 ## 0.1.6
 
 - 优化了 `CompilerHelper` 的一些周围实现
