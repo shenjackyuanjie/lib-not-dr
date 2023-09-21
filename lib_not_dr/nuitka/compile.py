@@ -120,7 +120,7 @@ class NuitkaDataConfig(NuitkaSubConfig):
     include_data_dir: List[Tuple[Path, Path]] = []
 
     # --noinclude-data-files=PATH
-    no_include_data_files: List[Path] = []\
+    no_include_data_files: List[Path] = []
 
     # --list-package-data=LIST_PACKAGE_DATA
     list_package_data: List[str] = []
