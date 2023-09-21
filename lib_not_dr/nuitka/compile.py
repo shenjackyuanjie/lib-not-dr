@@ -179,7 +179,7 @@ class NuitkaBinaryInfo(Options):
 
 class NuitkaOutputConfig(Options):
     """
-    nuitka 构建的输出信息
+    nuitka 构建的选项
     nuitka build output information
     """
     name = 'Nuitka Output Config'
@@ -194,6 +194,14 @@ class NuitkaOutputConfig(Options):
     # --no-pyo-file
     no_pyo_file: bool = False
 
+
+class NuitkaDebugConfig(Options):
+    """
+    nuitka 构建的调试选项
+    nuikta build debug information
+    """
+    name = 'Nuitka Debug Config'
+
     # --debug
     debug: bool = False
     # --unstripped
@@ -204,6 +212,7 @@ class NuitkaOutputConfig(Options):
     internal_graph: bool = False
     # --trace-execution
     trace_execution: bool = False
+
 
 
 class NuitkaTarget(Enum):
