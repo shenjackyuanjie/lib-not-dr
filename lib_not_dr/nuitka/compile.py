@@ -189,6 +189,33 @@ class NuitkaOutputConfig(Options):
     # --output-filename=FILENAME
     output_filename: Optional[str] = None
 
+    # --quiet
+    quiet: bool = False
+    # --no-progressbar
+    no_progressbar: bool = False
+    # --verbose
+    verbose: bool = False
+    # --verbose-output=PATH
+    verbose_output: Optional[Path] = None
+
+    # --show-progress
+    show_progress: bool = False
+    # --show-memory
+    show_memory: bool = False
+    # --show-scons
+    show_scons: bool = False
+    # --show-modules
+    show_modules: bool = False
+    # --show-modules-output=PATH
+    show_modules_output: Optional[Path] = None
+
+    # --xml=XML_FILENAME
+    xml: Optional[Path] = None
+    # --report=REPORT_FILENAME
+    report: Optional[Path] = None
+    # --report-diffable
+    report_diffable: bool = False
+
     # --remove-output
     remove_output: bool = False
     # --no-pyo-file
