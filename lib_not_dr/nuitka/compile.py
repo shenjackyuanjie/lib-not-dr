@@ -121,7 +121,10 @@ class NuitkaBinaryInfo(Options):
     trademarks: Optional[str] = None
 
     # Icon
-    # also as
+    # --linux-icon=ICON_PATH
+    # --macos-app-icon=ICON_PATH
+    # --windows-icon-from-ico=ICON_PATH
+    # --windows-icon-from-exe=ICON_EXE_PATH
     icon: Optional[Path] = None
 
 
