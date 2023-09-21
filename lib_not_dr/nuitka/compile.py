@@ -111,6 +111,7 @@ class NuitkaBinaryInfo(Options):
     product_name: Optional[str] = None
 
     # --file-version=FILE_VERSION
+    # --macos-app-version=MACOS_APP_VERSION
     file_version: Optional[Union[str, Version]] = None
     # --product-version=PRODUCT_VERSION
     product_version: Optional[Union[str, Version]] = None
