@@ -212,7 +212,16 @@ class NuitkaDebugConfig(Options):
     internal_graph: bool = False
     # --trace-execution
     trace_execution: bool = False
-
+    # --recompile-c-only
+    recompile_c_only: bool = False
+    # --generate-c-only
+    generate_c_only: bool = False
+    # --deployment
+    deployment: bool = False
+    # --no-deployment-flag=FLAG
+    deployment_flag: Optional[str] = None
+    # --experimental=FLAG
+    experimental: Optional[str] = None
 
 
 class NuitkaTarget(Enum):
