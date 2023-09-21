@@ -8,6 +8,7 @@ import platform
 import warnings
 from pathlib import Path
 from typing import List, Tuple, Optional, Union, Any
+from enum import Enum
 
 from lib_not_dr.types import Options, Version, VersionRequirement
 
@@ -44,6 +45,123 @@ def format_cmd(arg_name: Optional[str] = None,
         return [f'{arg_name}{arg_value}']
     arg_value = ensure_cmd_readable(arg_value)
     return [f'{arg_name}{arg_value}']
+
+
+class NuitkaSubConfig(Options):
+    """
+    Nuitka 配置的子项
+    Nuitka configuration sub-items
+    """
+    name = 'Nuitka Sub Configuration'
+
+
+class NuitkaPluginConfig(NuitkaSubConfig):
+    """
+    控制 nuitka 的 plugin 相关参数的部分
+    Control part of nuitka's plugin related parameters
+    """
+    name = 'Nuitka Plugin Configuration'
+
+    # --enable-plugin=PLUGIN_NAME
+    enable_plugin: List[str] = []
+    # --disable-plugin=PLUGIN_NAME
+    disable_plugin: List[str] = []
+    # --plugin-no-detection
+    plugin_no_detection: bool = False
+    # --user-plugin=PATH
+    user_plugin: List[Path] = []
+    # --show-source-changes
+    show_source_changes: bool = False
+
+    # --include-plugin-directory=MODULE/PACKAGE
+    include_plugin_dir: List[str] = []
+    # --include-plugin-files=PATTERN
+    include_plugin_files: List[str] = []
+
+
+class NuitkaIncludeConfig(NuitkaSubConfig):
+    """
+    控制 nuitka 的 include 和 数据 相关参数的部分
+    Control part of nuitka's include related parameters
+    """
+    name = 'Nuitka Include Configuration'
+
+    # --include-package=PACKAGE
+    include_packages: List[str] = []
+    # --include-module=MODULE
+    include_modules: List[str] = []
+
+    # --prefer-source-code
+    # --no-prefer-source-code    for --module
+    prefer_source_code: bool = False
+    # --follow-stdlib
+    follow_stdlib: bool = False
+
+
+class NuitkaBinaryInfo(Options):
+    """
+    nuitka 构建的二进制文件的信息
+    nuitka build binary file information
+    """
+    name = 'Nuitka Binary Info'
+
+    # --company-name=COMPANY_NAME
+    company_name: Optional[str] = None
+    # --product-name=PRODUCT_NAME
+    product_name: Optional[str] = None
+    # --file-version=FILE_VERSION
+    file_version: Optional[Union[str, Version]] = None
+    # --product-version=PRODUCT_VERSION
+    product_version: Optional[Union[str, Version]] = None
+    # --file-description=FILE_DESCRIPTION
+    file_description: Optional[str] = None
+    # --copyright=COPYRIGHT_TEXT
+    copyright: Optional[str] = None
+    # --trademarks=TRADEMARK_TEXT
+    trademarks: Optional[str] = None
+
+    # Icon
+    # also as
+    icon: Optional[Path] = None
+
+
+class NuitkaTarget(Enum):
+    """
+    用于指定 nuitka 构建的目标
+    Use to specify the target of nuitka build
+    exe: 不带任何参数
+    module: --module
+    standalone: --standalone
+    one_file: --onefile
+    """
+    exe = ''
+    module = 'module'
+    standalone = 'standalone'
+    one_file = 'package'
+
+
+class NuitkaScriptGenerator(Options):
+    """
+    用于帮助生成 nuitka 构建脚本的类
+    Use to help generate nuitka build script
+
+    :arg main 需要编译的文件
+    """
+    name = 'Nuitka Script Generator'
+    
+    # --main=PATH
+    # 可以有多个 输入时需要包在列表里
+    main: List[Path]
+
+    # standalone/onefile/module/exe
+    target: NuitkaTarget = NuitkaTarget.exe
+
+    # --python-debug
+    python_debug: bool = False
+    # --python-flag=FLAG
+    python_flag: List[str] = []
+    # --python-for-scons=PATH
+    python_for_scons: Optional[Path] = None
 
 
 class CompilerHelper(Options):
