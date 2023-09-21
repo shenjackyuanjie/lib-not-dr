@@ -54,6 +54,13 @@ class NuitkaSubConfig(Options):
     """
     name = 'Nuitka Sub Configuration'
 
+    def gen_cmd(self) -> List[str]:
+        """
+        生成命令行参数
+        :return:
+        """
+        raise NotImplementedError
+
 
 class NuitkaPluginConfig(NuitkaSubConfig):
     """
@@ -98,6 +105,32 @@ class NuitkaIncludeConfig(NuitkaSubConfig):
     follow_stdlib: bool = False
 
 
+class NuitkaDataConfig(NuitkaSubConfig):
+    """
+    控制 nuitka 的 数据 相关参数的部分
+    Control part of nuitka's data related parameters
+    """
+    name = 'Nuitka Data Configuration'
+
+    # --include-package-data=PACKAGE=PACKAGE_PATH
+    include_package_data: List[Tuple[Path, Path]] = []
+    # --include-data-files=PATH=PATH
+    include_data_files: List[Tuple[Path, Path]] = []
+    # --include-data-dir=DIRECTORY=PATH
+    include_data_dir: List[Tuple[Path, Path]] = []
+
+    # --noinclude-data-files=PATH
+    no_include_data_files: List[Path] = []\
+
+    # --list-package-data=LIST_PACKAGE_DATA
+    list_package_data: List[str] = []
+    # --list-package-dlls=LIST_PACKAGE_DLLS
+    list_package_dlls: List[str] = []
+
+    # --include-distribution-metadata=DISTRIBUTION
+    include_distribution_metadata: List[str] = []
+
+
 class NuitkaBinaryInfo(Options):
     """
     nuitka 构建的二进制文件的信息
@@ -131,6 +164,11 @@ class NuitkaBinaryInfo(Options):
     # 注意: 只有 Windows 下 才可以提供多个 ICO 文件
     # 其他平台 和 EXE 下只会使用第一个路径
     icon: Optional[List[Path]] = None
+
+    # Console
+    # --enable-console
+    # --disable-console
+    console: bool = True
 
     # Windows UAC
     # --windows-uac-admin
@@ -167,7 +205,14 @@ class NuitkaScriptGenerator(Options):
     # 可以有多个 输入时需要包在列表里
     main: List[Path]
 
-    # standalone/onefile/module/exe
+    # --run
+    run_after_build: bool = False
+    # --debugger
+    debugger: bool = False
+    # --execute-with-pythonpath
+    execute_with_python_path: bool = False
+
+    # standalone/one_file/module/exe
     target: NuitkaTarget = NuitkaTarget.exe
 
     # --python-debug
