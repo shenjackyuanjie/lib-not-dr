@@ -177,6 +177,35 @@ class NuitkaBinaryInfo(Options):
     windows_uac_ui_access: bool = False
 
 
+class NuitkaOutputConfig(Options):
+    """
+    nuitka 构建的输出信息
+    nuitka build output information
+    """
+    name = 'Nuitka Output Config'
+
+    # --output-dir=DIRECTORY
+    output_dir: Optional[Path] = None
+    # --output-filename=FILENAME
+    output_filename: Optional[str] = None
+
+    # --remove-output
+    remove_output: bool = False
+    # --no-pyo-file
+    no_pyo_file: bool = False
+
+    # --debug
+    debug: bool = False
+    # --unstripped
+    strip: bool = True
+    # --profile
+    profile: bool = False
+    # --internal-graph
+    internal_graph: bool = False
+    # --trace-execution
+    trace_execution: bool = False
+
+
 class NuitkaTarget(Enum):
     """
     用于指定 nuitka 构建的目标
@@ -211,6 +240,9 @@ class NuitkaScriptGenerator(Options):
     debugger: bool = False
     # --execute-with-pythonpath
     execute_with_python_path: bool = False
+
+    # --assume-yes-for-downloads
+    download_confirm: bool = True
 
     # standalone/one_file/module/exe
     target: NuitkaTarget = NuitkaTarget.exe
