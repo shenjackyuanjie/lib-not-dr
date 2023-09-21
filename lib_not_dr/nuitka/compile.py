@@ -109,10 +109,12 @@ class NuitkaBinaryInfo(Options):
     company_name: Optional[str] = None
     # --product-name=PRODUCT_NAME
     product_name: Optional[str] = None
+
     # --file-version=FILE_VERSION
     file_version: Optional[Union[str, Version]] = None
     # --product-version=PRODUCT_VERSION
     product_version: Optional[Union[str, Version]] = None
+
     # --file-description=FILE_DESCRIPTION
     file_description: Optional[str] = None
     # --copyright=COPYRIGHT_TEXT
@@ -125,7 +127,15 @@ class NuitkaBinaryInfo(Options):
     # --macos-app-icon=ICON_PATH
     # --windows-icon-from-ico=ICON_PATH
     # --windows-icon-from-exe=ICON_EXE_PATH
-    icon: Optional[Path] = None
+    # 注意: 只有 Windows 下 才可以提供多个 ICO 文件
+    # 其他平台 和 EXE 下只会使用第一个路径
+    icon: Optional[List[Path]] = None
+
+    # Windows UAC
+    # --windows-uac-admin
+    windows_uac_admin: bool = False
+    # --windows-uac-uiaccess
+    windows_uac_ui_access: bool = False
 
 
 class NuitkaTarget(Enum):
