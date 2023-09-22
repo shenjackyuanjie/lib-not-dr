@@ -85,6 +85,17 @@ class NuitkaPluginConfig(NuitkaSubConfig):
     # --include-plugin-files=PATTERN
     include_plugin_files: List[str] = []
 
+    def gen_cmd(self) -> List[str]:
+        lst = []
+        lst += format_cmd('--enable-plugin=', self.enable_plugin, self.enable_plugin)
+        lst += format_cmd('--disable-plugin=', self.disable_plugin, self.disable_plugin)
+        lst += format_cmd('--plugin-no-detection' if self.plugin_no_detection else None)
+        lst += format_cmd('--user-plugin=', [str(plugin.absolute()) for plugin in self.user_plugin], self.user_plugin)
+        lst += format_cmd('--show-source-changes' if self.show_source_changes else None)
+        lst += format_cmd('--include-plugin-directory=', self.include_plugin_dir, self.include_plugin_dir)
+        lst += format_cmd('--include-plugin-files=', self.include_plugin_files, self.include_plugin_files)
+        return lst
+
 
 class NuitkaIncludeConfig(NuitkaSubConfig):
     """
@@ -103,6 +114,15 @@ class NuitkaIncludeConfig(NuitkaSubConfig):
     prefer_source_code: bool = False
     # --follow-stdlib
     follow_stdlib: bool = False
+
+    def gen_cmd(self) -> List[str]:
+        lst = []
+        lst += format_cmd('--include-package=', self.include_packages, self.include_packages)
+        lst += format_cmd('--include-module=', self.include_modules, self.include_modules)
+        lst += format_cmd('--prefer-source-code' if self.prefer_source_code else None)
+        lst += format_cmd('--no-prefer-source-code' if not self.prefer_source_code else None)
+        lst += format_cmd('--follow-stdlib' if self.follow_stdlib else None)
+        return lst
 
 
 class NuitkaDataConfig(NuitkaSubConfig):
