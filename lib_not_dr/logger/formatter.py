@@ -7,7 +7,7 @@
 import time
 
 from string import Template
-from typing import List, Tuple, Dict, Union, Optional
+from typing import List, Union, Optional
 from lib_not_dr.types.options import Options
 
 from structers import LogMessage, FormattingMessage
@@ -25,7 +25,9 @@ class BaseFormatter(Options):
 
     @classmethod
     def info(cls) -> str:
-        cache = f"## {cls.name}\n"
+        cache = "## Base Formatter\n"
+        cache += BaseFormatter._info()
+        cache += f"## {cls.name}\n"
         cache += cls._info()
         for formatter in cls.sub_formatter:
             cache += formatter.info()
@@ -33,7 +35,11 @@ class BaseFormatter(Options):
 
     @classmethod
     def _info(cls) -> str:
-        return ''
+        info = cls.add_info('logger_name', 'logger name', 'The name of the logger')
+        info += '\n'
+        info += cls.add_info('logger_tag', 'logger tag', 'The tag of the logger')
+        info += '\n'
+        return info
 
     def format_message(self,
                        message: LogMessage,
@@ -86,6 +92,14 @@ class TimeFormatter(BaseFormatter):
                                                      message[0].create_msec_3)
         message[1]['log_time'] = time_mark
         return message
+
+
+class LevelFormatter(BaseFormatter):
+    name = 'LevelFormatter'
+
+    @classmethod
+    def _info(cls) -> str:
+        return cls.add_info('level', 'log level', 'The log level')
 
 
 if __name__ == '__main__':
