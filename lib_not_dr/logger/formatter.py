@@ -17,7 +17,7 @@ class BaseFormatter(Options):
     name = 'BaseFormatter'
 
     sub_formatter: List['BaseFormatter'] = []
-    default_template: str = '${log_time} ${logger_name} ${logger_tag} ${level} ${messages}'
+    default_template: str = '${log_time}|${logger_name}|${logger_tag}|${level}|${messages}'
 
     @classmethod
     def add_info(cls, match: str, to: str, description: str) -> str:
@@ -44,9 +44,8 @@ class BaseFormatter(Options):
         :param template: 日志输出模板
         :return:
         """
-        basic_info = message.option()
-        if basic_info['']
-        message, info = self._format((message, message.option()))
+        basic_info = message.format_for_message()
+        message, info = self._format((message, basic_info))
 
         if template is None:
             template = Template(self.default_template)
@@ -91,4 +90,4 @@ class TimeFormatter(BaseFormatter):
 
 if __name__ == '__main__':
     print(TimeFormatter.info())
-    print(TimeFormatter().format_message(LogMessage()))
+    print(TimeFormatter().format_message(LogMessage(messages=['Hello World!'])))

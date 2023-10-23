@@ -36,6 +36,19 @@ class LogMessage(Options):
             self.log_time = time.time_ns()
         return False
 
+    def format_message(self) -> str:
+        return self.split.join(self.messages) + self.end
+
+    def format_for_message(self) -> Dict[str, str]:
+        basic_info = self.option()
+
+        if self.logger_tag is None:
+            basic_info['logger_tag'] = '   '
+
+        basic_info['messages'] = self.format_message()
+
+        return basic_info
+
     @property
     def create_msec_3(self) -> int:
         return int(self.log_time / 1000000) % 1000
