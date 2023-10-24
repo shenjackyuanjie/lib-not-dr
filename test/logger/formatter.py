@@ -7,6 +7,7 @@
 import unittest
 
 from lib_not_dr.logger.formatter import BaseFormatter, TimeFormatter, LevelFormatter
+from lib_not_dr.logger.structers import LogMessage
 
 
 class FormatterTest(unittest.TestCase):
@@ -21,4 +22,8 @@ class FormatterTest(unittest.TestCase):
 
     def test_level_formatter(self):
         formatter = LevelFormatter()
+        formatter.info()
+
+    def test_std_formatter(self):
+        formatter = BaseFormatter()
         formatter.info()

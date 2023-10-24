@@ -25,12 +25,17 @@ class BaseFormatter(Options):
 
     @classmethod
     def info(cls) -> str:
-        cache = "## Base Formatter\n"
-        cache += BaseFormatter._info()
-        cache += f"## {cls.name}\n"
-        cache += cls._info()
+        infos = {BaseFormatter.name: BaseFormatter._info()}
+        # cache = "## Base Formatter\n"
+        # cache += BaseFormatter._info()
+        # cache += f"## {cls.name}\n"
+        # cache += cls._info()
+        cache = ''
         for formatter in cls.sub_formatter:
-            cache += formatter.info()
+            infos[formatter.name] = formatter._info()
+        for name, info in infos.items():
+            cache += f"## {name}\n"
+            cache += info
         return cache
 
     @classmethod
@@ -149,9 +154,23 @@ class LevelFormatter(BaseFormatter):
         return message
 
 
+class StdFormatter(BaseFormatter):
+    name = 'StdFormatter'
+
+    sub_formatter = [TimeFormatter(), LevelFormatter()]
+    
+    @classmethod
+    def _info(cls) -> str:
+        return ''
+
+
+
 if __name__ == '__main__':
     print(TimeFormatter.info())
     print(TimeFormatter().format_message(LogMessage(messages=['Hello World!'])))
 
     print(LevelFormatter.info())
     print(LevelFormatter().format_message(LogMessage(messages=['Hello World!'], level=10)))
+
+    print(StdFormatter.info())
+    print(StdFormatter().format_message(LogMessage(messages=['Hello World!'], level=10)))
