@@ -60,7 +60,7 @@ class BaseFormatter(Options):
 
         try:
             return template.substitute(**info)
-        except KeyError:
+        except (KeyError, ValueError):
             return template.safe_substitute(**info)
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
