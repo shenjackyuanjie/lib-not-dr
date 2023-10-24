@@ -97,11 +97,61 @@ class TimeFormatter(BaseFormatter):
 class LevelFormatter(BaseFormatter):
     name = 'LevelFormatter'
 
+    default_level: int = 20
+
+    # If True, the undefined level will be set to the higher nearest level.
+    level_get_higher: bool = True
+
+    level_name_map = {
+        0: 'NOTSET',
+        10: 'TRACE',
+        20: 'FINE',
+        30: 'DEBUG',
+        40: 'INFO',
+        50: 'WARN',
+        60: 'ERROR',
+        70: 'FATAL'
+    }
+    name_level_map = {
+        'NOTSET': 0,
+        'TRACE': 10,
+        'FINE': 20,
+        'DEBUG': 30,
+        'INFO': 40,
+        'WARN': 50,
+        'ERROR': 60,
+        'FATAL': 70
+    }
+
     @classmethod
     def _info(cls) -> str:
         return cls.add_info('level', 'log level', 'The log level')
+
+    def _format(self, message: FormattingMessage) -> FormattingMessage:
+        if message[0].level in self.name_level_map:
+            level_tag = self.level_name_map[message[0].level]
+        else:
+            if self.level_get_higher:
+                for level in self.name_level_map:
+                    if message[0].level < self.name_level_map[level]:
+                        level_tag = level
+                        break
+                else:
+                    level_tag = 'FATAL'
+            else:
+                for level in self.name_level_map:
+                    if message[0].level > self.name_level_map[level]:
+                        level_tag = level
+                        break
+                else:
+                    level_tag = 'NOTSET'
+        message[1]['level'] = level_tag
+        return message
 
 
 if __name__ == '__main__':
     print(TimeFormatter.info())
     print(TimeFormatter().format_message(LogMessage(messages=['Hello World!'])))
+
+    print(LevelFormatter.info())
+    print(LevelFormatter().format_message(LogMessage(messages=['Hello World!'], level=10)))
