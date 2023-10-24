@@ -8,9 +8,9 @@ import time
 
 from string import Template
 from typing import List, Union, Optional
-from lib_not_dr.types.options import Options
 
-from structers import LogMessage, FormattingMessage
+from lib_not_dr.types.options import Options
+from lib_not_dr.logger.structers import LogMessage, FormattingMessage
 
 
 class BaseFormatter(Options):
@@ -104,23 +104,23 @@ class LevelFormatter(BaseFormatter):
 
     level_name_map = {
         0: 'NOTSET',
-        10: 'TRACE',
-        20: 'FINE',
-        30: 'DEBUG',
-        40: 'INFO',
-        50: 'WARN',
-        60: 'ERROR',
-        70: 'FATAL'
+        2: 'TRACE',
+        5: 'FINE',
+        7: 'DEBUG',
+        10: 'INFO',
+        30: 'WARN',
+        50: 'ERROR',
+        90: 'FATAL'
     }
     name_level_map = {
         'NOTSET': 0,
-        'TRACE': 10,
-        'FINE': 20,
-        'DEBUG': 30,
-        'INFO': 40,
-        'WARN': 50,
-        'ERROR': 60,
-        'FATAL': 70
+        'TRACE': 2,
+        'FINE': 5,
+        'DEBUG': 7,
+        'INFO': 10,
+        'WARN': 30,
+        'ERROR': 50,
+        'FATAL': 90
     }
 
     @classmethod
