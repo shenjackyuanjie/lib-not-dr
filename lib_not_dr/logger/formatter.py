@@ -36,6 +36,7 @@ class BaseFormatter(Options):
         for name, info in infos.items():
             cache += f"## {name}\n"
             cache += info
+            cache += '\n'
         return cache
 
     @classmethod
@@ -43,7 +44,6 @@ class BaseFormatter(Options):
         info = cls.add_info('logger_name', 'logger name', 'The name of the logger')
         info += '\n'
         info += cls.add_info('logger_tag', 'logger tag', 'The tag of the logger')
-        info += '\n'
         return info
 
     def format_message(self,
@@ -158,7 +158,7 @@ class StdFormatter(BaseFormatter):
     name = 'StdFormatter'
 
     sub_formatter = [TimeFormatter(), LevelFormatter()]
-    
+
     @classmethod
     def _info(cls) -> str:
         return ''
