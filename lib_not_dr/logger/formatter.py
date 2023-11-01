@@ -26,10 +26,6 @@ class BaseFormatter(Options):
     @classmethod
     def info(cls) -> str:
         infos = {BaseFormatter.name: BaseFormatter._info()}
-        # cache = "## Base Formatter\n"
-        # cache += BaseFormatter._info()
-        # cache += f"## {cls.name}\n"
-        # cache += cls._info()
         cache = ''
         for formatter in cls.sub_formatter:
             infos[formatter.name] = formatter._info()
@@ -162,7 +158,17 @@ class StdFormatter(BaseFormatter):
 
     @classmethod
     def _info(cls) -> str:
-        return ''
+        return 'None'
+
+
+class LevelColorFormatter(BaseFormatter):
+    name = 'LevelColorFormatter'
+
+    enable_color: bool = True
+
+    @classmethod
+    def _info(cls) -> str:
+        return 'None'
 
 
 if __name__ == '__main__':
