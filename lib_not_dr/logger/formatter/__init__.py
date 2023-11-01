@@ -84,7 +84,8 @@ class TimeFormatter(BaseFormatter):
     @classmethod
     def _info(cls) -> str:
         return cls.add_info('log_time', 'formatted time when logging', 'The time format string'
-                                                                       '. See https://docs.python.org/3/library/time.html#time.strftime for more information.')
+                                                                       '. See https://docs.python.org/3/library/time'
+                                                                       '.html#time.strftime for more information.')
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         time_mark = time.localtime(message[0].log_time / 1000000000)
@@ -171,63 +172,23 @@ class TraceFormatter(BaseFormatter):
         return message
 
 
-class LevelColorFormatter(BaseFormatter):
-    name = 'LevelColorFormatter'
-
-    enable_color: bool = True
-
-    @staticmethod
-    def _default_color() -> Dict[int, Tuple[str, str]]:
-        return {
-            # Notset: just black
-            0: ('', ''),
-            # Trace: blue
-            2: ('\033[0;34m', '\033[0m'),
-            # Fine: green
-            5: ('\033[0;32m', '\033[0m'),
-            # Debug: cyan
-            7: ('\033[0;36m', '\033[0m'),
-            # Info: white
-            10: ('\033[0;37m', '\033[0m'),
-            # Warn: yellow
-            30: ('\033[0;33m', '\033[0m'),
-            # Error: red
-            50: ('\033[0;31m', '\033[0m'),
-            # Fatal: red
-            90: ('\033[0;31m', '\033[0m')
-        }
-
-    @classmethod
-    def _info(cls) -> str:
-        info = cls.add_info('colored message', 'message', 'A colored message')
-        info += '\n'
-        info += cls.add_info('colored level', 'level', 'A colored level')
-        info += '\n'
-        info += cls.add_info('colored logger name', 'logger_name', 'A colored logger name')
-        return info
-
-    def _format(self, message: FormattingMessage) -> FormattingMessage:
-        if message[1].get('level') is None:
-            return message
-        # 向上寻找等级
-        for level in self._default_color():
-            if message[0].level < level:
-                break
-        else:
-            level = 90
-        # 获取颜色
-        color = self._default_color()[level]
-        # 添加颜色
-        message[1]['messages'] = f'{color[0]}{message[1]["messages"]}{color[1]}'
-        message[1]['level'] = f'{color[0]}{message[1]["level"]}{color[1]}'
-        message[1]['logger_name'] = f'{color[0]}{message[1]["logger_name"]}{color[1]}'
-        return message
-
-
 class StdFormatter(BaseFormatter):
     name = 'StdFormatter'
 
-    sub_formatter = [TimeFormatter(), LevelFormatter(), TraceFormatter(), LevelColorFormatter()]
+    sub_formatter = [TimeFormatter(),
+                     LevelFormatter(),
+                     TraceFormatter()]
+
+    from lib_not_dr.logger.formatter.colors import LevelColorFormatter, LoggerColorFormatter, TimeColorFormatter
+    color_formatters = [LevelColorFormatter(),
+                        LoggerColorFormatter(),
+                        TimeColorFormatter()]
+
+    def _format(self, message: FormattingMessage) -> FormattingMessage:
+        super()._format(message)
+        for formatter in self.color_formatters:
+            message = formatter._format(message)
+        return message
 
     @classmethod
     def _info(cls) -> str:
@@ -251,9 +212,6 @@ if __name__ == '__main__':
 
     print(TraceFormatter.info())
     print(TraceFormatter().format_message(log_message))
-
-    print(LevelColorFormatter.info())
-    print(LevelColorFormatter().format_message(log_message))
 
     print(StdFormatter.info())
     print(StdFormatter().format_message(log_message))
