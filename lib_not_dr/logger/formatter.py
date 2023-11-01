@@ -33,6 +33,7 @@ class BaseFormatter(Options):
         cache = ''
         for formatter in cls.sub_formatter:
             infos[formatter.name] = formatter._info()
+        infos[cls.name] = cls._info()
         for name, info in infos.items():
             cache += f"## {name}\n"
             cache += info
@@ -88,7 +89,7 @@ class TimeFormatter(BaseFormatter):
     @classmethod
     def _info(cls) -> str:
         return cls.add_info('log_time', 'formatted time when logging', 'The time format string'
-                                '. See https://docs.python.org/3/library/time.html#time.strftime for more information.')
+                                                                       '. See https://docs.python.org/3/library/time.html#time.strftime for more information.')
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         time_mark = time.localtime(message[0].log_time / 1000000000)
@@ -108,10 +109,10 @@ class LevelFormatter(BaseFormatter):
     level_get_higher: bool = True
 
     level_name_map = {
-        0: 'NOTSET',
-        2: 'TRACE',
-        5: 'FINE',
-        7: 'DEBUG',
+        0:  'NOTSET',
+        2:  'TRACE',
+        5:  'FINE',
+        7:  'DEBUG',
         10: 'INFO',
         30: 'WARN',
         50: 'ERROR',
@@ -119,13 +120,13 @@ class LevelFormatter(BaseFormatter):
     }
     name_level_map = {
         'NOTSET': 0,
-        'TRACE': 2,
-        'FINE': 5,
-        'DEBUG': 7,
-        'INFO': 10,
-        'WARN': 30,
-        'ERROR': 50,
-        'FATAL': 90
+        'TRACE':  2,
+        'FINE':   5,
+        'DEBUG':  7,
+        'INFO':   10,
+        'WARN':   30,
+        'ERROR':  50,
+        'FATAL':  90
     }
 
     @classmethod
@@ -162,7 +163,6 @@ class StdFormatter(BaseFormatter):
     @classmethod
     def _info(cls) -> str:
         return ''
-
 
 
 if __name__ == '__main__':
