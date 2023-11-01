@@ -3,11 +3,10 @@
 #  Copyright © 2020-2023 by shenjackyuanjie 3695888@qq.com
 #  All rights reserved
 #  -------------------------------
-
 import time
 
 from string import Template
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Dict, Tuple
 
 from lib_not_dr.types.options import Options
 from lib_not_dr.logger.structers import LogMessage, FormattingMessage
@@ -151,14 +150,25 @@ class LevelFormatter(BaseFormatter):
         return message
 
 
-class StdFormatter(BaseFormatter):
-    name = 'StdFormatter'
-
-    sub_formatter = [TimeFormatter(), LevelFormatter()]
+class TraceFormatter(BaseFormatter):
+    name = 'TraceFormatter'
 
     @classmethod
     def _info(cls) -> str:
-        return 'None'
+        info = cls.add_info('logging file', 'log_source', 'the logging file name')
+        info += '\n'
+        info += cls.add_info('logging line', 'log_line', 'the logging line number')
+        info += '\n'
+        info += cls.add_info('logging function', 'log_function', 'the logging function name')
+        return info
+
+    def _format(self, message: FormattingMessage) -> FormattingMessage:
+        if message[0].stack_trace is None:
+            return message
+        message[1]['log_source'] = message[0].stack_trace.f_code.co_filename
+        message[1]['log_line'] = message[0].stack_trace.f_lineno
+        message[1]['log_function'] = message[0].stack_trace.f_code.co_name
+        return message
 
 
 class LevelColorFormatter(BaseFormatter):
@@ -166,17 +176,84 @@ class LevelColorFormatter(BaseFormatter):
 
     enable_color: bool = True
 
+    @staticmethod
+    def _default_color() -> Dict[int, Tuple[str, str]]:
+        return {
+            # Notset: just black
+            0: ('', ''),
+            # Trace: blue
+            2: ('\033[0;34m', '\033[0m'),
+            # Fine: green
+            5: ('\033[0;32m', '\033[0m'),
+            # Debug: cyan
+            7: ('\033[0;36m', '\033[0m'),
+            # Info: white
+            10: ('\033[0;37m', '\033[0m'),
+            # Warn: yellow
+            30: ('\033[0;33m', '\033[0m'),
+            # Error: red
+            50: ('\033[0;31m', '\033[0m'),
+            # Fatal: red
+            90: ('\033[0;31m', '\033[0m')
+        }
+
+    @classmethod
+    def _info(cls) -> str:
+        info = cls.add_info('colored message', 'message', 'A colored message')
+        info += '\n'
+        info += cls.add_info('colored level', 'level', 'A colored level')
+        info += '\n'
+        info += cls.add_info('colored logger name', 'logger_name', 'A colored logger name')
+        return info
+
+    def _format(self, message: FormattingMessage) -> FormattingMessage:
+        if message[1].get('level') is None:
+            return message
+        # 向上寻找等级
+        for level in self._default_color():
+            if message[0].level < level:
+                break
+        else:
+            level = 90
+        # 获取颜色
+        color = self._default_color()[level]
+        # 添加颜色
+        message[1]['messages'] = f'{color[0]}{message[1]["messages"]}{color[1]}'
+        message[1]['level'] = f'{color[0]}{message[1]["level"]}{color[1]}'
+        message[1]['logger_name'] = f'{color[0]}{message[1]["logger_name"]}{color[1]}'
+        return message
+
+
+class StdFormatter(BaseFormatter):
+    name = 'StdFormatter'
+
+    sub_formatter = [TimeFormatter(), LevelFormatter(), TraceFormatter(), LevelColorFormatter()]
+
     @classmethod
     def _info(cls) -> str:
         return 'None'
 
 
 if __name__ == '__main__':
+    import inspect
+
+    log_message = LogMessage(messages=['Hello World!'],
+                             level=10,
+                             stack_trace=inspect.currentframe(),
+                             logger_tag='tester',
+                             logger_name='test')
+
     print(TimeFormatter.info())
-    print(TimeFormatter().format_message(LogMessage(messages=['Hello World!'])))
+    print(TimeFormatter().format_message(log_message))
 
     print(LevelFormatter.info())
-    print(LevelFormatter().format_message(LogMessage(messages=['Hello World!'], level=10)))
+    print(LevelFormatter().format_message(log_message))
+
+    print(TraceFormatter.info())
+    print(TraceFormatter().format_message(log_message))
+
+    print(LevelColorFormatter.info())
+    print(LevelColorFormatter().format_message(log_message))
 
     print(StdFormatter.info())
-    print(StdFormatter().format_message(LogMessage(messages=['Hello World!'], level=10)))
+    print(StdFormatter().format_message(log_message))
