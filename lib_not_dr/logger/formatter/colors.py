@@ -23,9 +23,7 @@ RESET_COLOR = '\033[0m'
 class BaseColorFormatter(BaseFormatter):
     name = 'BaseColorFormatter'
 
-    @staticmethod
-    def _default_color() -> Dict[int, str]:
-        return {
+    color = {
             # Notset: just black
             0: '',
             # Trace: blue
@@ -42,13 +40,11 @@ class BaseColorFormatter(BaseFormatter):
             50: '\033[0;31m',
             # Fatal: red background
             90: '\033[0;41m'
-        }
+    }
 
-    @staticmethod
-    def get_level(message: FormattingMessage, colors: Dict[int, str] = None) -> int:
-        if colors is None:
-            colors = BaseColorFormatter._default_color()
-        for level in colors:
+    @classmethod
+    def get_level(cls, message: FormattingMessage) -> int:
+        for level in cls.color:
             if message[0].level < level:
                 break
         else:
@@ -88,9 +84,9 @@ class LevelColorFormatter(BaseColorFormatter):
         if isinstance(message[1].get('level'), int):
             return message
         # 向上寻找等级
-        level = self.get_level(message, self._default_color())
+        level = self.get_level(message)
         # 获取颜色
-        color = self._default_color()[level]
+        color = self.color[level]
         # 添加颜色
         message[1]['level'] = f'{color}{message[1]["level"]}{RESET_COLOR}'
         return message
@@ -128,9 +124,9 @@ class LoggerColorFormatter(BaseColorFormatter):
         if message[1].get('logger_name') is None:
             return message
         # 向上寻找等级
-        level = self.get_level(message, self._default_color())
+        level = self.get_level(message)
         # 获取颜色
-        color = self._default_color()[level]
+        color = self.color[level]
         # 添加颜色
         message[1]['logger_name'] = f'{color}{message[1]["logger_name"]}{RESET_COLOR}'
         if message[1].get('logger_tag') is not None and message[1].get('logger_tag') != '   ':
@@ -141,9 +137,7 @@ class LoggerColorFormatter(BaseColorFormatter):
 class TimeColorFormatter(BaseColorFormatter):
     name = 'TimeColorFormatter'
 
-    @staticmethod
-    def _default_color() -> Dict[int, str]:
-        return {
+    color = {
             # Notset: just black
             0: '',
             # Trace: blue
@@ -160,7 +154,7 @@ class TimeColorFormatter(BaseColorFormatter):
             50: '\033[0;31m',
             # Fatal: red background
             90: '\033[0;41m',
-        }
+    }
 
     @classmethod
     def _info(cls) -> str:
@@ -170,9 +164,9 @@ class TimeColorFormatter(BaseColorFormatter):
         if message[1].get('log_time') is None:
             return message
         # 向上寻找等级
-        level = self.get_level(message, self._default_color())
+        level = self.get_level(message)
         # 获取颜色
-        color = self._default_color()[level]
+        color = self.color[level]
         # 添加颜色
         message[1]['log_time'] = f'{color}{message[1]["log_time"]}{RESET_COLOR}'
         return message
