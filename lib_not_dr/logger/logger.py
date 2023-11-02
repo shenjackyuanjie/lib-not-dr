@@ -9,24 +9,9 @@ import inspect
 from types import FrameType
 from typing import List, Optional
 
-from .structers import LogMessage
+from lib_not_dr.logger.structers import LogMessage
+from lib_not_dr.logger.outstream import BaseOutputStream
 from lib_not_dr.types.options import Options
-
-
-class BaseOutputStream(Options):
-    name = 'BaseOutputStream'
-
-    level: int = 20
-    enable: bool = True
-
-    def write_stdout(self, message: LogMessage) -> None:
-        raise NotImplementedError(f'{self.__class__.__name__}.write_stdout is not implemented')
-
-    def write_stderr(self, message: LogMessage) -> None:
-        raise NotImplementedError(f'{self.__class__.__name__}.write_stderr is not implemented')
-
-    def flush(self) -> None:
-        raise NotImplementedError(f'{self.__class__.__name__}.flush is not implemented')
 
 
 class Logger(Options):
