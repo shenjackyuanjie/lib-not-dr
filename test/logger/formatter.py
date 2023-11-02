@@ -13,6 +13,8 @@ from lib_not_dr.logger.structers import LogMessage
 
 class FormatterTest(unittest.TestCase):
 
+    test_levels = (0, 2, 5, 7, 10, 30, 50, 90)
+
     def test_create_message(self):
         message = LogMessage(messages=['test'],
                              level=20,
@@ -41,6 +43,14 @@ class FormatterTest(unittest.TestCase):
     def test_level_formatter(self):
         formatter = LevelFormatter()
         formatter.info()
+        message = LogMessage(messages=['test'],
+                             level=0)
+
+        for test_level in self.test_levels:
+            message.level = test_level
+            basic_info = message.format_for_message()
+            formatting_message = formatter._format((message, basic_info))
+            self.assertEqual(formatting_message[1]['level'], formatter.level_name_map[formatting_message[0].level])
 
     def test_std_formatter(self):
         formatter = BaseFormatter()

@@ -74,6 +74,16 @@ class BaseFormatter(Options):
             message = formatter._format(message)
         return message
 
+    @property
+    def template(self) -> str:
+        return self.default_template
+
+    @template.setter
+    def template(self, template: str) -> None:
+        if not isinstance(template, str):
+            raise TypeError(f'The template must be str, not {type(template)}')
+        self.default_template = template
+
 
 class TimeFormatter(BaseFormatter):
     name = 'TimeFormatter'
@@ -135,14 +145,14 @@ class LevelFormatter(BaseFormatter):
         else:
             if self.level_get_higher:
                 for level in self.name_level_map:
-                    if message[0].level < self.name_level_map[level]:
+                    if message[0].level <= self.name_level_map[level]:
                         level_tag = level
                         break
                 else:
                     level_tag = 'FATAL'
             else:
                 for level in self.name_level_map:
-                    if message[0].level > self.name_level_map[level]:
+                    if message[0].level >= self.name_level_map[level]:
                         level_tag = level
                         break
                 else:
@@ -179,10 +189,16 @@ class StdFormatter(BaseFormatter):
                      LevelFormatter(),
                      TraceFormatter()]
 
-    from lib_not_dr.logger.formatter.colors import LevelColorFormatter, LoggerColorFormatter, TimeColorFormatter
+    from lib_not_dr.logger.formatter.colors import (LevelColorFormatter,
+                                                    LoggerColorFormatter,
+                                                    TimeColorFormatter,
+                                                    TraceColorFormatter,
+                                                    MessageColorFormatter)
     color_formatters = [LevelColorFormatter(),
                         LoggerColorFormatter(),
-                        TimeColorFormatter()]
+                        TimeColorFormatter(),
+                        TraceColorFormatter(),
+                        MessageColorFormatter()]
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         super()._format(message)
@@ -199,7 +215,7 @@ if __name__ == '__main__':
     import inspect
 
     log_message = LogMessage(messages=['Hello World!'],
-                             level=10,
+                             level=7,
                              stack_trace=inspect.currentframe(),
                              logger_tag='tester',
                              logger_name='test')
@@ -215,3 +231,8 @@ if __name__ == '__main__':
 
     print(StdFormatter.info())
     print(StdFormatter().format_message(log_message))
+
+    test_levels = (0, 2, 5, 7, 10, 30, 50, 90)
+    for test_level in test_levels:
+        log_message.level = test_level
+        print(StdFormatter().format_message(log_message), end='')
