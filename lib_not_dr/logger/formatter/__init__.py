@@ -166,11 +166,11 @@ class TraceFormatter(BaseFormatter):
 
     @classmethod
     def _info(cls) -> str:
-        info = cls.add_info('logging file', 'log_source', 'the logging file name')
+        info = cls.add_info('log_source', 'logging file', 'the logging file name')
         info += '\n'
-        info += cls.add_info('logging line', 'log_line', 'the logging line number')
+        info += cls.add_info('log_line', 'logging line', 'the logging line number')
         info += '\n'
-        info += cls.add_info('logging function', 'log_function', 'the logging function name')
+        info += cls.add_info('log_function', 'logging function', 'the logging function name')
         return info
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
