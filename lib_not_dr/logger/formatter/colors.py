@@ -251,5 +251,8 @@ class MessageColorFormatter(BaseColorFormatter):
         # 添加颜色
         if color == '' or color == RESET_COLOR:
             return message
-        message[1]['messages'] = f'{color}{message[1]["messages"]}{RESET_COLOR}'
+        if message[1]['messages'][-1] == '\n':
+            message[1]['messages'] = f'{color}{message[1]["messages"][:-1]}{RESET_COLOR}\n'
+        else:
+            message[1]['messages'] = f'{color}{message[1]["messages"]}{RESET_COLOR}'
         return message

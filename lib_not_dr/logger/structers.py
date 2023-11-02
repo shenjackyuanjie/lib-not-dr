@@ -55,3 +55,6 @@ class LogMessage(Options):
 
 
 FormattingMessage = Tuple[LogMessage, Dict[str, str]]
+
+if __name__ == '__main__':
+    print(LogMessage().as_markdown())

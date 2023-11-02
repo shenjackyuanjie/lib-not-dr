@@ -185,6 +185,8 @@ class TraceFormatter(BaseFormatter):
 class StdFormatter(BaseFormatter):
     name = 'StdFormatter'
 
+    enable_color: bool = True
+
     sub_formatter = [TimeFormatter(),
                      LevelFormatter(),
                      TraceFormatter()]
@@ -202,8 +204,13 @@ class StdFormatter(BaseFormatter):
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         super()._format(message)
+
+        if not self.enable_color:
+            return message
+
         for formatter in self.color_formatters:
             message = formatter._format(message)
+
         return message
 
     @classmethod
@@ -232,7 +239,24 @@ if __name__ == '__main__':
     print(StdFormatter.info())
     print(StdFormatter().format_message(log_message))
 
+    std_format = StdFormatter()
+    std_format.default_template = "${log_time}|${logger_name}|${logger_tag}|${log_source}:${log_line}|${log_function}|${level}|${messages}"
+
     test_levels = (0, 2, 5, 7, 10, 30, 50, 90)
+
+    print("with color")
+
     for test_level in test_levels:
         log_message.level = test_level
-        print(StdFormatter().format_message(log_message), end='')
+        print(std_format.format_message(log_message), end='')
+
+    print("without color")
+
+    std_format.enable_color = False
+
+    for test_level in test_levels:
+        log_message.level = test_level
+        print(std_format.format_message(log_message), end='')
+
+    print(std_format.as_markdown())
+

@@ -30,6 +30,21 @@ if __name__ == '__main__':
     std_format.default_template = "${log_time}|${logger_name}|${logger_tag}|${log_source}:${log_line}|${log_function}|${level}|${messages}"
 
     test_levels = (0, 2, 5, 7, 10, 30, 50, 90)
+
+    print("with color")
+
     for test_level in test_levels:
         log_message.level = test_level
         print(std_format.format_message(log_message), end='')
+
+    print(std_format.as_markdown())
+
+    print("without color")
+
+    std_format.enable_color = False
+
+    for test_level in test_levels:
+        log_message.level = test_level
+        print(std_format.format_message(log_message), end='')
+
+    print(std_format.as_markdown())
