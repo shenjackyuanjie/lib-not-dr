@@ -14,6 +14,7 @@ __all__ = [
     'BaseColorFormatter',
     'LevelColorFormatter',
     'LoggerColorFormatter',
+    'TimeColorFormatter',
     'RESET_COLOR'
 ]
 
@@ -22,24 +23,24 @@ RESET_COLOR = '\033[0m'
 
 class BaseColorFormatter(BaseFormatter):
     name = 'BaseColorFormatter'
-
+    # TODO 迁移老 logger 颜色
     color = {
-            # Notset: just black
-            0: '',
-            # Trace: blue
-            2: '\033[0;34m',
-            # Fine: green
-            5: '\033[0;32m',
-            # Debug: cyan
-            7: '\033[0;36m',
-            # Info: white
-            10: '\033[0;37m',
-            # Warn: yellow
-            30: '\033[0;33m',
-            # Error: red
-            50: '\033[0;31m',
-            # Fatal: red background
-            90: '\033[0;41m'
+        # Notset: just black
+        0: '',
+        # Trace: blue
+        2: '\033[0;34m',
+        # Fine: green
+        5: '\033[0;32m',
+        # Debug: cyan
+        7: '\033[0;36m',
+        # Info: white
+        10: '\033[0;37m',
+        # Warn: yellow
+        30: '\033[0;33m',
+        # Error: red
+        50: '\033[0;31m',
+        # Fatal: red background
+        90: '\033[0;41m'
     }
 
     @classmethod
@@ -54,27 +55,25 @@ class BaseColorFormatter(BaseFormatter):
 
 class LevelColorFormatter(BaseColorFormatter):
     name = 'LevelColorFormatter'
-
-    @staticmethod
-    def _default_color() -> Dict[int, str]:
-        return {
-            # Notset: just black
-            0: '',
-            # Trace: blue
-            2: '\033[0;34m',
-            # Fine: green
-            5: '\033[0;32m',
-            # Debug: cyan
-            7: '\033[0;36m',
-            # Info: white
-            10: '\033[0;37m',
-            # Warn: yellow
-            30: '\033[0;33m',
-            # Error: red
-            50: '\033[0;31m',
-            # Fatal: red background
-            90: '\033[0;41m'
-        }
+    # TODO 迁移老 logger 颜色
+    color = {
+        # Notset: just black
+        0: '',
+        # Trace: blue
+        2: '\033[0;34m',
+        # Fine: green
+        5: '\033[0;32m',
+        # Debug: cyan
+        7: '\033[0;36m',
+        # Info: white
+        10: '\033[0;37m',
+        # Warn: yellow
+        30: '\033[0;33m',
+        # Error: red
+        50: '\033[0;31m',
+        # Fatal: red background
+        90: '\033[0;41m'
+    }
 
     @classmethod
     def _info(cls) -> str:
@@ -94,27 +93,25 @@ class LevelColorFormatter(BaseColorFormatter):
 
 class LoggerColorFormatter(BaseColorFormatter):
     name = 'LoggerColorFormatter'
-
-    @staticmethod
-    def _default_color() -> Dict[int, str]:
-        return {
-            # Notset: just black
-            0: '',
-            # Trace: blue
-            2: '\033[0;34m',
-            # Fine: green
-            5: '\033[0;32m',
-            # Debug: cyan
-            7: '\033[0;36m',
-            # Info: white
-            10: '\033[0;37m',
-            # Warn: yellow
-            30: '\033[0;33m',
-            # Error: red
-            50: '\033[0;31m',
-            # Fatal: red background
-            90: '\033[0;41m',
-        }
+    # TODO 迁移老 logger 颜色
+    color = {
+        # Notset: just black
+        0: '',
+        # Trace: blue
+        2: '\033[0;34m',
+        # Fine: green
+        5: '\033[0;32m',
+        # Debug: cyan
+        7: '\033[0;36m',
+        # Info: white
+        10: '\033[0;37m',
+        # Warn: yellow
+        30: '\033[0;33m',
+        # Error: red
+        50: '\033[0;31m',
+        # Fatal: red background
+        90: '\033[0;41m',
+    }
 
     @classmethod
     def _info(cls) -> str:
@@ -136,24 +133,24 @@ class LoggerColorFormatter(BaseColorFormatter):
 
 class TimeColorFormatter(BaseColorFormatter):
     name = 'TimeColorFormatter'
-
+    # TODO 迁移老 logger 颜色
     color = {
-            # Notset: just black
-            0: '',
-            # Trace: blue
-            2: '\033[0;34m',
-            # Fine: green
-            5: '\033[0;32m',
-            # Debug: cyan
-            7: '\033[0;36m',
-            # Info: white
-            10: '\033[0;37m',
-            # Warn: yellow
-            30: '\033[0;33m',
-            # Error: red
-            50: '\033[0;31m',
-            # Fatal: red background
-            90: '\033[0;41m',
+        # Notset: just black
+        0: '',
+        # Trace: blue
+        2: '\033[0;34m',
+        # Fine: green
+        5: '\033[0;32m',
+        # Debug: cyan
+        7: '\033[0;36m',
+        # Info: white
+        10: '\033[0;37m',
+        # Warn: yellow
+        30: '\033[0;33m',
+        # Error: red
+        50: '\033[0;31m',
+        # Fatal: red background
+        90: '\033[0;41m',
     }
 
     @classmethod
