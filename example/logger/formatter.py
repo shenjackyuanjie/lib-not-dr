@@ -15,7 +15,7 @@ from lib_not_dr.logger.formatter import (StdFormatter,
 
 if __name__ == '__main__':
 
-    levels = (0, 2, 5, 7, 10, 30, 50, 90)
+    levels = (0, 5, 7, 10, 20, 30, 40, 50)
 
     log_message = LogMessage(messages=['Hello World!'],
                              level=7,
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     std_format = StdFormatter()
     std_format.default_template = "${log_time}|${logger_name}|${logger_tag}|${log_source}:${log_line}|${log_function}|${level}|${messages}"
 
-    test_levels = (0, 2, 5, 7, 10, 30, 50, 90)
+    test_levels = (0, 5, 7, 10, 20, 30, 40, 50)
 
     print("with color")
 

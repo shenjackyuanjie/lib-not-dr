@@ -5,6 +5,8 @@
 #  -------------------------------
 import sys
 
+from lib_not_dr.types.options import Options
+
 COLOR_SUPPORT = True
 
 if sys.platform == "win32":
@@ -17,3 +19,15 @@ if sys.platform == "win32":
         kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
     except OSError:  # pragma: no cover
         COLOR_SUPPORT = False
+
+
+class LogLevel(Options):
+    name = 'LogLevel'
+    notset: int = 0
+    trace: int = 5
+    fine: int = 7
+    debug: int = 10
+    info: int = 20
+    warn: int = 30
+    error: int = 40
+    fatal: int = 50

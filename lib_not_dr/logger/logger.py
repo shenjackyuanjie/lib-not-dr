@@ -9,15 +9,17 @@ import inspect
 from types import FrameType
 from typing import List, Optional
 
-from lib_not_dr.logger.structure import LogMessage
-from lib_not_dr.logger.outstream import BaseOutputStream
 from lib_not_dr.types.options import Options
+from lib_not_dr.logger.structure import LogMessage
+from lib_not_dr.logger.outstream import BaseOutputStream, StdioOutputStream
 
 
 class Logger(Options):
     name = 'Logger-v2'
 
-    outputs: List[BaseOutputStream] = []
+    outputs: List[BaseOutputStream] = [StdioOutputStream()]
+
+    log_name: str = 'root'
 
     enable: bool = True
     level: int = 20  # info
@@ -62,20 +64,19 @@ class Logger(Options):
 
     def make_log(self,
                  messages: List[str],
+                 tag: Optional[str] = None,
                  end: str = '\n',
                  split: str = ' ',
                  flush: bool = True,
-                 level: int = 20,
-                 log_time: Optional[float] = None,
-                 logger_name: str = 'root',
-                 logger_tag: Optional[str] = None,
+                 level: int = 20,  # info
+                 # log_time: Optional[float] = None,
+                 # logger_name: str = 'root',
+                 # logger_tag: Optional[str] = None,
                  stack_trace: Optional[FrameType] = None) -> None:
         # 检查是否需要记录
         if not self.log_for(level):
             return
-        # 处理时间
-        if log_time is None:
-            log_time = time.time_ns()
+        log_time = time.time_ns()
         # 处理堆栈信息
         if stack_trace is None:
             # 尝试获取堆栈信息
@@ -95,6 +96,29 @@ class Logger(Options):
                              flush=flush,
                              level=level,
                              log_time=log_time,
-                             logger_name=logger_name,
-                             logger_tag=logger_tag,
+                             logger_name=self.log_name,
+                             logger_tag=tag,
                              stack_trace=stack_trace)
+        if level >= 30:  # WARN
+            for output in self.outputs:
+                output.write_stderr(message)
+        else:
+            for output in self.outputs:
+                output.write_stdout(message)
+        # done?
+        # 20231106 00:06
+
+    @staticmethod
+    def get_logger_by_name(name: str) -> 'Logger':
+        """
+        Get a logger by name.
+
+        Args:
+            name (str): The name of the logger.
+
+        Returns:
+            Logger: The logger with the specified name.
+        """
+
+
+

@@ -13,7 +13,7 @@ from lib_not_dr.logger.structure import LogMessage
 
 class FormatterTest(unittest.TestCase):
 
-    test_levels = (0, 2, 5, 7, 10, 30, 50, 90)
+    test_levels = (0, 5, 7, 10, 20, 30, 40, 50)
 
     def test_create_message(self):
         message = LogMessage(messages=['test'],

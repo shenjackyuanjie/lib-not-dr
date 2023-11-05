@@ -6,9 +6,9 @@
 
 from typing import Dict, Tuple
 
+from lib_not_dr.logger import LogLevel
 from lib_not_dr.logger.formatter import BaseFormatter
 from lib_not_dr.logger.structure import FormattingMessage
-
 
 __all__ = [
     'BaseColorFormatter',
@@ -30,21 +30,21 @@ class BaseColorFormatter(BaseFormatter):
     # TODO 迁移老 logger 颜色
     color = {
         # Notset: just black
-        0: '',
+        LogLevel.notset: '',
         # Trace: blue
-        2: '\033[0;34m',
+        LogLevel.trace:  '\033[0;34m',
         # Fine: green
-        5: '\033[0;32m',
+        LogLevel.fine:   '\033[0;32m',
         # Debug: cyan
-        7: '\033[0;36m',
+        LogLevel.debug:  '\033[0;36m',
         # Info: white
-        10: '\033[0;37m',
+        LogLevel.info:   '\033[0;37m',
         # Warn: yellow
-        30: '\033[0;33m',
+        LogLevel.warn:   '\033[0;33m',
         # Error: red
-        50: '\033[0;31m',
+        LogLevel.error:  '\033[0;31m',
         # Fatal: red background
-        90: '\033[0;41m'
+        LogLevel.fatal:  '\033[0;41m'
     }
 
     def get_color(self, message: FormattingMessage) -> str:
@@ -61,21 +61,21 @@ class LevelColorFormatter(BaseColorFormatter):
     # TODO 迁移老 logger 颜色
     color = {
         # Notset: just black
-        0: '',
+        LogLevel.notset: '',
         # Trace: blue
-        2: '\033[0;34m',
+        LogLevel.trace:  '\033[0;34m',
         # Fine: green
-        5: '\033[0;32m',
+        LogLevel.fine:   '\033[0;32m',
         # Debug: cyan
-        7: '\033[0;36m',
+        LogLevel.debug:  '\033[0;36m',
         # Info: white
-        10: '\033[0;37m',
+        LogLevel.info:   '\033[0;37m',
         # Warn: yellow
-        30: '\033[0;33m',
+        LogLevel.warn:   '\033[0;33m',
         # Error: red
-        50: '\033[0;31m',
+        LogLevel.error:  '\033[0;31m',
         # Fatal: red background
-        90: '\033[0;41m'
+        LogLevel.fatal:  '\033[0;41m'
     }
 
     @classmethod
@@ -99,21 +99,21 @@ class LoggerColorFormatter(BaseColorFormatter):
     # TODO 迁移老 logger 颜色
     color = {
         # Notset: just black
-        0: '',
+        LogLevel.notset: '',
         # Trace: blue
-        2: '\033[0;34m',
+        LogLevel.trace:  '\033[0;34m',
         # Fine: green
-        5: '\033[0;32m',
+        LogLevel.fine:   '\033[0;32m',
         # Debug: cyan
-        7: '\033[0;36m',
+        LogLevel.debug:  '\033[0;36m',
         # Info: white
-        10: '\033[0;37m',
+        LogLevel.info:   '\033[0;37m',
         # Warn: yellow
-        30: '\033[0;33m',
+        LogLevel.warn:   '\033[0;33m',
         # Error: red
-        50: '\033[0;31m',
+        LogLevel.error:  '\033[0;31m',
         # Fatal: red background
-        90: '\033[38;2;245;189;230m',
+        LogLevel.fatal:  '\033[38;2;245;189;230m',
     }
 
     @classmethod
@@ -139,21 +139,21 @@ class TimeColorFormatter(BaseColorFormatter):
     # TODO 迁移老 logger 颜色
     color = {
         # Notset: just black
-        0: '',
+        LogLevel.notset: '',
         # Trace: blue
-        2: '\033[0;34m',
+        LogLevel.trace:  '\033[0;34m',
         # Fine: green
-        5: '\033[0;32m',
+        LogLevel.fine:   '\033[0;32m',
         # Debug: cyan
-        7: '\033[0;36m',
+        LogLevel.debug:  '\033[0;36m',
         # Info: white
-        10: '\033[0;37m',
+        LogLevel.info:   '\033[0;37m',
         # Warn: yellow
-        30: '\033[0;33m',
+        LogLevel.warn:   '\033[0;33m',
         # Error: red
-        50: '\033[0;31m',
+        LogLevel.error:  '\033[0;31m',
         # Fatal: red background
-        90: '\033[0;41m',
+        LogLevel.fatal:  '\033[0;41m',
     }
 
     @classmethod
@@ -177,21 +177,21 @@ class TraceColorFormatter(BaseColorFormatter):
     # TODO 迁移老 logger 颜色
     color = {
         # Notset: just black
-        0: '\033[38;2;0;255;180m',
+        LogLevel.notset: '\033[38;2;0;255;180m',
         # Trace: blue
-        2: '\033[38;2;0;255;180m',
+        LogLevel.trace:  '\033[38;2;0;255;180m',
         # Fine: green
-        5: '\033[38;2;0;255;180m',
+        LogLevel.fine:   '\033[38;2;0;255;180m',
         # Debug: cyan
-        7: '\033[38;2;0;255;180m',
+        LogLevel.debug:  '\033[38;2;0;255;180m',
         # Info: white
-        10: '\033[38;2;0;255;180m',
+        LogLevel.info:   '\033[38;2;0;255;180m',
         # Warn: yellow
-        30: '\033[38;2;0;255;180m',
+        LogLevel.warn:   '\033[38;2;0;255;180m',
         # Error: red
-        50: '\033[38;2;0;255;180m',
+        LogLevel.error:  '\033[38;2;0;255;180m',
         # Fatal: red background
-        90: '\033[38;2;0;255;180m',
+        LogLevel.fatal:  '\033[38;2;0;255;180m',
     }
 
     @classmethod
@@ -222,21 +222,21 @@ class MessageColorFormatter(BaseColorFormatter):
 
     color = {
         # Notset: just black
-        0: '',
+        LogLevel.notset: '',
         # Trace: blue
-        2: '\033[38;2;138;173;244m',
+        LogLevel.trace:  '\033[38;2;138;173;244m',
         # Fine: blue
-        5: '\033[38;2;138;173;244m',
+        LogLevel.fine:   '\033[38;2;138;173;244m',
         # Debug: blue
-        7: '\033[38;2;138;173;244m',
+        LogLevel.debug:  '\033[38;2;138;173;244m',
         # Info: no color
-        10: '',
+        LogLevel.info:   '',
         # Warn: yellow
-        30: '\033[0;33m',
+        LogLevel.warn:   '\033[0;33m',
         # Error: red
-        50: '\033[0;31m',
+        LogLevel.error:  '\033[0;31m',
         # Fatal: red background
-        90: '\033[38;2;255;255;0;48;2;120;10;10m',
+        LogLevel.fatal:  '\033[38;2;255;255;0;48;2;120;10;10m',
     }
 
     @classmethod

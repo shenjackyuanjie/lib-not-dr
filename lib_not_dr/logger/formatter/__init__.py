@@ -9,6 +9,7 @@ from pathlib import Path
 from string import Template
 from typing import List, Union, Optional, Dict, Tuple, TYPE_CHECKING
 
+from lib_not_dr.logger import LogLevel
 from lib_not_dr.types.options import Options
 from lib_not_dr.logger.structure import LogMessage, FormattingMessage
 
@@ -120,24 +121,24 @@ class LevelFormatter(BaseFormatter):
     level_get_higher: bool = True
 
     level_name_map = {
-        0:  'NOTSET',
-        5:  'TRACE',
-        7:  'FINE',
-        10: 'DEBUG',
-        20: 'INFO',
-        30: 'WARN',
-        40: 'ERROR',
-        50: 'FATAL'
+        LogLevel.notset:  'NOTSET',
+        LogLevel.trace:   'TRACE',
+        LogLevel.fine:    'FINE',
+        LogLevel.debug:   'DEBUG',
+        LogLevel.info:    'INFO',
+        LogLevel.warn:    'WARN',
+        LogLevel.error:   'ERROR',
+        LogLevel.fatal:   'FATAL',
     }
     name_level_map = {
-        'NOTSET': 0,
-        'TRACE':  5,
-        'FINE':   7,
-        'DEBUG':  10,
-        'INFO':   20,
-        'WARN':   30,
-        'ERROR':  40,
-        'FATAL':  50
+        'NOTSET': LogLevel.notset,
+        'TRACE': LogLevel.trace,
+        'FINE': LogLevel.fine,
+        'DEBUG': LogLevel.debug,
+        'INFO': LogLevel.info,
+        'WARN': LogLevel.warn,
+        'ERROR': LogLevel.error,
+        'FATAL': LogLevel.fatal,
     }
 
     @classmethod
@@ -266,7 +267,7 @@ if __name__ == '__main__':
     std_format = StdFormatter()
     std_format.default_template = "${log_time}|${logger_name}|${logger_tag}|${log_source}:${log_line}|${log_function}|${level}|${messages}"
 
-    test_levels = (0, 2, 5, 7, 10, 30, 50, 90)
+    test_levels = (0, 5, 7, 10, 20, 30, 40, 50)
 
     print("with color")
 

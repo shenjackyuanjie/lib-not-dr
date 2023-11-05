@@ -26,9 +26,11 @@ if __name__ == '__main__':
     file_cache.write_stdout(log_message)
     stdio.write_stdout(log_message)
     # wait for 10 sec
-    print('wait for 11 sec')
-    time.sleep(11)
-    print('finish')
+    print('wait for 10 sec')
+    time.sleep(10)
+    print('look at the ./logs/test.log (sleep 5 sec)')
+    time.sleep(5)
+    print('go on')
     # write 10 lines
 
     for i in range(10):
