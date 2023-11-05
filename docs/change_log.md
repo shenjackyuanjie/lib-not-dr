@@ -5,6 +5,10 @@
 - 为 `types.Options` 添加了 `_check_option` 选项
   - 为 `True` 时 会检查参数是否合法 (在类属性中已经定义了)
 
+### Logger
+
+- WIP (wait for 0.2.0)
+
 ## 0.1.7
 
 - 修复了 `CompilerHelper` 中的问题
