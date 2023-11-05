@@ -14,6 +14,7 @@ import threading
 from pathlib import Path
 from typing import Optional
 
+from lib_not_dr.logger import LogLevel
 from lib_not_dr.types.options import Options
 from lib_not_dr.logger.structure import LogMessage
 from lib_not_dr.logger.formatter import BaseFormatter, StdFormatter
@@ -28,7 +29,7 @@ __all__ = [
 class BaseOutputStream(Options):
     name = 'BaseOutputStream'
 
-    level: int = 20
+    level: int = LogLevel.info
     enable: bool = True
 
     formatter: BaseFormatter
@@ -49,7 +50,7 @@ class BaseOutputStream(Options):
 class StdioOutputStream(BaseOutputStream):
     name = 'StdioOutputStream'
 
-    level: int = 20
+    level: int = LogLevel.info
     formatter: BaseFormatter = StdFormatter()
 
     def write_stdout(self, message: LogMessage) -> None:
@@ -81,7 +82,7 @@ class StdioOutputStream(BaseOutputStream):
 class FileCacheOutputStream(BaseOutputStream):
     name = 'FileCacheOutputStream'
 
-    level: int = 20
+    level: int = LogLevel.info
     formatter: BaseFormatter = StdFormatter(enable_color=False)
     text_cache: io.StringIO = None
 

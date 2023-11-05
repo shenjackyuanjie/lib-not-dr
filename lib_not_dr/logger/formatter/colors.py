@@ -4,8 +4,6 @@
 #  All rights reserved
 #  -------------------------------
 
-from typing import Dict, Tuple
-
 from lib_not_dr.logger import LogLevel
 from lib_not_dr.logger.formatter import BaseFormatter
 from lib_not_dr.logger.structure import FormattingMessage

@@ -9,6 +9,7 @@ import inspect
 from types import FrameType
 from typing import List, Optional
 
+from lib_not_dr.logger import LogLevel
 from lib_not_dr.types.options import Options
 from lib_not_dr.logger.structure import LogMessage
 from lib_not_dr.logger.outstream import BaseOutputStream, StdioOutputStream
@@ -119,6 +120,123 @@ class Logger(Options):
         Returns:
             Logger: The logger with the specified name.
         """
+        return Logger(log_name=name)
 
+    def info(self,
+             *message,
+             tag: Optional[str] = None,
+             end: str = '\n',
+             split: str = ' ',
+             flush: bool = True,
+             stack_trace: Optional[FrameType] = None) -> None:
+        if not self.log_for(LogLevel.info):
+            return
+        self.make_log(messages=list(message),
+                      tag=tag,
+                      end=end,
+                      split=split,
+                      flush=flush,
+                      level=LogLevel.info,
+                      stack_trace=stack_trace)
 
+    def trace(self,
+              *message,
+              tag: Optional[str] = None,
+              end: str = '\n',
+              split: str = ' ',
+              flush: bool = True,
+              stack_trace: Optional[FrameType] = None) -> None:
+        if not self.log_for(LogLevel.trace):
+            return
+        self.make_log(messages=list(message),
+                      tag=tag,
+                      end=end,
+                      split=split,
+                      flush=flush,
+                      level=LogLevel.trace,
+                      stack_trace=stack_trace)
 
+    def fine(self,
+             *message,
+             tag: Optional[str] = None,
+             end: str = '\n',
+             split: str = ' ',
+             flush: bool = True,
+             stack_trace: Optional[FrameType] = None) -> None:
+        if not self.log_for(LogLevel.fine):
+            return
+        self.make_log(messages=list(message),
+                      tag=tag,
+                      end=end,
+                      split=split,
+                      flush=flush,
+                      level=LogLevel.fine,
+                      stack_trace=stack_trace)
+
+    def debug(self,
+              *message,
+              tag: Optional[str] = None,
+              end: str = '\n',
+              split: str = ' ',
+              flush: bool = True,
+              stack_trace: Optional[FrameType] = None) -> None:
+        if not self.log_for(LogLevel.debug):
+            return
+        self.make_log(messages=list(message),
+                      tag=tag,
+                      end=end,
+                      split=split,
+                      flush=flush,
+                      level=LogLevel.debug,
+                      stack_trace=stack_trace)
+
+    def warn(self,
+             *message,
+             tag: Optional[str] = None,
+             end: str = '\n',
+             split: str = ' ',
+             flush: bool = True,
+             stack_trace: Optional[FrameType] = None) -> None:
+        if not self.log_for(LogLevel.warn):
+            return
+        self.make_log(messages=list(message),
+                      tag=tag,
+                      end=end,
+                      split=split,
+                      flush=flush,
+                      level=LogLevel.warn,
+                      stack_trace=stack_trace)
+
+    def error(self,
+              *message,
+              tag: Optional[str] = None,
+              end: str = '\n',
+              split: str = ' ',
+              flush: bool = True,
+              stack_trace: Optional[FrameType] = None) -> None:
+        if not self.log_for(LogLevel.error):
+            return
+        self.make_log(messages=list(message),
+                      tag=tag,
+                      end=end,
+                      split=split,
+                      flush=flush,
+                      level=LogLevel.error,
+                      stack_trace=stack_trace)
+
+    def fatal(self,
+              *message,
+              tag: Optional[str] = None,
+              end: str = '\n',
+              split: str = ' ',
+              flush: bool = True,
+              stack_trace: Optional[FrameType] = None) -> None:
+        if not self.log_for(LogLevel.fatal):
+            return
+        self.make_log(messages=list(message),
+                      tag=tag,
+                      end=end,
+                      split=split,
+                      flush=flush,
+                      level=LogLevel.fatal,
+                      stack_trace=stack_trace)
