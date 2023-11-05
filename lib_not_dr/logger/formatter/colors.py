@@ -7,7 +7,7 @@
 from typing import Dict, Tuple
 
 from lib_not_dr.logger.formatter import BaseFormatter
-from lib_not_dr.logger.structers import FormattingMessage
+from lib_not_dr.logger.structure import FormattingMessage
 
 
 __all__ = [

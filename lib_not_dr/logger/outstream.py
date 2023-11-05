@@ -7,7 +7,7 @@
 import sys
 
 from lib_not_dr.types.options import Options
-from lib_not_dr.logger.structers import LogMessage
+from lib_not_dr.logger.structure import LogMessage
 from lib_not_dr.logger.formatter import BaseFormatter, StdFormatter
 
 __all__ = [
@@ -20,6 +20,8 @@ class BaseOutputStream(Options):
 
     level: int = 20
     enable: bool = True
+
+    formatter: BaseFormatter
 
     def write_stdout(self, message: LogMessage) -> None:
         raise NotImplementedError(f'{self.__class__.__name__}.write_stdout is not implemented')
@@ -60,3 +62,9 @@ class StdioOutputStream(BaseOutputStream):
         print('', end='', flush=True)
         print('', end='', flush=True, file=sys.stderr)
         return None
+
+
+class FileCacheOutputStream(BaseOutputStream):
+    name = 'FileCacheOutputStream'
+
+    formatter: BaseFormatter = StdFormatter(enable_color=False)

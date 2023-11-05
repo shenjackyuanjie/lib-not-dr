@@ -9,7 +9,7 @@ import inspect
 from types import FrameType
 from typing import List, Optional
 
-from lib_not_dr.logger.structers import LogMessage
+from lib_not_dr.logger.structure import LogMessage
 from lib_not_dr.logger.outstream import BaseOutputStream
 from lib_not_dr.types.options import Options
 

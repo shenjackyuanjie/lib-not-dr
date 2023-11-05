@@ -8,7 +8,7 @@ import inspect
 import unittest
 
 from lib_not_dr.logger.formatter import BaseFormatter, TimeFormatter, LevelFormatter, TraceFormatter
-from lib_not_dr.logger.structers import LogMessage
+from lib_not_dr.logger.structure import LogMessage
 
 
 class FormatterTest(unittest.TestCase):

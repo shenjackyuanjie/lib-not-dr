@@ -9,7 +9,7 @@ from string import Template
 from typing import List, Union, Optional, Dict, Tuple
 
 from lib_not_dr.types.options import Options
-from lib_not_dr.logger.structers import LogMessage, FormattingMessage
+from lib_not_dr.logger.structure import LogMessage, FormattingMessage
 
 
 class BaseFormatter(Options):
@@ -201,6 +201,24 @@ class StdFormatter(BaseFormatter):
                         TimeColorFormatter(),
                         TraceColorFormatter(),
                         MessageColorFormatter()]
+
+    def __init__(self,
+                 enable_color: bool = True,
+                 sub_formatter: Optional[List[BaseFormatter]] = None,
+                 color_formatters: Optional[List[BaseFormatter]] = None,
+                 **kwargs) -> None:
+        """
+        Initialize the StdFormatter
+        :param enable_color: enable color
+        :param sub_formatter: list of sub formatter
+        :param color_formatters: list of color formatter
+        :param kwargs: other options
+        """
+        # 同 structures.LogMessage.__init__ 的注释 (逃)
+        super().__init__(enable_color=enable_color,
+                         sub_formatter=sub_formatter,
+                         color_formatters=color_formatters,
+                         **kwargs)
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         super()._format(message)
