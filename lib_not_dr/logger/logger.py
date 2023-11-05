@@ -20,7 +20,7 @@ class Logger(Options):
     outputs: List[BaseOutputStream] = []
 
     enable: bool = True
-    level: int = 20
+    level: int = 20  # info
 
     def log_for(self, level: int) -> bool:
         """

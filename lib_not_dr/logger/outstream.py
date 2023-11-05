@@ -28,7 +28,7 @@ __all__ = [
 class BaseOutputStream(Options):
     name = 'BaseOutputStream'
 
-    level: int = 10
+    level: int = 20
     enable: bool = True
 
     formatter: BaseFormatter
@@ -49,7 +49,7 @@ class BaseOutputStream(Options):
 class StdioOutputStream(BaseOutputStream):
     name = 'StdioOutputStream'
 
-    level: int = 10
+    level: int = 20
     formatter: BaseFormatter = StdFormatter()
 
     def write_stdout(self, message: LogMessage) -> None:
@@ -81,7 +81,7 @@ class StdioOutputStream(BaseOutputStream):
 class FileCacheOutputStream(BaseOutputStream):
     name = 'FileCacheOutputStream'
 
-    level: int = 10
+    level: int = 20
     formatter: BaseFormatter = StdFormatter(enable_color=False)
     text_cache: io.StringIO = None
 
