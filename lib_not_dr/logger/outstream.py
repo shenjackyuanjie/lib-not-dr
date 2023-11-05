@@ -84,11 +84,13 @@ class FileCacheOutputStream(BaseOutputStream):
     flush_counter: int = 0
     # 默认 10 次 flush 一次
     flush_count_limit: int = 10
+    flush_time_limit: int = 10  # time limit in sec, 0 means no limit
     flush_lock: threading.Lock = None
+    flush_timer: threading.Timer = None
 
     file_path: Path = Path('./logs')
     file_name: str
-    # file mode: always 'rw'
+    # file mode: always 'a'
     file_encoding: str = 'utf-8'
     # do file swap or not
     file_swap: bool = False
@@ -130,9 +132,14 @@ class FileCacheOutputStream(BaseOutputStream):
         """
         self.text_cache.write(self.formatter.format_message(message))
         self.flush_counter += 1
-        if message.flush or self.flush_counter >= self.flush_count_limit:
+        if message.flush or self.flush_counter >= self.flush_count_limit or \
+                (0 < self.flush_time_limit <= time.time() - self.file_start_time):
             self.flush()
         else:
+            if self.flush_time_limit > 0:
+                if not self.flush_timer.is_alive() or self.flush_timer is None:
+                    self.flush_timer = threading.Timer(self.flush_time_limit, self.flush)
+                    self.flush_timer.start()
             atexit.register(self.flush)
         return None
 
@@ -207,6 +214,10 @@ class FileCacheOutputStream(BaseOutputStream):
         if text == '':
             return None
         current_file = self.check_flush()
+        current_file.touch(mode=0o666, exist_ok=True)
+        with open(current_file, 'a', encoding=self.file_encoding) as f:
+            f.write(text)
+        return None
 
     def close(self) -> None:
         super().close()
