@@ -173,22 +173,29 @@ class FileCacheOutputStream(BaseOutputStream):
 
     def check_flush(self) -> Path:
         current_file = self.get_file_path()
-        if self.file_swap:
-            size_pass = True
-            if self.file_size_limit > 0:
-                file_size = current_file.stat().st_size / 1024  # kb
-                if file_size > self.file_size_limit:  # kb
-                    size_pass = False
-            time_pass = True
-            if self.file_time_limit > 0:
-                file_time = round(time.time()) - current_file.stat().st_mtime
-                if file_time > self.file_time_limit:
-                    time_pass = False
-            if self.file_swap_on_both:
-                if size_pass and time_pass:
-                    self.file_swap_counter += 1
-                    # 生成新的文件名
-                    return current_file
+        # 获取当前文件的路径
+        if not self.file_swap:
+            # 不需要 swap 直接返回
+            return current_file
+        # 检查是否需要 swap
+        size_pass = True
+        if self.file_size_limit > 0:
+            file_size = current_file.stat().st_size / 1024  # kb
+            if file_size > self.file_size_limit:  # kb
+                size_pass = False
+        time_pass = True
+        if self.file_time_limit > 0:
+            file_time = round(time.time()) - current_file.stat().st_mtime
+            if file_time > self.file_time_limit:
+                time_pass = False
+        if (self.file_swap_on_both and size_pass and time_pass) or \
+           (not self.file_swap_on_both and (size_pass or time_pass)):
+            # 两个都满足
+            # 或者只有一个满足
+            if size_pass and time_pass:
+                self.file_swap_counter += 1
+                # 生成新的文件名
+                return self.get_file_path()
 
     def flush(self) -> None:
         new_cache = io.StringIO()  # 创建新的缓存
