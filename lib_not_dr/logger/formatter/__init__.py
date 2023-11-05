@@ -121,23 +121,23 @@ class LevelFormatter(BaseFormatter):
 
     level_name_map = {
         0:  'NOTSET',
-        2:  'TRACE',
-        5:  'FINE',
-        7:  'DEBUG',
-        10: 'INFO',
+        5:  'TRACE',
+        7:  'FINE',
+        10: 'DEBUG',
+        20: 'INFO',
         30: 'WARN',
-        50: 'ERROR',
-        90: 'FATAL'
+        40: 'ERROR',
+        50: 'FATAL'
     }
     name_level_map = {
         'NOTSET': 0,
-        'TRACE':  2,
-        'FINE':   5,
-        'DEBUG':  7,
-        'INFO':   10,
+        'TRACE':  5,
+        'FINE':   7,
+        'DEBUG':  10,
+        'INFO':   20,
         'WARN':   30,
-        'ERROR':  50,
-        'FATAL':  90
+        'ERROR':  40,
+        'FATAL':  50
     }
 
     @classmethod
