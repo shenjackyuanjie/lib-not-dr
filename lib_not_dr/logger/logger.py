@@ -63,6 +63,31 @@ class Logger(Options):
         self.outputs.remove(output)
         self.level = max(self.level, *[output.level for output in self.outputs])
 
+    @property
+    def global_level(self) -> int:
+        """
+        Get the global logging level.
+
+        Returns:
+            int: The global logging level.
+        """
+        return self.level
+
+    @global_level.setter
+    def global_level(self, level: int) -> None:
+        """
+        Set the global logging level.
+
+        Args:
+            level (int): The global logging level.
+
+        Returns:
+            None
+        """
+        self.level = level
+        for output in self.outputs:
+            output.level = level
+
     def make_log(self,
                  messages: List[str],
                  tag: Optional[str] = None,

@@ -8,7 +8,7 @@ from lib_not_dr.logger.logger import Logger
 
 if __name__ == '__main__':
     logger = Logger.get_logger_by_name('test')
-    logger.level = 0
+    logger.global_level = 0
 
     logger.info('Hello World!')
 
