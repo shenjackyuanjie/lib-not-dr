@@ -6,16 +6,20 @@
 import time
 
 from string import Template
-from typing import List, Union, Optional, Dict, Tuple
+from typing import List, Union, Optional, Dict, Tuple, TYPE_CHECKING
 
 from lib_not_dr.types.options import Options
 from lib_not_dr.logger.structure import LogMessage, FormattingMessage
+
+if TYPE_CHECKING:
+    from lib_not_dr.logger.formatter.colors import BaseColorFormatter
 
 
 class BaseFormatter(Options):
     name = 'BaseFormatter'
 
     sub_formatter: List['BaseFormatter'] = []
+    color_formatters: List['BaseColorFormatter'] = []
     default_template: str = '${log_time}|${logger_name}|${logger_tag}|${level}|${messages}'
 
     @classmethod
@@ -187,20 +191,19 @@ class StdFormatter(BaseFormatter):
 
     enable_color: bool = True
 
-    sub_formatter = [TimeFormatter(),
-                     LevelFormatter(),
-                     TraceFormatter()]
-
+    sub_formatter: List[BaseFormatter] = [TimeFormatter(),
+                          LevelFormatter(),
+                          TraceFormatter()]
     from lib_not_dr.logger.formatter.colors import (LevelColorFormatter,
                                                     LoggerColorFormatter,
                                                     TimeColorFormatter,
                                                     TraceColorFormatter,
                                                     MessageColorFormatter)
-    color_formatters = [LevelColorFormatter(),
-                        LoggerColorFormatter(),
-                        TimeColorFormatter(),
-                        TraceColorFormatter(),
-                        MessageColorFormatter()]
+    color_formatters: List[BaseFormatter] = [LevelColorFormatter(),
+                                             LoggerColorFormatter(),
+                                             TimeColorFormatter(),
+                                             TraceColorFormatter(),
+                                             MessageColorFormatter()]
 
     def __init__(self,
                  enable_color: bool = True,
@@ -215,10 +218,12 @@ class StdFormatter(BaseFormatter):
         :param kwargs: other options
         """
         # 同 structures.LogMessage.__init__ 的注释 (逃)
-        super().__init__(enable_color=enable_color,
-                         sub_formatter=sub_formatter,
-                         color_formatters=color_formatters,
-                         **kwargs)
+        self.enable_color = enable_color
+        if sub_formatter is not None:
+            self.sub_formatter = sub_formatter
+        if color_formatters is not None:
+            self.color_formatters = color_formatters
+        super().__init__(**kwargs)
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         super()._format(message)
@@ -277,4 +282,3 @@ if __name__ == '__main__':
         print(std_format.format_message(log_message), end='')
 
     print(std_format.as_markdown())
-
