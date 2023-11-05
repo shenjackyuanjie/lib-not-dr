@@ -12,20 +12,23 @@ import atexit
 import threading
 
 from pathlib import Path
+from typing import Optional
 
 from lib_not_dr.types.options import Options
 from lib_not_dr.logger.structure import LogMessage
 from lib_not_dr.logger.formatter import BaseFormatter, StdFormatter
 
 __all__ = [
-    'BaseOutputStream'
+    'BaseOutputStream',
+    'StdioOutputStream',
+    'FileCacheOutputStream'
 ]
 
 
 class BaseOutputStream(Options):
     name = 'BaseOutputStream'
 
-    level: int = 20
+    level: int = 10
     enable: bool = True
 
     formatter: BaseFormatter
@@ -46,6 +49,7 @@ class BaseOutputStream(Options):
 class StdioOutputStream(BaseOutputStream):
     name = 'StdioOutputStream'
 
+    level: int = 10
     formatter: BaseFormatter = StdFormatter()
 
     def write_stdout(self, message: LogMessage) -> None:
@@ -77,8 +81,8 @@ class StdioOutputStream(BaseOutputStream):
 class FileCacheOutputStream(BaseOutputStream):
     name = 'FileCacheOutputStream'
 
+    level: int = 10
     formatter: BaseFormatter = StdFormatter(enable_color=False)
-
     text_cache: io.StringIO = None
 
     flush_counter: int = 0
@@ -88,12 +92,13 @@ class FileCacheOutputStream(BaseOutputStream):
     flush_lock: threading.Lock = None
     flush_timer: threading.Timer = None
 
-    file_path: Path = Path('./logs')
+    file_path: Optional[Path] = Path('./logs')
     file_name: str
     # file mode: always 'a'
     file_encoding: str = 'utf-8'
     # do file swap or not
     file_swap: bool = False
+    at_exit_register: bool = False
 
     file_swap_counter: int = 0
     file_swap_name_template: str = '${name}-${counter}.log'
@@ -111,17 +116,11 @@ class FileCacheOutputStream(BaseOutputStream):
     file_swap_on_both: bool = False  # swap file when both size and time limit reached
 
     def init(self, **kwargs) -> bool:
-        if self.text_cache is None:
-            # ( 其实我也不确定为啥这么写 反正按照 "规范" 来说, StringIO 算是 "file" )
-            return True
-        self.flush_lock = threading.Lock()
-        return False
-
-    def load_file(self) -> bool:
         self.file_start_time = round(time.time())
         if self.text_cache is None:
             self.text_cache = io.StringIO()
-        return True
+        self.flush_lock = threading.Lock()
+        return False
 
     def _write(self, message: LogMessage) -> None:
         """
@@ -132,15 +131,17 @@ class FileCacheOutputStream(BaseOutputStream):
         """
         self.text_cache.write(self.formatter.format_message(message))
         self.flush_counter += 1
-        if message.flush or self.flush_counter >= self.flush_count_limit or \
-                (0 < self.flush_time_limit <= time.time() - self.file_start_time):
+        if message.flush or self.flush_counter >= self.flush_count_limit:
             self.flush()
         else:
             if self.flush_time_limit > 0:
-                if not self.flush_timer.is_alive() or self.flush_timer is None:
+                if self.flush_timer is None or not self.flush_timer.is_alive():
                     self.flush_timer = threading.Timer(self.flush_time_limit, self.flush)
+                    self.flush_timer.daemon = True
                     self.flush_timer.start()
-            atexit.register(self.flush)
+            if not self.at_exit_register:
+                atexit.register(self.flush)
+                self.at_exit_register = True
         return None
 
     def write_stdout(self, message: LogMessage) -> None:
@@ -165,15 +166,18 @@ class FileCacheOutputStream(BaseOutputStream):
         :return:
         """
         if (current_file := self.current_file_name) is None:
-            if self.file_start_time is None:
-                self.file_start_time = round(time.time())
+            if not self.file_swap:
+                # 直接根据 file name 生成文件
+                current_file = Path(self.file_path) / self.file_name
+                self.current_file_name = str(current_file)
+                return current_file
             template = string.Template(self.file_swap_name_template)
             file_name = template.safe_substitute(name=self.file_name,
                                                  counter=self.file_swap_counter,
                                                  log_time=round(time.time()),
                                                  start_time=self.file_start_time)
             current_file = Path(self.file_path) / file_name
-            self.current_file_name = str(current_file.absolute())
+            self.current_file_name = str(current_file)
         else:
             current_file = Path(current_file)
         return current_file
@@ -214,8 +218,10 @@ class FileCacheOutputStream(BaseOutputStream):
         if text == '':
             return None
         current_file = self.check_flush()
-        current_file.touch(mode=0o666, exist_ok=True)
-        with open(current_file, 'a', encoding=self.file_encoding) as f:
+        if not current_file.exists():
+            current_file.parent.mkdir(parents=True, exist_ok=True)
+            current_file.touch()
+        with current_file.open('a', encoding=self.file_encoding) as f:
             f.write(text)
         return None
 

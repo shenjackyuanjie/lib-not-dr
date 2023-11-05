@@ -24,7 +24,7 @@ class LogMessage(Options):
     split: str = ' '
 
     # 消息的属性
-    flush: bool = True
+    flush: bool = None
     level: int = 20
     log_time: float = None  # time.time_ns()
     logger_name: str = 'root'
@@ -35,7 +35,7 @@ class LogMessage(Options):
                  messages: Optional[List[str]] = None,
                  end: Optional[str] = '\n',
                  split: Optional[str] = ' ',
-                 flush: Optional[bool] = True,
+                 flush: Optional[bool] = None,
                  level: Optional[int] = 20,
                  log_time: Optional[float] = None,
                  logger_name: Optional[str] = 'root',
@@ -70,7 +70,7 @@ class LogMessage(Options):
     def init(self, **kwargs) -> bool:
         if self.log_time is None:
             self.log_time = time.time_ns()
-        if not isinstance(self.flush, bool):
+        if not isinstance(self.flush, bool) and self.flush is not None:
             self.flush = True if self.flush else False
         return False
 
