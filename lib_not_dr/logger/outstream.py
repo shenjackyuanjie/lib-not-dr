@@ -120,6 +120,7 @@ class FileCacheOutputStream(BaseOutputStream):
         if self.text_cache is None:
             self.text_cache = io.StringIO()
         self.flush_lock = threading.Lock()
+        self.get_file_path()
         return False
 
     def _write(self, message: LogMessage) -> None:
@@ -220,7 +221,7 @@ class FileCacheOutputStream(BaseOutputStream):
         current_file = self.check_flush()
         if not current_file.exists():
             current_file.parent.mkdir(parents=True, exist_ok=True)
-            current_file.touch()
+            current_file.touch(exist_ok=True)
         with current_file.open('a', encoding=self.file_encoding) as f:
             f.write(text)
         return None

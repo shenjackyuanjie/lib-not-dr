@@ -5,6 +5,7 @@
 #  -------------------------------
 import time
 
+from pathlib import Path
 from string import Template
 from typing import List, Union, Optional, Dict, Tuple, TYPE_CHECKING
 
@@ -180,7 +181,7 @@ class TraceFormatter(BaseFormatter):
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         if message[0].stack_trace is None:
             return message
-        message[1]['log_source'] = message[0].stack_trace.f_code.co_filename
+        message[1]['log_source'] = Path(message[0].stack_trace.f_code.co_filename)
         message[1]['log_line'] = message[0].stack_trace.f_lineno
         message[1]['log_function'] = message[0].stack_trace.f_code.co_name
         return message
