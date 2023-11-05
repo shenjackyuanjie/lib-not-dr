@@ -6,8 +6,9 @@
 
 import time
 
+from pathlib import Path
 from types import FrameType
-from typing import List, Optional, Tuple, Dict
+from typing import List, Optional, Tuple, Dict, Union
 
 from lib_not_dr.types.options import Options
 
@@ -92,7 +93,7 @@ class LogMessage(Options):
         return int(self.log_time / 1000000) % 1000
 
 
-FormattingMessage = Tuple[LogMessage, Dict[str, str]]
+FormattingMessage = Tuple[LogMessage, Dict[str, Union[str, Path]]]
 
 if __name__ == '__main__':
     print(LogMessage().as_markdown())
