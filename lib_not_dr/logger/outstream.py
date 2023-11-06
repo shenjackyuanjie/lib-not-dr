@@ -52,6 +52,7 @@ class StdioOutputStream(BaseOutputStream):
 
     level: int = LogLevel.info
     formatter: BaseFormatter = StdFormatter()
+    use_stderr: bool = True
 
     def write_stdout(self, message: LogMessage) -> None:
         if not self.enable:
@@ -66,7 +67,10 @@ class StdioOutputStream(BaseOutputStream):
             return None
         if message.level < self.level:
             return None
-        print(self.formatter.format_message(message), end='', flush=message.flush, file=sys.stderr)
+        if self.use_stderr:
+            print(self.formatter.format_message(message), end='', flush=message.flush, file=sys.stderr)
+        else:
+            print(self.formatter.format_message(message), end='', flush=message.flush)
         return None
 
     def flush(self) -> None:
