@@ -90,7 +90,6 @@ class FileCacheOutputStream(BaseOutputStream):
     # 默认 10 次 flush 一次
     flush_count_limit: int = 10
     flush_time_limit: int = 10  # time limit in sec, 0 means no limit
-    flush_lock: threading.Lock = None
     flush_timer: threading.Timer = None
 
     file_path: Optional[Path] = Path('./logs')
@@ -120,7 +119,6 @@ class FileCacheOutputStream(BaseOutputStream):
         self.file_start_time = round(time.time())
         if self.text_cache is None:
             self.text_cache = io.StringIO()
-        self.flush_lock = threading.Lock()
         self.get_file_path()
         return False
 
@@ -213,9 +211,8 @@ class FileCacheOutputStream(BaseOutputStream):
     def flush(self) -> None:
         new_cache = io.StringIO()  # 创建新的缓存
         self.flush_counter = 0  # atomic, no lock
-        with self.flush_lock:
-            text = self.text_cache.getvalue()
-            old_cache, self.text_cache = self.text_cache, new_cache
+        old_cache, self.text_cache = self.text_cache, new_cache
+        text = old_cache.getvalue()
         old_cache.close()  # 关闭旧的缓存
         if text == '':
             return None
