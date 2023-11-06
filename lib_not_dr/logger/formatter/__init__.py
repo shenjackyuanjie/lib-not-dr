@@ -22,7 +22,7 @@ class BaseFormatter(Options):
 
     sub_formatter: List['BaseFormatter'] = []
     color_formatters: List['BaseColorFormatter'] = []
-    default_template: str = '${log_time}|${logger_name}|${logger_tag}|${level}|${messages}'
+    default_template: str = '${log_time}|${logger_name}:${logger_tag}|${level}|${messages}'
 
     @classmethod
     def add_info(cls, match: str, to: str, description: str) -> str:

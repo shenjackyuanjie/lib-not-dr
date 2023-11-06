@@ -4,7 +4,7 @@
 #  All rights reserved
 #  -------------------------------
 
-from lib_not_dr.logger import LogLevel
+from lib_not_dr.logger import LogLevel, COLOR_SUPPORT
 from lib_not_dr.logger.formatter import BaseFormatter
 from lib_not_dr.logger.structure import FormattingMessage
 
@@ -81,7 +81,7 @@ class LevelColorFormatter(BaseColorFormatter):
         return cls.add_info('colored level', 'level', 'A colored level')
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
-        if isinstance(message[1].get('level'), int):
+        if isinstance(message[1].get('level'), int) or not COLOR_SUPPORT:
             return message
         # 获取颜色
         color = self.get_color(message)
@@ -119,7 +119,7 @@ class LoggerColorFormatter(BaseColorFormatter):
         return cls.add_info('colored logger name', 'logger name', 'A colored logger name')
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
-        if message[1].get('logger_name') is None:
+        if message[1].get('logger_name') is None or not COLOR_SUPPORT:
             return message
         # 获取颜色
         color = self.get_color(message)
@@ -159,7 +159,7 @@ class TimeColorFormatter(BaseColorFormatter):
         return cls.add_info('colored time', 'time', 'A colored time')
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
-        if message[1].get('log_time') is None:
+        if message[1].get('log_time') is None or not COLOR_SUPPORT:
             return message
         # 获取颜色
         color = self.get_color(message)
@@ -202,7 +202,7 @@ class TraceColorFormatter(BaseColorFormatter):
         return info
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
-        if message[0].stack_trace is None:
+        if message[0].stack_trace is None or not COLOR_SUPPORT:
             return message
         # 获取颜色
         color = self.get_color(message)
@@ -242,7 +242,7 @@ class MessageColorFormatter(BaseColorFormatter):
         return cls.add_info('colored message', 'message', 'A colored message')
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
-        if message[1].get('messages') is None:
+        if message[1].get('messages') is None or not COLOR_SUPPORT:
             return message
         # 获取颜色
         color = self.get_color(message)

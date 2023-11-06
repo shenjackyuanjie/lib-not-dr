@@ -18,3 +18,9 @@ if __name__ == '__main__':
     logger.warn('Hello World!')
     logger.error('Hello World!')
     logger.fatal('Hello World!')
+
+    logger.info('this message if from tag', tag='test')
+    logger.debug('this debug log if from admin', tag='admin')
+
+    logger.debug('and this message ends with none', end=' ')
+    logger.trace('so this message will be in the same line', tag='same line!')
