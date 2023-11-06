@@ -14,13 +14,16 @@ if __name__ == '__main__':
 
     logger.fine('Hello World!')
     logger.debug('Hello World!')
-    logger.trace('Hello World!')
-    logger.warn('Hello World!')
+    logger.trace('Hello tracing!')
+    logger.warn('warnnnnnnn')
     logger.error('Hello World!')
-    logger.fatal('Hello World!')
+    logger.fatal('good bye world')
 
     logger.info('this message if from tag', tag='test')
     logger.debug('this debug log if from admin', tag='admin')
 
     logger.debug('and this message ends with none', end=' ')
     logger.trace('so this message will be in the same line', tag='same line!')
+
+    logger.info('so just info some stuff')
+

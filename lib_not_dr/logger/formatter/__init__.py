@@ -22,7 +22,7 @@ class BaseFormatter(Options):
 
     sub_formatter: List['BaseFormatter'] = []
     color_formatters: List['BaseColorFormatter'] = []
-    default_template: str = '${log_time}|${logger_name}:${logger_tag}|${level}|${messages}'
+    default_template: str = '[${log_time}][${level}]|${logger_name}:${logger_tag}|${messages}'
 
     @classmethod
     def add_info(cls, match: str, to: str, description: str) -> str:
@@ -122,23 +122,23 @@ class LevelFormatter(BaseFormatter):
 
     level_name_map = {
         LogLevel.notset:  'NOTSET',
-        LogLevel.trace:   'TRACE',
-        LogLevel.fine:    'FINE',
-        LogLevel.debug:   'DEBUG',
-        LogLevel.info:    'INFO',
-        LogLevel.warn:    'WARN',
-        LogLevel.error:   'ERROR',
-        LogLevel.fatal:   'FATAL',
+        LogLevel.trace:   ' TRACE',
+        LogLevel.fine:    ' FINE ',
+        LogLevel.debug:   ' DEBUG',
+        LogLevel.info:    ' INFO ',
+        LogLevel.warn:    ' WARN ',
+        LogLevel.error:   'ERROR ',
+        LogLevel.fatal:   'FATAL ',
     }
     name_level_map = {
         'NOTSET': LogLevel.notset,
-        'TRACE': LogLevel.trace,
-        'FINE': LogLevel.fine,
-        'DEBUG': LogLevel.debug,
-        'INFO': LogLevel.info,
-        'WARN': LogLevel.warn,
-        'ERROR': LogLevel.error,
-        'FATAL': LogLevel.fatal,
+        ' TRACE': LogLevel.trace,
+        ' FINE ': LogLevel.fine,
+        ' DEBUG': LogLevel.debug,
+        ' INFO ': LogLevel.info,
+        ' WARN ': LogLevel.warn,
+        'ERROR ': LogLevel.error,
+        'FATAL ': LogLevel.fatal,
     }
 
     @classmethod

@@ -30,7 +30,7 @@ class BaseColorFormatter(BaseFormatter):
         # Notset: just black
         LogLevel.notset: '',
         # Trace: blue
-        LogLevel.trace:  '\033[0;34m',
+        LogLevel.trace:  '\033[38;2;138;173;244m',
         # Fine: green
         LogLevel.fine:   '\033[0;32m',
         # Debug: cyan
@@ -61,11 +61,11 @@ class LevelColorFormatter(BaseColorFormatter):
         # Notset: just black
         LogLevel.notset: '',
         # Trace: blue
-        LogLevel.trace:  '\033[0;34m',
+        LogLevel.trace:  '\033[38;2;138;173;244m',
         # Fine: green
-        LogLevel.fine:   '\033[0;32m',
+        LogLevel.fine:   '\033[35;48;2;44;44;54m',
         # Debug: cyan
-        LogLevel.debug:  '\033[0;36m',
+        LogLevel.debug:  '\033[38;2;133;138;149m',
         # Info: white
         LogLevel.info:   '\033[0;37m',
         # Warn: yellow
@@ -99,7 +99,7 @@ class LoggerColorFormatter(BaseColorFormatter):
         # Notset: just black
         LogLevel.notset: '',
         # Trace: blue
-        LogLevel.trace:  '\033[0;34m',
+        LogLevel.trace:  '\033[38;2;138;173;244m',
         # Fine: green
         LogLevel.fine:   '\033[0;32m',
         # Debug: cyan
@@ -139,7 +139,7 @@ class TimeColorFormatter(BaseColorFormatter):
         # Notset: just black
         LogLevel.notset: '',
         # Trace: blue
-        LogLevel.trace:  '\033[0;34m',
+        LogLevel.trace:  '\033[38;2;138;173;244m',
         # Fine: green
         LogLevel.fine:   '\033[0;32m',
         # Debug: cyan
@@ -151,7 +151,7 @@ class TimeColorFormatter(BaseColorFormatter):
         # Error: red
         LogLevel.error:  '\033[0;31m',
         # Fatal: red background
-        LogLevel.fatal:  '\033[0;41m',
+        LogLevel.fatal:  '\033[38;2;255;255;0;48;2;120;10;10m',
     }
 
     @classmethod
@@ -189,7 +189,7 @@ class TraceColorFormatter(BaseColorFormatter):
         # Error: red
         LogLevel.error:  '\033[38;2;0;255;180m',
         # Fatal: red background
-        LogLevel.fatal:  '\033[38;2;0;255;180m',
+        LogLevel.fatal:  '\033[38;2;255;255;0;48;2;120;10;10m',
     }
 
     @classmethod
