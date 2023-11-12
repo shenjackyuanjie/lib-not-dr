@@ -91,27 +91,6 @@ class BaseFormatter(Options):
         self.default_template = template
 
 
-class TimeFormatter(BaseFormatter):
-    name = 'TimeFormatter'
-
-    time_format: str = '%Y-%m-%d %H:%M:%S'
-    msec_time_format: str = '{}-{:03d}'
-
-    @classmethod
-    def _info(cls) -> str:
-        return cls.add_info('log_time', 'formatted time when logging', 'The time format string'
-                                                                       '. See https://docs.python.org/3/library/time'
-                                                                       '.html#time.strftime for more information.')
-
-    def _format(self, message: FormattingMessage) -> FormattingMessage:
-        time_mark = time.localtime(message[0].log_time / 1000000000)
-        if self.msec_time_format:
-            time_mark = self.msec_time_format.format(time.strftime(self.time_format, time_mark),
-                                                     message[0].create_msec_3)
-        message[1]['log_time'] = time_mark
-        return message
-
-
 class LevelFormatter(BaseFormatter):
     name = 'LevelFormatter'
 
@@ -121,14 +100,14 @@ class LevelFormatter(BaseFormatter):
     level_get_higher: bool = True
 
     level_name_map = {
-        LogLevel.notset:  'NOTSET',
-        LogLevel.trace:   ' TRACE',
-        LogLevel.fine:    ' FINE ',
-        LogLevel.debug:   ' DEBUG',
-        LogLevel.info:    ' INFO ',
-        LogLevel.warn:    ' WARN ',
-        LogLevel.error:   'ERROR ',
-        LogLevel.fatal:   'FATAL ',
+        LogLevel.notset: 'NOTSET',
+        LogLevel.trace:  ' TRACE',
+        LogLevel.fine:   ' FINE ',
+        LogLevel.debug:  ' DEBUG',
+        LogLevel.info:   ' INFO ',
+        LogLevel.warn:   ' WARN ',
+        LogLevel.error:  'ERROR ',
+        LogLevel.fatal:  'FATAL ',
     }
     name_level_map = {
         'NOTSET': LogLevel.notset,
@@ -170,9 +149,17 @@ class LevelFormatter(BaseFormatter):
 class TraceFormatter(BaseFormatter):
     name = 'TraceFormatter'
 
+    time_format: str = '%Y-%m-%d %H:%M:%S'
+    msec_time_format: str = '{}-{:03d}'
+    use_absolute_path: bool = False
+
     @classmethod
     def _info(cls) -> str:
-        info = cls.add_info('log_source', 'logging file', 'the logging file name')
+        info = cls.add_info('log_time', 'formatted time when logging', 'The time format string'
+                                                                       '. See https://docs.python.org/3/library/time'
+                                                                       '.html#time.strftime for more information.')
+        info += '\n'
+        info += cls.add_info('log_source', 'logging file', 'the logging file name')
         info += '\n'
         info += cls.add_info('log_line', 'logging line', 'the logging line number')
         info += '\n'
@@ -180,9 +167,25 @@ class TraceFormatter(BaseFormatter):
         return info
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
+        message = self._time_format(message)
+        message = self._trace_format(message)
+        return message
+
+    def _time_format(self, message: FormattingMessage) -> FormattingMessage:
+        time_mark = time.localtime(message[0].log_time / 1000000000)
+        if self.msec_time_format:
+            time_mark = self.msec_time_format.format(time.strftime(self.time_format, time_mark),
+                                                     message[0].create_msec_3)
+        message[1]['log_time'] = time_mark
+        return message
+
+    def _trace_format(self, message: FormattingMessage) -> FormattingMessage:
         if message[0].stack_trace is None:
             return message
-        message[1]['log_source'] = Path(message[0].stack_trace.f_code.co_filename)
+        path = Path(message[0].stack_trace.f_code.co_filename)
+        if self.use_absolute_path:
+            message[1]['log_source'] = path.absolute()
+        message[1]['log_source'] = path
         message[1]['log_line'] = message[0].stack_trace.f_lineno
         message[1]['log_function'] = message[0].stack_trace.f_code.co_name
         return message
@@ -193,9 +196,8 @@ class StdFormatter(BaseFormatter):
 
     enable_color: bool = True
 
-    sub_formatter: List[BaseFormatter] = [TimeFormatter(),
-                          LevelFormatter(),
-                          TraceFormatter()]
+    sub_formatter: List[BaseFormatter] = [LevelFormatter(),
+                                          TraceFormatter()]
     from lib_not_dr.logger.formatter.colors import (LevelColorFormatter,
                                                     LoggerColorFormatter,
                                                     TimeColorFormatter,
@@ -251,9 +253,6 @@ if __name__ == '__main__':
                              stack_trace=inspect.currentframe(),
                              logger_tag='tester',
                              logger_name='test')
-
-    print(TimeFormatter.info())
-    print(TimeFormatter().format_message(log_message))
 
     print(LevelFormatter.info())
     print(LevelFormatter().format_message(log_message))

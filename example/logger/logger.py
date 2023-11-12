@@ -27,3 +27,7 @@ if __name__ == '__main__':
 
     logger.info('so just info some stuff')
 
+    print = logger.info
+
+    print('abc')
+
