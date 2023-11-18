@@ -91,12 +91,14 @@ class BaseFormatter(Options):
         self.default_template = template
 
 
-class LevelFormatter(BaseFormatter):
-    name = 'LevelFormatter'
+class MainFormatter(BaseFormatter):
+    name = 'TraceFormatter'
+
+    time_format: str = '%Y-%m-%d %H:%M:%S'
+    msec_time_format: str = '{}-{:03d}'
+    use_absolute_path: bool = False
 
     default_level: int = 20
-
-    # If True, the undefined level will be set to the higher nearest level.
     level_get_higher: bool = True
 
     level_name_map = {
@@ -122,9 +124,26 @@ class LevelFormatter(BaseFormatter):
 
     @classmethod
     def _info(cls) -> str:
-        return cls.add_info('level', 'log level', 'The log level')
+        info = cls.add_info('log_time', 'formatted time when logging', 'The time format string'
+                                                                       '. See https://docs.python.org/3/library/time'
+                                                                       '.html#time.strftime for more information.')
+        info += '\n'
+        info += cls.add_info('level', 'log level', 'The log level')
+        info += '\n'
+        info += cls.add_info('log_source', 'logging file', 'the logging file name')
+        info += '\n'
+        info += cls.add_info('log_line', 'logging line', 'the logging line number')
+        info += '\n'
+        info += cls.add_info('log_function', 'logging function', 'the logging function name')
+        return info
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
+        message = self._time_format(message)
+        message = self._trace_format(message)
+        message = self._level_format(message)
+        return message
+
+    def _level_format(self, message: FormattingMessage) -> FormattingMessage:
         if message[0].level in self.name_level_map:
             level_tag = self.level_name_map[message[0].level]
         else:
@@ -143,32 +162,6 @@ class LevelFormatter(BaseFormatter):
                 else:
                     level_tag = 'NOTSET'
         message[1]['level'] = level_tag
-        return message
-
-
-class TraceFormatter(BaseFormatter):
-    name = 'TraceFormatter'
-
-    time_format: str = '%Y-%m-%d %H:%M:%S'
-    msec_time_format: str = '{}-{:03d}'
-    use_absolute_path: bool = False
-
-    @classmethod
-    def _info(cls) -> str:
-        info = cls.add_info('log_time', 'formatted time when logging', 'The time format string'
-                                                                       '. See https://docs.python.org/3/library/time'
-                                                                       '.html#time.strftime for more information.')
-        info += '\n'
-        info += cls.add_info('log_source', 'logging file', 'the logging file name')
-        info += '\n'
-        info += cls.add_info('log_line', 'logging line', 'the logging line number')
-        info += '\n'
-        info += cls.add_info('log_function', 'logging function', 'the logging function name')
-        return info
-
-    def _format(self, message: FormattingMessage) -> FormattingMessage:
-        message = self._time_format(message)
-        message = self._trace_format(message)
         return message
 
     def _time_format(self, message: FormattingMessage) -> FormattingMessage:
@@ -196,8 +189,7 @@ class StdFormatter(BaseFormatter):
 
     enable_color: bool = True
 
-    sub_formatter: List[BaseFormatter] = [LevelFormatter(),
-                                          TraceFormatter()]
+    sub_formatter: List[BaseFormatter] = [MainFormatter()]
     from lib_not_dr.logger.formatter.colors import (LevelColorFormatter,
                                                     LoggerColorFormatter,
                                                     TimeColorFormatter,
@@ -253,12 +245,6 @@ if __name__ == '__main__':
                              stack_trace=inspect.currentframe(),
                              logger_tag='tester',
                              logger_name='test')
-
-    print(LevelFormatter.info())
-    print(LevelFormatter().format_message(log_message))
-
-    print(TraceFormatter.info())
-    print(TraceFormatter().format_message(log_message))
 
     print(StdFormatter.info())
     print(StdFormatter().format_message(log_message))
