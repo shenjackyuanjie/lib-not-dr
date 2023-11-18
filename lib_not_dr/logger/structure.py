@@ -57,6 +57,8 @@ class LogMessage(Options):
         :param kwargs: other options
         """
         # 为了方便使用 单独覆盖了 __init__ 方法来提供代码补全的选项
+        if messages is None:
+            messages = []
         super().__init__(messages=messages,
                          end=end,
                          split=split,
@@ -76,6 +78,8 @@ class LogMessage(Options):
         return False
 
     def format_message(self) -> str:
+        if self.split is None:
+            self.split = ' '
         return self.split.join(self.messages) + self.end
 
     def format_for_message(self) -> Dict[str, str]:

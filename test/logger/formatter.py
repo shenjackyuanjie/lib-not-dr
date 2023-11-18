@@ -7,7 +7,7 @@
 import inspect
 import unittest
 
-from lib_not_dr.logger.formatter import BaseFormatter, TimeFormatter, LevelFormatter, TraceFormatter
+from lib_not_dr.logger.formatter import BaseFormatter, MainFormatter
 from lib_not_dr.logger.structure import LogMessage
 
 
@@ -26,22 +26,8 @@ class FormatterTest(unittest.TestCase):
         self.assertEqual(message.logger_name, 'root')
         self.assertEqual(message.logger_tag, 'root')
 
-    def test_create_empty_tag_message(self):
-        message = LogMessage()
-
-        self.assertIsNone(message.logger_tag)
-        self.assertEqual(message.format_for_message()['logger_tag'], '   ')
-
-    def test_formatter(self):
-        formatter = BaseFormatter()
-        formatter.info()
-
-    def test_time_formatter(self):
-        formatter = TimeFormatter()
-        formatter.info()
-
-    def test_level_formatter(self):
-        formatter = LevelFormatter()
+    def test_format_level(self):
+        formatter = MainFormatter()
         formatter.info()
         message = LogMessage(messages=['test'],
                              level=0)
@@ -54,8 +40,4 @@ class FormatterTest(unittest.TestCase):
 
     def test_std_formatter(self):
         formatter = BaseFormatter()
-        formatter.info()
-
-    def test_trace_formatter(self):
-        formatter = TraceFormatter()
         formatter.info()
