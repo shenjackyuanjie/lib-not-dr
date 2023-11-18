@@ -12,6 +12,10 @@ from lib_not_dr.logger.structure import LogMessage
 
 class LogMessageTest(unittest.TestCase):
     def test_create_empty_message(self):
+        """
+        测试空消息的创建
+        这玩意甚至是 codeiume/github copilot 自动补全的
+        """
         message = LogMessage()
         self.assertEqual(message.messages, [])
         self.assertEqual(message.level, 20)
@@ -44,6 +48,17 @@ class LogMessageTest(unittest.TestCase):
         for testing in (' ', ' | ', ' | '):
             message.split = testing
             self.assertEqual(message.format_message(), 'test' + testing + 'test2')
+
+    def test_format_message_end_with_split(self):
+        """
+        测试消息的结尾和分割
+        """
+        message = LogMessage(messages=['test', 'test2'], end='\n')
+        for test_split in (' ', ' | ', ' | '):
+            for test_end in ('\n', '\r\n', '\r'):
+                message.split = test_split
+                message.end = test_end
+                self.assertEqual(message.format_message(), 'test' + test_split + 'test2' + test_end)
 
     def test_msec_3(self):
         start_time = time.time()
