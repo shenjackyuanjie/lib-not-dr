@@ -25,4 +25,3 @@ line-length = 150
 src = [
     "lib_not_dr"
 ]
-format = "grouped"

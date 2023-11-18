@@ -9,7 +9,9 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 - Version / 版本: 0.2.0-alpha0
 - Author / 作者: shenjackyuanjie 3695888@qq.com
 
-> [shenjackyuanjie](https://github/shenjackyuanjie)
+> [shenjackyuanjie](https://github.com/shenjackyuanjie)
+
+> [更新日志|Change Log](docs/change_log.md)
 
 ### License/许可证
 
@@ -17,18 +19,46 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ## 安装/Install
 
-```bash
+```bash title="install.sh"
 pip install lib-not-dr
 ```
 
 ## 使用/Usage
+
+### Logger
+
+> WIP
+> 等待 0.2.0
+
+```python title="logger.py"
+from lib_not_dr.logger.logger import Logger
+
+logger = Logger.get_logger_by_name("test")
+
+logger.fine('Hello World!')
+logger.debug('Hello World!')
+logger.trace('Hello tracing!')
+logger.info('Hello World!')  # info!
+logger.warn('warnnnnnnn')
+logger.error('Hello World!')
+logger.fatal('good bye world')
+
+# tag
+logger.info('this message if from tag', tag='test')
+logger.debug('this debug log if from admin', tag='admin')
+
+# end
+logger.debug('and this message ends with none', end=' ')
+logger.trace('so this message will be in the same line', tag='same line!')
+```
+
 
 ### Nuitka Compiler Helper
 
 > simple example
 > 简单示例
 
-```python
+```python title="simple_nuitka.py"
 import subprocess
 from pathlib import Path
 from lib_not_dr.nuitka.compile import CompilerHelper
@@ -42,7 +72,7 @@ subprocess.run(compiler.gen_subprocess_cmd())
 > more complex example
 > 复杂示例
 
-```python
+```python title="complex_nuitka.py"
 import sys
 import subprocess
 from pathlib import Path
