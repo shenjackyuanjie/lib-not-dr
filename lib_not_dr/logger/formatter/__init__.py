@@ -16,6 +16,12 @@ from lib_not_dr.logger.structure import LogMessage, FormattingMessage
 if TYPE_CHECKING:
     from lib_not_dr.logger.formatter.colors import BaseColorFormatter
 
+__all__ = [
+    'BaseFormatter',
+    'MainFormatter',
+    'StdFormatter'
+]
+
 
 class BaseFormatter(Options):
     name = 'BaseFormatter'
@@ -189,7 +195,7 @@ class StdFormatter(BaseFormatter):
 
     enable_color: bool = True
 
-    sub_formatter: List[BaseFormatter] = [MainFormatter()]
+    sub_formatter: List[BaseFormatter] = []
     from lib_not_dr.logger.formatter.colors import (LevelColorFormatter,
                                                     LoggerColorFormatter,
                                                     TimeColorFormatter,
@@ -204,6 +210,7 @@ class StdFormatter(BaseFormatter):
     def __init__(self,
                  enable_color: bool = True,
                  sub_formatter: Optional[List[BaseFormatter]] = None,
+                 main_formatter: Optional[MainFormatter] = None,
                  color_formatters: Optional[List[BaseFormatter]] = None,
                  **kwargs) -> None:
         """
@@ -219,6 +226,10 @@ class StdFormatter(BaseFormatter):
             self.sub_formatter = sub_formatter
         if color_formatters is not None:
             self.color_formatters = color_formatters
+        if main_formatter is not None and isinstance(main_formatter, MainFormatter):
+            self.main_formatter = main_formatter
+        else:
+            self.main_formatter = MainFormatter()
         super().__init__(**kwargs)
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:

@@ -1,5 +1,12 @@
 # Change log / 更新日志
 
+## 0.2.0-alpha0
+
+### Logger
+
+- 添加了 Logger (虽说 0.1.8 就有了)
+- 目前入口点位于 `lib_not_dr.logger.logger.Logger`
+
 ## 0.1.8
 
 - 为 `types.Options` 添加了 `_check_option` 选项
