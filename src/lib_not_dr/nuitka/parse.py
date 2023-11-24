@@ -144,6 +144,7 @@ def main():
     # printed in blue text
     # \033[34m is the escape code for blue text
     print(f"\033[34mRunning: {subprocess_command}\033[0m")
+    print(f"Working Dir: {Path().cwd()}")
 
     start_time = time.time()
     subprocess.run(subprocess_command, shell=True)

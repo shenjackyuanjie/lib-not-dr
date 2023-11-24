@@ -8,3 +8,5 @@ from lib_not_dr.nuitka.parse import main
 
 if __name__ == '__main__':
     main()
+
+main = main
