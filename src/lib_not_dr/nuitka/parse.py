@@ -64,7 +64,8 @@ def get_toml_reader():
             return toml_loads
         except ImportError:
             continue
-    error_msg = """No toml reader found, please install any below by pip:\n%s
+    error_msg = """No toml reader found, please install any below by pip:
+    %s
     or use Python 3.11+""" % " ".join(
         TOML_READERS
     )
@@ -100,15 +101,15 @@ def gen_subprocess_args(nuitka_config: dict) -> list:
     for name, value in nuitka_config.items():
         if value is True:
             # --<name>
-            cmd_list.append("--%s" % name)
+            cmd_list.append(f"--{name}")
             continue
         elif isinstance(value, str):
             # --<name>=<value>
-            cmd_list.append("--%s=%s" % (name, value))
+            cmd_list.append(f"--{name}={value}")
             continue
         elif isinstance(value, Iterable):
             # --<name>=<value1>,<value2>,...
-            cmd_list.append("--%s=%s" % (name, ",".join(value)))
+            cmd_list.append(f"--{name}={','.join(value)}")
             continue
 
     return cmd_list

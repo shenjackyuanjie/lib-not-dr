@@ -45,6 +45,9 @@ build-backend = "setuptools.build_meta"
 #lib_not_dr = "lib_not_dr"
 #lndl_nuitka = "lndl_nuitka"
 
+[project.optional-dependencies]
+toml = ["tomli >= 2.0.1"]
+
 [tool.setuptools.dynamic]
 version = { attr = "lib_not_dr.__version__"}
 
