@@ -6,7 +6,7 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ## Information/信息
 
-- Version / 版本: 0.2.0-alpha0
+- Version / 版本: 0.2.0-beta.0
 - Author / 作者: shenjackyuanjie <3695888@qq.com>
 
 > [shenjackyuanjie](https://github.com/shenjackyuanjie)
@@ -52,6 +52,17 @@ logger.debug('and this message ends with none', end=' ')
 logger.trace('so this message will be in the same line', tag='same line!')
 ```
 
+### Nuitka pyproject paser
+
+> WIP
+> 等待 0.2.0
+
+```toml title="pyproject.toml"
+[tool.lndl.nuitka]
+main = "main.py"
+# --main=main.py
+
+```
 
 ### Nuitka Compiler Helper
 

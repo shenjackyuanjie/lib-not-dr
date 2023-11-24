@@ -4,12 +4,7 @@
 #  All rights reserved
 #  -------------------------------
 
-__version__ = '0.2.0-beta.0'
+from lib_not_dr.nuitka.parse import main
 
-__all__ = [
-    '__version__',
-    'logger',
-    'nuitka',
-    'types',
-    'command'
-]
+if __name__ == '__main__':
+    main()

@@ -1,27 +1,53 @@
 [project]
-version = "0.2.0-alpha0"
+
 name = "lib-not-dr"
 description = "A python lib created from Difficult Rocket development"
 readme = "README.md"
 authors = [
     {name = "shenjackyuanjie", email = "3695888@qq.com"}
 ]
+
 requires-python = ">=3.8"
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    # Python 3 支持版本.
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    # Python 实现.
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    # 系统支持.
     "Operating System :: OS Independent",
+    
 ]
 license = { file = "LICENSE" }
+dynamic = ["version"]
+
+# [build-system]
+# requires = ["setuptools>=61.0"]
+# build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["lib_not_dr", "lndl_nuitka"]
+
+[tool.setuptools.dynamic]
+version = { attr = "lib_not_dr.__version__"}
 
 [project.urls]
 Homepage = "https://github.com/shenjackyuanjie/lib-not-dr"
 Repository = "https://github.com/shenjackyuanjie/lib-not-dr"
 Changelog = "https://github.com/shenjackyuanjie/lib-not-dr/blob/main/docs/change_log.md"
 
+[project.scripts]
+lndl_nuitka = "lndl_nuitka:main"
 
 [tool.ruff]
 target-version = "py38"
 line-length = 150
 src = [
-    "lib_not_dr"
+    "lib_not_dr",
+    "lndl"
 ]

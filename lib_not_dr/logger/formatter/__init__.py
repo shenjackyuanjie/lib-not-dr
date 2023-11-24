@@ -7,7 +7,7 @@ import time
 
 from pathlib import Path
 from string import Template
-from typing import List, Union, Optional, Dict, Tuple, TYPE_CHECKING
+from typing import List, Union, Optional, TYPE_CHECKING
 
 from lib_not_dr.logger import LogLevel
 from lib_not_dr.types.options import Options
