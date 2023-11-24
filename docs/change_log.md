@@ -1,5 +1,17 @@
 # Change log / 更新日志
 
+## 0.2.0-beta.0/1
+
+### 重构
+
+- 重构了文件目录结构
+  - 保证 `setuptools` 可以正常工作
+
+### lndl-nuitka
+
+- 添加了脚本 `lndl-nuitka`
+  - 用于解析 `pyproject.toml` 中的 `tool.lndl.nuitka` 部分
+
 ## 0.2.0-alpha0
 
 ### Logger
