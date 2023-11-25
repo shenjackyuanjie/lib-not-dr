@@ -1,5 +1,13 @@
 # Change log / 更新日志
 
+## 0.2.0-rc.3
+
+### lndl-nuitka
+
+- 在 `arg_parser` 中添加了函数 `subprocess_to_bash`
+  - 用于将 `arg_parser` 中的参数转换为 `bash` 命令
+  - 理论上可以直接运行
+
 ## 0.2.0-rc.1/2
 
 ### lndl-nuitka

@@ -165,3 +165,12 @@ def gen_subprocess_args(nuitka_config:
                 continue
 
     return cmd_list
+
+
+def subprocess_to_bash(cmd_list: List[str]) -> str:
+    """
+    :param cmd_list: list
+    :return: str
+    """
+    cmd_list = [item if ' ' not in item else f'"{item}"' for item in cmd_list]
+    return " ".join(cmd_list)
