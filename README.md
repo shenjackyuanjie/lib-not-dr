@@ -6,7 +6,7 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ## Information/信息
 
-- Version / 版本: 0.2.0-beta.0
+- Version / 版本: 0.2.0-beta.3
 - Author / 作者: shenjackyuanjie <3695888@qq.com>
 
 > [shenjackyuanjie](https://github.com/shenjackyuanjie)
@@ -61,7 +61,14 @@ logger.trace('so this message will be in the same line', tag='same line!')
 [tool.lndl.nuitka]
 main = "main.py"
 # --main=main.py
+standalone = true
+onefile = false
+```
 
+```bash
+lndl-nuitka .
+lndl-nuitka . -- --onefile
+# add --onefile to nuitka
 ```
 
 ### Nuitka Compiler Helper

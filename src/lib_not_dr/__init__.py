@@ -4,7 +4,17 @@
 #  All rights reserved
 #  -------------------------------
 
-__version__ = '0.2.0-beta.2'
+__version__ = '0.2.0-beta.3'
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from lib_not_dr import (
+        logger,
+        nuitka,
+        types,
+        command
+    )
 
 __all__ = [
     '__version__',

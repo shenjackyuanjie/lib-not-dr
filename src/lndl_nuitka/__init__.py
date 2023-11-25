@@ -4,9 +4,9 @@
 #  All rights reserved
 #  -------------------------------
 
-from lib_not_dr.nuitka.parse import main
+from lib_not_dr.nuitka.reader import cli_main
 
 if __name__ == '__main__':
-    main()
+    cli_main()
 
-main = main
+main = cli_main

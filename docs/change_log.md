@@ -1,5 +1,13 @@
 # Change log / 更新日志
 
+## 0.2.0-beta.2
+
+### lndl-nuitka
+
+- 可以使用 `--` 单独添加参数了
+  - 例如 `lndl-nuitka -- --onefile`
+  - 会将 `--onefile` 添加到 `nuitka` 的参数中
+
 ## 0.2.0-beta.0/1
 
 ### 重构

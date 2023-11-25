@@ -65,3 +65,9 @@ line-length = 150
 src = [
     "src",
 ]
+
+[tool.lndl.nuitka]
+main = "test-only.py"
+onefile = false
+standalone = true
+
