@@ -1,5 +1,13 @@
 # Change log / 更新日志
 
+## 0.2.0-rc.10
+
+### lndl-nuitka
+
+- 将 `lndl-nuitka` 中的 `subprocess.run` 方法修改为
+  - Linux / MacOS: `subprocess.run(shell=False)`
+  - Windows: `subprocess.run(shell=True)`
+
 ## 0.2.0-rc.9
 
 ### lndl-nuitka

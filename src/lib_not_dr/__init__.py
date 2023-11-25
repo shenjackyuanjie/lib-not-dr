@@ -4,7 +4,7 @@
 #  All rights reserved
 #  -------------------------------
 
-__version__ = '0.2.0-rc.9'
+__version__ = '0.2.0-rc.10'
 
 from typing import TYPE_CHECKING
 
