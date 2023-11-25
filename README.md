@@ -21,6 +21,8 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ```bash title="install.sh"
 pip install lib-not-dr
+pip install lib-not-dr[nuitka]
+# install with nuitka support
 ```
 
 ## 使用/Usage
