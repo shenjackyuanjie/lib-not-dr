@@ -94,7 +94,7 @@ def run_nuitka(subprocess_command: list) -> None:
     print(f"Time Elapsed: {end_time - start_time} seconds")
 
 
-def main(config: support_config_dict) -> None:
+def main(config: support_config_dict) -> list:
     """
     enter point for python direct call
     :param config: nuitka config dict
@@ -102,7 +102,7 @@ def main(config: support_config_dict) -> None:
     """
     subprocess_command = gen_subprocess_args(config)
     display_config(subprocess_command)
-    run_nuitka(subprocess_command)
+    return subprocess_command
 
 
 def cli_main() -> None:

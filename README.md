@@ -75,6 +75,17 @@ lndl_nuitka . -y
 # run without confirmation
 lndl_nuitka . -n
 # do not run
+``` 
+
+```python
+from tomli import loads
+from lib_not_dr.nuitka.reader import main, run_nuitka
+
+pyproject_toml = loads(open("pyproject.toml", "r").read())
+nuitka_config = pyproject_toml["tool"]["lndl"]["nuitka"]
+nuitka_config["product_version"] = "0.1.0"
+command = main(nuitka_config)
+run_nuitka(command)
 ```
 
 ### Nuitka Compiler Helper

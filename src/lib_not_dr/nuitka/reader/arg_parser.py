@@ -65,7 +65,6 @@ def get_cli_nuitka_args() -> dict:
     if len(sys.argv) < 2:
         return {}
     if '--' not in sys.argv:
-        print(f"invalid args: {sys.argv}")
         return {}
 
     # start from --
