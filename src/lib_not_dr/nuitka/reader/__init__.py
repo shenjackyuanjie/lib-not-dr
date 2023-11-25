@@ -10,7 +10,10 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Union, List
 
-from lib_not_dr.nuitka.reader.arg_parser import pyproject_toml, toml_path_cli, gen_subprocess_args
+from lib_not_dr.nuitka.reader.arg_parser import (pyproject_toml,
+                                                 toml_path_cli,
+                                                 gen_subprocess_args,
+                                                 subprocess_to_bash)
 
 support_config_dict = Dict[str, Union[str, bool, List[Union[str, tuple]]]]
 
@@ -83,7 +86,7 @@ toml_loads = get_toml_reader()
 def display_config(subprocess_command: list) -> None:
     print(f"The config is:\n\033[34m{subprocess_command} \033[0m")
     print("shell command is:\n\033[34m", end="")
-    print(" ".join(subprocess_command), '\033[0m')
+    print(subprocess_to_bash(subprocess_command), '\033[0m')
     print(f"Working Dir: \033[32m {Path().cwd().absolute()} \033[0m")
 
 

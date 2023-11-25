@@ -1,5 +1,14 @@
 # Change log / 更新日志
 
+## 0.2.0-rc.4
+
+### lndl-nuitka
+
+- 在 `lndl-nuitka` 中使用新添加的 `subprocess_to_bash` 函数展示命令
+  - 保证展示的命令可以直接运行
+
+> 真的就是在刷版本号啊
+
 ## 0.2.0-rc.3
 
 ### lndl-nuitka
