@@ -422,6 +422,9 @@ class CompilerHelper(Options):
                 生成的 nuitka 构建脚本
                 Generated nuitka build script
         """
+        warnings.warn("\033[33mlib_not_dr.nuitka.compile is deprecated "
+                      "use lib_not_dr.nuitka.reader.main or lndl-nuitka instead\033[0m",
+                      DeprecationWarning, stacklevel=2)
         cmd_list = [self.python_cmd, '-m', 'nuitka']
         # macos 和 非 macos icon 参数不同
         if platform.system() == 'Darwin':
