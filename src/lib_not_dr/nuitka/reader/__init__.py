@@ -14,6 +14,14 @@ from lib_not_dr.nuitka.reader.arg_parser import pyproject_toml, toml_path_cli, g
 
 support_config_dict = Dict[str, Union[str, bool, List[Union[str, tuple]]]]
 
+#  it will
+# - read the given file or
+# - find pyproject.toml in the given dir or
+# - find pyproject.toml in current dir
+
+# and read the `[tool.lndl.nuitka]` section
+# then it will run nuitka with the given config
+
 USEAGE = """
 usage:
 python lndl-nuitka.py --help (or -h)
@@ -23,14 +31,10 @@ python lndl-nuitka.py <path-to-pyproject.toml>
 python lndl-nuitka.py <path-to-dir>
 python lndl-nuitka.py (with nothing, will use current dir)
 
-then it will
-- read the given file or
-- find pyproject.toml in the given dir or
-- find pyproject.toml in current dir
-
-and read the `[tool.lndl.nuitka]` section
-
-then it will run nuitka with the given config
+arguments:
+--no-run (-n) : only show the config, not run nuitka
+--yes (-y) : run nuitka without asking
+-- --xxx : pass to nuitka
 
 用法:
 python lndl-nuitka.py --help (或 -h)
@@ -40,14 +44,11 @@ python lndl-nuitka.py <一个文件>
 python lndl-nuitka.py <一个路径>
 python lndl-nuitka.py (直接运行 会使用当前目录)
 
-然后它会
-- 读取给定的文件 或
-- 在给定的路径中找到 pyproject.toml 或
-- 在当前目录中找到 pyproject.toml
+参数:
+--no-run (-n) : 只显示配置, 不运行 nuitka
+--yes (-y) : 不询问直接运行 nuitka
+-- --xxx : 传递给 nuitka 的参数
 
-并读取 `[tool.lndl.nuitka]` 部分
-
-然后它会使用给定的配置运行 nuitka
 """
 
 TOML_READERS = (
@@ -127,6 +128,13 @@ def cli_main() -> None:
 
     subprocess_command = gen_subprocess_args(nuitka_config)
     display_config(subprocess_command)
-    if input("are you sure to run? (y/n)") not in ["y", "Y", "yes", "Yes"]:
+
+    exit_arg = ('-no-run', '-n')
+    confirm_arg = ('-y', '-yes')
+    if any(arg in sys.argv for arg in exit_arg):
         sys.exit(0)
+    elif all(arg not in sys.argv for arg in confirm_arg):
+        if input("are you sure to run? (y/n)") not in ["y", "Y", "yes", "Yes"]:
+            sys.exit(0)
+
     run_nuitka(subprocess_command)

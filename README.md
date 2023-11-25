@@ -66,12 +66,24 @@ onefile = false
 ```
 
 ```bash
-lndl-nuitka .
-lndl-nuitka . -- --onefile
+lndl_nuitka .
+lndl_nuitka . -- --onefile
 # add --onefile to nuitka
+lndl_nuitka . -y
+# run without confirmation
+lndl_nuitka . -n
+# do not run
 ```
 
 ### Nuitka Compiler Helper
+
+#### Warning/警告
+
+::: warning
+> 已经弃用 Deprecated
+> 请改用 lndl_nuitka / python -m lndl_nuitka
+
+:::
 
 > simple example
 > 简单示例

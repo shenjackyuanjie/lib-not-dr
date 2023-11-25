@@ -21,7 +21,6 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
     # 系统支持.
     "Operating System :: OS Independent",
-    
 ]
 license = { file = "LICENSE" }
 dynamic = ["version"]
