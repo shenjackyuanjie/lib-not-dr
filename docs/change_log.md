@@ -1,5 +1,11 @@
 # Change log / 更新日志
 
+## 0.2.0-rc.9
+
+### lndl-nuitka
+
+- 将运行方法修改为 `subprocess.run(shell=False)`
+
 ## 0.2.0-rc.4
 
 ### lndl-nuitka

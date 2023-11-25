@@ -92,7 +92,7 @@ def display_config(subprocess_command: list) -> None:
 
 def run_nuitka(subprocess_command: list) -> None:
     start_time = time.time()
-    subprocess.run(subprocess_command, shell=True)
+    subprocess.run(subprocess_command, shell=False, check=True)
     end_time = time.time()
     print(f"Time Elapsed: {end_time - start_time} seconds")
 
