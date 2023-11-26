@@ -145,6 +145,9 @@ class Logger(Options):
         Returns:
             Logger: The logger with the specified name.
         """
+        from lib_not_dr.logger.config import storage
+        if storage.have_logger(name):
+            return storage.get_logger(name)
         return Logger(logger_name=name)
 
     def info(self,

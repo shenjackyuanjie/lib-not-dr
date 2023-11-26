@@ -209,9 +209,9 @@ class TraceColorFormatter(BaseColorFormatter):
         # 添加颜色
         if color == '' or color == RESET_COLOR:
             return message
-        message[1]['log_source'] = f'{color}{message[1]["log_source"]}{RESET_COLOR}'
-        message[1]['log_line'] = f'{color}{message[1]["log_line"]}{RESET_COLOR}'
-        message[1]['log_function'] = f'{color}{message[1]["log_function"]}{RESET_COLOR}'
+        for name in ('log_source', 'log_line', 'log_function'):
+            if message[1].get(name) is not None:
+                message[1][name] = f'{color}{message[1][name]}{RESET_COLOR}'
         return message
 
 

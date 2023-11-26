@@ -99,6 +99,7 @@ class BaseFormatter(Options):
 
 class MainFormatter(BaseFormatter):
     name = 'TraceFormatter'
+    sub_formatter: List['BaseFormatter'] = []
 
     time_format: str = '%Y-%m-%d %H:%M:%S'
     msec_time_format: str = '{}-{:03d}'
@@ -195,7 +196,7 @@ class StdFormatter(BaseFormatter):
 
     enable_color: bool = True
 
-    sub_formatter: List[BaseFormatter] = []
+    sub_formatter: List[BaseFormatter] = [MainFormatter()]
     from lib_not_dr.logger.formatter.colors import (LevelColorFormatter,
                                                     LoggerColorFormatter,
                                                     TimeColorFormatter,
