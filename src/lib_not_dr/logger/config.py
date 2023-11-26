@@ -56,13 +56,13 @@ class ConfigStorage(Options):
 
     # by GitHub Copilot
     @classmethod
-    def detect_cycle(cls, graph: Dict[str, List[str]], start: str, visited: Set[str], path: List[str]) -> List[str]:
+    def _detect_cycle(cls, graph: Dict[str, List[str]], start: str, visited: Set[str], path: List[str]) -> List[str]:
         visited.add(start)  # 将当前节点添加到已访问的节点集合中
         path.append(start)  # 将当前节点添加到当前路径中
         for neighbour in graph[start]:  # 遍历当前节点的所有邻居
             if neighbour in visited:  # 如果邻居节点已经被访问过，那么我们找到了一个循环
                 return path + [neighbour]  # 返回包含循环的路径
-            cycle_path = cls.detect_cycle(graph, neighbour, visited, path)  # 递归地在邻居节点上调用函数
+            cycle_path = cls._detect_cycle(graph, neighbour, visited, path)  # 递归地在邻居节点上调用函数
             if cycle_path:  # 如果在邻居节点上找到了循环，那么返回包含循环的路径
                 return cycle_path
         visited.remove(start)  # 从已访问的节点集合中移除当前节点
@@ -73,7 +73,7 @@ class ConfigStorage(Options):
     def find_cycles(cls, graph: Dict[str, List[str]]) -> List[str]:
         cycles_set = set()  # 创建一个集合来存储所有的循环
         for node in graph:  # 遍历图中的所有节点
-            cycle = cls.detect_cycle(graph, node, set(), [])  # 在每个节点上调用detect_cycle函数
+            cycle = cls._detect_cycle(graph, node, set(), [])  # 在每个节点上调用detect_cycle函数
             if cycle:  # 如果找到了循环，那么将循环添加到集合中
                 cycles_set.update(cycle)
         return sorted(cycles_set)  # 返回排序后的循环列表
