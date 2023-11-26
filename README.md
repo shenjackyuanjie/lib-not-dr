@@ -56,8 +56,9 @@ logger.trace('so this message will be in the same line', tag='same line!')
 
 ### Nuitka pyproject paser
 
-> WIP
-> 等待 0.2.0
+> `pyproject.toml` 内的配置
+> 
+> Config in `pyproject.toml`
 
 ```toml title="pyproject.toml"
 [tool.lndl.nuitka]
@@ -66,6 +67,10 @@ main = "main.py"
 standalone = true
 onefile = false
 ```
+
+> 通过 `lndl_nuitka` 命令行工具使用
+> 
+> Use with `lndl_nuitka` command line tool
 
 ```bash
 lndl_nuitka .
@@ -76,6 +81,10 @@ lndl_nuitka . -y
 lndl_nuitka . -n
 # do not run
 ``` 
+
+> 通过 `lib_not_dr.nuitka.reader` 模块使用
+> 
+> Use with `lib_not_dr.nuitka.reader`
 
 ```python
 from tomli import loads
@@ -93,6 +102,7 @@ run_nuitka(command)
 #### Warning/警告
 
 ::: warning
+
 > 已经弃用 Deprecated
 > 请改用 lndl_nuitka / python -m lndl_nuitka
 
@@ -138,5 +148,4 @@ else: # do_run is None
 
 if do_run:
     subprocess.run(compiler.gen_subprocess_cmd())
-
 ```
