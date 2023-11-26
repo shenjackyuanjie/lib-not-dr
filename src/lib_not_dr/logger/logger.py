@@ -20,7 +20,7 @@ class Logger(Options):
 
     outputs: List[BaseOutputStream] = [StdioOutputStream()]
 
-    log_name: str = 'root'
+    logger_name: str = 'root'
 
     enable: bool = True
     level: int = 20  # info
@@ -122,7 +122,7 @@ class Logger(Options):
                              flush=flush,
                              level=level,
                              log_time=log_time,
-                             logger_name=self.log_name,
+                             logger_name=self.logger_name,
                              logger_tag=tag,
                              stack_trace=stack_trace)
         if level >= 30:  # WARN

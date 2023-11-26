@@ -207,17 +207,22 @@ class StdFormatter(BaseFormatter):
                                              TraceColorFormatter(),
                                              MessageColorFormatter()]
 
+    default_template: str = '[${log_time}][${level}]|${logger_name}:${logger_tag}|${messages}'
+
     def __init__(self,
                  enable_color: bool = True,
                  sub_formatter: Optional[List[BaseFormatter]] = None,
                  main_formatter: Optional[MainFormatter] = None,
                  color_formatters: Optional[List[BaseFormatter]] = None,
+                 default_template: Optional[str] = None,
                  **kwargs) -> None:
         """
         Initialize the StdFormatter
         :param enable_color: enable color
         :param sub_formatter: list of sub formatter
+        :param main_formatter: main formatter
         :param color_formatters: list of color formatter
+        :param default_template: default template
         :param kwargs: other options
         """
         # 同 structures.LogMessage.__init__ 的注释 (逃)
@@ -230,6 +235,8 @@ class StdFormatter(BaseFormatter):
             self.main_formatter = main_formatter
         else:
             self.main_formatter = MainFormatter()
+        if default_template is not None:
+            self.default_template = default_template
         super().__init__(**kwargs)
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
