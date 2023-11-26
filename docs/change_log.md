@@ -2,6 +2,8 @@
 
 ## 0.2.1
 
+> logger 继续后延
+
 ### Fix
 
 - `Logger`
