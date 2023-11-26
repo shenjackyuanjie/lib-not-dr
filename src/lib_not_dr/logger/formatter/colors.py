@@ -88,7 +88,8 @@ class LevelColorFormatter(BaseColorFormatter):
         # 添加颜色
         if color == '' or color == RESET_COLOR:
             return message
-        message[1]['level'] = f'{color}{message[1]["level"]}{RESET_COLOR}'
+        if 'level' in message[1]:
+            message[1]['level'] = f'{color}{message[1]["level"]}{RESET_COLOR}'
         return message
 
 
@@ -126,8 +127,9 @@ class LoggerColorFormatter(BaseColorFormatter):
         # 添加颜色
         if color == '' or color == RESET_COLOR:
             return message
-        message[1]['logger_name'] = f'{color}{message[1]["logger_name"]}{RESET_COLOR}'
-        if message[1].get('logger_tag') is not None and message[1].get('logger_tag') != '   ':
+        if 'logger_name' in message[1]:
+            message[1]['logger_name'] = f'{color}{message[1]["logger_name"]}{RESET_COLOR}'
+        if 'logger_tag' in message[1] and message[1].get('logger_tag') != '   ':
             message[1]['logger_tag'] = f'{color}{message[1]["logger_tag"]}{RESET_COLOR}'
         return message
 
@@ -166,7 +168,8 @@ class TimeColorFormatter(BaseColorFormatter):
         # 添加颜色
         if color == '' or color == RESET_COLOR:
             return message
-        message[1]['log_time'] = f'{color}{message[1]["log_time"]}{RESET_COLOR}'
+        if 'log_time' in message[1]:
+            message[1]['log_time'] = f'{color}{message[1]["log_time"]}{RESET_COLOR}'
         return message
 
 
@@ -210,7 +213,7 @@ class TraceColorFormatter(BaseColorFormatter):
         if color == '' or color == RESET_COLOR:
             return message
         for name in ('log_source', 'log_line', 'log_function'):
-            if message[1].get(name) is not None:
+            if name in message[1]:
                 message[1][name] = f'{color}{message[1][name]}{RESET_COLOR}'
         return message
 
@@ -249,8 +252,9 @@ class MessageColorFormatter(BaseColorFormatter):
         # 添加颜色
         if color == '' or color == RESET_COLOR:
             return message
-        if message[1]['messages'][-1] == '\n':
-            message[1]['messages'] = f'{color}{message[1]["messages"][:-1]}{RESET_COLOR}\n'
-        else:
-            message[1]['messages'] = f'{color}{message[1]["messages"]}{RESET_COLOR}'
+        if 'messages' in message[1]:
+            if message[1]['messages'][-1] == '\n':
+                message[1]['messages'] = f'{color}{message[1]["messages"][:-1]}{RESET_COLOR}\n'
+            else:
+                message[1]['messages'] = f'{color}{message[1]["messages"]}{RESET_COLOR}'
         return message

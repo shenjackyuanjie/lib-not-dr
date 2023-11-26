@@ -1,5 +1,17 @@
 # Change log / 更新日志
 
+## 0.2.1
+
+### Fix
+
+- `Logger`
+  - `MainFormatter`
+    - 修复了会导致 `ColorFormatter` 崩溃的问题
+
+## 0.2.0
+
+> 内容和 0.2.0-rc.10 相同
+
 ## 0.2.0-rc.10
 
 ### lndl-nuitka

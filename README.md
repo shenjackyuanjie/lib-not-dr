@@ -6,7 +6,7 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ## Information/信息
 
-- Version / 版本: 0.2.0
+- Version / 版本: 0.2.1
 - Author / 作者: shenjackyuanjie <3695888@qq.com>
 
 > [shenjackyuanjie](https://github.com/shenjackyuanjie)
@@ -30,7 +30,7 @@ pip install lib-not-dr[nuitka]
 ### Logger
 
 > WIP
-> 等待 0.2.0
+> 等待 0.3.0
 
 ```python title="logger.py"
 from lib_not_dr.logger.logger import Logger
