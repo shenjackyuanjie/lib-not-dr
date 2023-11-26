@@ -145,7 +145,7 @@ class Logger(Options):
         Returns:
             Logger: The logger with the specified name.
         """
-        return Logger(log_name=name)
+        return Logger(logger_name=name)
 
     def info(self,
              *message,
