@@ -25,9 +25,9 @@ class LogMessage(Options):
     split: str = ' '
 
     # 消息的属性
-    flush: bool = None
+    flush: Optional[bool] = None
     level: int = 20
-    log_time: float = None  # time.time_ns()
+    log_time: float = 0.0  # time.time_ns() if None
     logger_name: str = 'root'
     logger_tag: Optional[str] = None
     stack_trace: Optional[FrameType] = None

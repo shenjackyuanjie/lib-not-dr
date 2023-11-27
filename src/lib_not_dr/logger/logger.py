@@ -147,7 +147,7 @@ class Logger(Options):
         """
         from lib_not_dr.logger.config import storage
         if storage.have_logger(name):
-            return storage.get_logger(name)
+            return storage.loggers[name]
         return Logger(logger_name=name)
 
     def info(self,
