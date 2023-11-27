@@ -88,15 +88,15 @@ class FileCacheOutputStream(BaseOutputStream):
 
     level: int = LogLevel.info
     formatter: BaseFormatter = StdFormatter(enable_color=False)
-    text_cache: io.StringIO = None
+    text_cache: io.StringIO = None  # type: ignore
 
     flush_counter: int = 0
     # 默认 10 次 flush 一次
     flush_count_limit: int = 10
     flush_time_limit: int = 10  # time limit in sec, 0 means no limit
-    flush_timer: threading.Timer = None
+    flush_timer: Optional[threading.Timer] = None
 
-    file_path: Optional[Path] = Path('./logs')
+    file_path: Path = Path('./logs')
     file_name: str
     # file mode: always 'a'
     file_encoding: str = 'utf-8'
@@ -110,8 +110,8 @@ class FileCacheOutputStream(BaseOutputStream):
     # ${counter} -> file_swap_counter
     # ${log_time} -> time when file swap ( round(time.time()) )
     # ${start_time} -> start time of output stream ( round(time.time()) )
-    current_file_name: str = None
-    file_start_time: int = None
+    current_file_name: Optional[str] = None
+    file_start_time: Optional[int] = None
 
     # log file swap triggers
     # 0 -> no limit
@@ -211,6 +211,7 @@ class FileCacheOutputStream(BaseOutputStream):
                 self.file_swap_counter += 1
                 # 生成新的文件名
                 return self.get_file_path()
+        return current_file
 
     def flush(self) -> None:
         new_cache = io.StringIO()  # 创建新的缓存
