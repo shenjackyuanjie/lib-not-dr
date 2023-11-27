@@ -162,7 +162,7 @@ class ConfigStorage(Options):
         self.merge_storage(env)
         return None
 
-    def parse_output(self, output_config: Dict[str, dict]) -> 'ConfigStorage':
+    def parse_output(self, output_config: Dict[str, dict]) -> None:
         """
         Parse output config
         :param output_config:
@@ -175,6 +175,17 @@ class ConfigStorage(Options):
             if output_class is None:
                 env.fail_outputs[output_name] = config
                 continue
+            # get formatter for output
+            if 'formatter' in config:
+                if self.formatters.get(config['formatter']) is None:
+                    if self.fail_formatters.get(config['formatter']) is None:
+                        self.log.error(f'Output {output_name} formatter {config["formatter"]} not found, ignored')
+                    else:
+                        self.log.error(f'Output {output_name} require a fail formatter {config["formatter"]}, ignored')
+                    env.fail_outputs[output_name] = config
+                    continue
+                else:
+                    config['formatter'] = self.formatters[config['formatter']]
             # init output
             try:
                 output_instance = output_class(**config)
@@ -185,7 +196,8 @@ class ConfigStorage(Options):
                 continue
             # add output
             env.outputs[output_name] = output_instance
-        return env
+        self.merge_storage(env)
+        return None
 
     def read_dict_config(self, config: Dict[str, dict]) -> None:
         """

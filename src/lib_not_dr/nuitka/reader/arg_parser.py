@@ -17,13 +17,13 @@ def pyproject_toml(toml_data: dict) -> dict:
     :return: dict
     """
     if "tool" not in toml_data:
-        raise ValueError(f"No tool section in config file/dict")
+        raise ValueError("No tool section in config file/dict")
 
     if "lndl" not in toml_data["tool"]:
-        raise ValueError(f"No lib-not-dr(lndl) section in config file/dict")
+        raise ValueError("No lib-not-dr(lndl) section in config file/dict")
 
     if "nuitka" not in toml_data["tool"]["lndl"]:
-        raise ValueError(f"No lib-not-dr(lndl).nuitka section in config file/dict")
+        raise ValueError("No lib-not-dr(lndl).nuitka section in config file/dict")
 
     nuitka_config = toml_data["tool"]["lndl"]["nuitka"]
 
@@ -152,7 +152,7 @@ def gen_subprocess_args(nuitka_config:
                 continue
             if all(isinstance(item, str) for item in value):
                 # --<name>=<value1>,<value2>,...
-                cmd_list.append(f"--{name}={','.join(value)}")
+                cmd_list.append(f"--{name}={','.join(value)}") # type: ignore
             elif all(isinstance(item, (tuple, list)) for item in value):
                 # --<name>=<value1>=<value2>
                 # --<name>=<value3>=<value4>,...

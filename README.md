@@ -57,7 +57,6 @@ logger.trace('so this message will be in the same line', tag='same line!')
 ### Nuitka pyproject paser
 
 > `pyproject.toml` 内的配置
-> 
 > Config in `pyproject.toml`
 
 ```toml title="pyproject.toml"
@@ -69,7 +68,6 @@ onefile = false
 ```
 
 > 通过 `lndl_nuitka` 命令行工具使用
-> 
 > Use with `lndl_nuitka` command line tool
 
 ```bash
@@ -83,7 +81,6 @@ lndl_nuitka . -n
 ``` 
 
 > 通过 `lib_not_dr.nuitka.reader` 模块使用
-> 
 > Use with `lib_not_dr.nuitka.reader`
 
 ```python
