@@ -1,5 +1,14 @@
 # Change log / 更新日志
 
+## 0.2.2 (draft)
+
+### Logger
+
+- `MainFormatter`
+  - `_trace_format`
+    - 通过不需要获取绝对路径时直接使用获取到的路径减少用时
+- 终于是开始扣时间了
+
 ## 0.2.1
 
 > logger 继续后延

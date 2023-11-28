@@ -182,10 +182,12 @@ class MainFormatter(BaseFormatter):
     def _trace_format(self, message: FormattingMessage) -> FormattingMessage:
         if message[0].stack_trace is None:
             return message
-        path = Path(message[0].stack_trace.f_code.co_filename)
+        raw_path = message[0].stack_trace.f_code.co_filename
         if self.use_absolute_path:
+            path = Path(raw_path)
             message[1]['log_source'] = path.absolute()
-        message[1]['log_source'] = path
+        else:
+            message[1]['log_source'] = raw_path
         message[1]['log_line'] = message[0].stack_trace.f_lineno
         message[1]['log_function'] = message[0].stack_trace.f_code.co_name
         return message
