@@ -4,5 +4,15 @@
 #  All rights reserved
 #  -------------------------------
 
-__version__ = '0.1.1'
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from lib_not_dr.nuitka import (
+        reader,
+        compile
+    )
+
+__all__ = [
+    "reader",
+    "compile"
+]
