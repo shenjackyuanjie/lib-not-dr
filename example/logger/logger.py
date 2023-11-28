@@ -11,7 +11,7 @@ import logging
 def logging_logger() -> None:
 
     logger = logging.getLogger('test')
-    logger.setLevel(logging.DEBUG)
+    logger.level = logging.INFO
 
     logger.info('Hello World!')
     logger.debug('Hello World!')
@@ -22,7 +22,7 @@ def logging_logger() -> None:
 
 def lndl_logger() -> None:
     logger = Logger.get_logger_by_name('test')
-    logger.global_level = 0
+    logger.global_level = 20
 
     logger.info('Hello World!')
     logger.fine('Hello World!')
@@ -53,5 +53,6 @@ def main():
 
 
 if __name__ == '__main__':
+    main()
     lndl_logger()
     logging_logger()
