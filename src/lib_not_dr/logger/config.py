@@ -73,6 +73,11 @@ class ConfigStorage(Options):
                 cycles_set.update(cycle)
         return sorted(cycles_set)  # 返回排序后的循环列表
 
+    def parse_level(self, level_config: Dict[str, str]) -> int:
+        """
+        """
+        
+
     def get_class_by_name(self, config: Dict[str, str], module) -> Optional[type]:
         """
         Get class by name
@@ -198,6 +203,16 @@ class ConfigStorage(Options):
             env.outputs[output_name] = output_instance
         self.merge_storage(env)
         return None
+    
+    def parse_logger(self, logger_config: Dict[str, dict]) -> None:
+        """
+        Parse logger config
+        :param logger_config: config of logger
+        """
+        env = ConfigStorage()
+        for logger_name, config in logger_config.items():
+            ...
+        
 
     def read_dict_config(self, config: Dict[str, dict]) -> None:
         """
@@ -206,6 +221,8 @@ class ConfigStorage(Options):
         :return:
         """
         self.parse_formatter(config.get('Formatter', {}))
+        self.parse_output(config.get('Outstream', {}))
+        self.parse_logger(config.get('Logger', {}))
 
 
 def gen_default_storage() -> ConfigStorage:
