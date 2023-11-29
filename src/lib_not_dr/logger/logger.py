@@ -7,7 +7,7 @@
 import time
 import inspect
 from types import FrameType
-from typing import List, Optional
+from typing import List, Optional, Any
 
 from lib_not_dr.logger import LogLevel
 from lib_not_dr.types.options import Options
@@ -89,7 +89,7 @@ class Logger(Options):
             output.level = level
 
     def make_log(self,
-                 messages: List[str],
+                 messages: List[Any],
                  tag: Optional[str] = None,
                  end: str = '\n',
                  split: str = ' ',
@@ -159,7 +159,7 @@ class Logger(Options):
              stack_trace: Optional[FrameType] = None) -> None:
         if not self.log_for(LogLevel.info):
             return
-        self.make_log(messages=list(message),
+        self.make_log(messages=message,
                       tag=tag,
                       end=end,
                       split=split,
@@ -176,7 +176,7 @@ class Logger(Options):
               stack_trace: Optional[FrameType] = None) -> None:
         if not self.log_for(LogLevel.trace):
             return
-        self.make_log(messages=list(message),
+        self.make_log(messages=message,
                       tag=tag,
                       end=end,
                       split=split,
@@ -193,7 +193,7 @@ class Logger(Options):
              stack_trace: Optional[FrameType] = None) -> None:
         if not self.log_for(LogLevel.fine):
             return
-        self.make_log(messages=list(message),
+        self.make_log(messages=message,
                       tag=tag,
                       end=end,
                       split=split,
@@ -210,7 +210,7 @@ class Logger(Options):
               stack_trace: Optional[FrameType] = None) -> None:
         if not self.log_for(LogLevel.debug):
             return
-        self.make_log(messages=list(message),
+        self.make_log(messages=message,
                       tag=tag,
                       end=end,
                       split=split,
@@ -227,7 +227,7 @@ class Logger(Options):
              stack_trace: Optional[FrameType] = None) -> None:
         if not self.log_for(LogLevel.warn):
             return
-        self.make_log(messages=list(message),
+        self.make_log(messages=message,
                       tag=tag,
                       end=end,
                       split=split,
@@ -244,7 +244,7 @@ class Logger(Options):
               stack_trace: Optional[FrameType] = None) -> None:
         if not self.log_for(LogLevel.error):
             return
-        self.make_log(messages=list(message),
+        self.make_log(messages=message,
                       tag=tag,
                       end=end,
                       split=split,
@@ -261,7 +261,7 @@ class Logger(Options):
               stack_trace: Optional[FrameType] = None) -> None:
         if not self.log_for(LogLevel.fatal):
             return
-        self.make_log(messages=list(message),
+        self.make_log(messages=message,
                       tag=tag,
                       end=end,
                       split=split,
