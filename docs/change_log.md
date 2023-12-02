@@ -7,7 +7,12 @@
 - `MainFormatter`
   - `_trace_format`
     - 通过不需要获取绝对路径时直接使用获取到的路径减少用时
+- `LogMessage`
+  - 不再继承 `Options`
+    - `Options` 的初始化太慢了
 - 终于是开始扣时间了
+- `ConfigStorage`
+  - 完善了功能 (虽然还是 WIP)
 
 ## 0.2.1
 
