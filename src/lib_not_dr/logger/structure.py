@@ -16,9 +16,7 @@ __all__ = ['LogMessage',
            'FormattingMessage']
 
 
-class LogMessage(Options):
-    name = 'LogMessage'
-
+class LogMessage:
     # 消息内容本身的属性
     messages: List[str] = []
     end: str = '\n'
@@ -41,8 +39,7 @@ class LogMessage(Options):
                  log_time: Optional[float] = None,
                  logger_name: Optional[str] = 'root',
                  logger_tag: Optional[str] = None,
-                 stack_trace: Optional[FrameType] = None,
-                 **kwargs) -> None:
+                 stack_trace: Optional[FrameType] = None) -> None:
         """
         Init for LogMessage
         :param messages: message list for log
@@ -54,28 +51,38 @@ class LogMessage(Options):
         :param logger_name: name of logger
         :param logger_tag: tag of logger
         :param stack_trace: stack trace of logger
-        :param kwargs: other options
         """
-        # 为了方便使用 单独覆盖了 __init__ 方法来提供代码补全的选项
-        if messages is None:
-            messages = []
-        super().__init__(messages=messages,
-                         end=end,
-                         split=split,
-                         flush=flush,
-                         level=level,
-                         log_time=log_time,
-                         logger_name=logger_name,
-                         logger_tag=logger_tag,
-                         stack_trace=stack_trace,
-                         **kwargs)
+        # 20231128 23:23
+        # 因为 Options 的初始化太慢了 所以改为不继承 直接编写
 
-    def init(self, **kwargs) -> bool:
-        if self.log_time is None:
-            self.log_time = time.time_ns()
-        if not isinstance(self.flush, bool) and self.flush is not None:
-            self.flush = True if self.flush else False
-        return False
+        self.messages = messages if messages is not None else []
+        self.end = end
+        self.split = split
+        self.level = level
+        self.logger_name = logger_name
+        self.logger_tag = logger_tag
+        self.stack_trace = stack_trace
+
+        if log_time is None:
+            log_time = time.time_ns()
+        self.log_time = log_time
+
+        if not isinstance(flush, bool) and flush is not None:
+            flush = True if flush else False
+        self.flush = flush
+
+    def option(self) -> Dict[str, Union[str, int, float, bool]]:
+        return {
+            'messages': self.messages,
+            'end': self.end,
+            'split': self.split,
+            'flush': self.flush,
+            'level': self.level,
+            'log_time': self.log_time,
+            'logger_name': self.logger_name,
+            'logger_tag': self.logger_tag,
+            'stack_trace': self.stack_trace,
+        }
 
     def format_message(self) -> str:
         if self.split is None:
@@ -98,6 +105,3 @@ class LogMessage(Options):
 
 
 FormattingMessage = Tuple[LogMessage, Dict[str, Union[str, Path]]]
-
-if __name__ == '__main__':
-    print(LogMessage().as_markdown())

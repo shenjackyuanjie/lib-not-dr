@@ -65,8 +65,7 @@ class LogLevel(Options):
     }
     
     @classmethod
-    def parse_name_level(cls,
-                         name: str) -> int:
+    def parse_name_level(cls, name: str) -> int:
         """
         parse logging name to level int
         :param name: logging level name
