@@ -4,13 +4,13 @@
 #  All rights reserved
 #  -------------------------------
 
-from typing import List, Set, Dict, Optional
+from typing import List, Set, Dict, Optional, Tuple
 
 from lib_not_dr.logger.logger import Logger
-from lib_not_dr.types.options import Options, OptionNameNotDefined
 from lib_not_dr.logger.formatter import BaseFormatter
 from lib_not_dr.logger.outstream import BaseOutputStream
-from lib_not_dr.logger import formatter, outstream
+from lib_not_dr.logger import formatter, outstream, LogLevel
+from lib_not_dr.types.options import Options, OptionNameNotDefined
 
 
 class ConfigStorage(Options):
@@ -73,10 +73,26 @@ class ConfigStorage(Options):
                 cycles_set.update(cycle)
         return sorted(cycles_set)  # 返回排序后的循环列表
 
-    def parse_level(self, level_config: Dict[str, str]) -> int:
+    def parse_level(self, level_config: Dict[str, str]) -> Optional[int]:
         """
         """
-        
+        level_found: Tuple[Optional[int], Optional[str]] = (level_config.get('level'), level_config.get('level_name'))
+        if all(_l is None for _l in level_found):
+            # 如果都没有
+            self.log.warn(f'No level or level_name in config {level_config}, ignored')
+            return 20
+        if all(_l is not None for _l in level_found):
+            # 如果都有 那么使用 level_name
+            self.log.warn(f'Level and level_name both exist in config {level_config}, using level_name')
+            # 去掉 level 保留 level_name
+            level_found = (None, level_found[1],)
+        if level_found[0] is not None:
+            # 如果 level 存在 那么使用 level
+            return level_found[0]
+        if level_found[1] is not None:
+            # 如果 level_name 存在 那么使用 level_name
+            return LogLevel.parse_name_level(level_found[1])
+        return None
 
     def get_class_by_name(self, config: Dict[str, str], module) -> Optional[type]:
         """
@@ -94,6 +110,7 @@ class ConfigStorage(Options):
         if class_name not in module.__all__:
             self.log.warn(f'Class {class_name} not found in module {module}, ignored')
             return None
+
         return getattr(module, class_name)
 
     def parse_formatter(self, formatter_config: Dict[str, dict]) -> None:
@@ -191,6 +208,10 @@ class ConfigStorage(Options):
                     continue
                 else:
                     config['formatter'] = self.formatters[config['formatter']]
+            if level := self.parse_level(config) is not None:
+                config['level'] = level
+            if 'level_name' in config:
+                config.pop('level_name')
             # init output
             try:
                 output_instance = output_class(**config)
@@ -211,9 +232,34 @@ class ConfigStorage(Options):
         """
         env = ConfigStorage()
         for logger_name, config in logger_config.items():
-            ...
-        
-
+            # get output for logger
+            if 'output' in config:
+                if self.outputs.get(config['output']) is None:
+                    if self.fail_outputs.get(config['output']) is None:
+                        self.log.error(f'Logger {logger_name} output {config["output"]} not found, ignored')
+                    else:
+                        self.log.error(f'Logger {logger_name} require a fail output {config["output"]}, ignored')
+                    env.fail_loggers[logger_name] = config
+                    continue
+                else:
+                    config['output'] = self.outputs[config['output']]
+            if level := self.parse_level(config) is not None:
+                config['level'] = level
+            if 'level_name' in config:
+                config.pop('level_name')
+            # init logger
+            try:
+                logger_instance = Logger(**config)
+            except OptionNameNotDefined as e:
+                self.log.error(f'Logger {logger_name} init failed, ignored\n'
+                               f'Error: {e}')
+                env.fail_loggers[logger_name] = config
+                continue
+            # add logger
+            env.loggers[logger_name] = logger_instance
+        self.merge_storage(env)
+        return None
+    
     def read_dict_config(self, config: Dict[str, dict]) -> None:
         """
         Read config from dict
