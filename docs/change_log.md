@@ -1,6 +1,8 @@
 # Change log / 更新日志
 
-## 0.2.2 (draft)
+## 0.2.3 (draft)
+
+## 0.2.2
 
 ### Logger
 
