@@ -5,12 +5,13 @@
 #  -------------------------------
 
 import sys
+import traceback
 
 from pathlib import Path
 from warnings import warn
 from typing import Iterable, List
 
-from lib_not_dr.nuitka import nuitka_config_type, raw_config_type
+from lib_not_dr.nuitka import nuitka_config_type, raw_config_type, parse_config_function
 
 
 def pyproject_toml(toml_data: dict) -> raw_config_type:
@@ -193,8 +194,9 @@ def parse_raw_config_by_script(raw_config: raw_config_type) -> nuitka_config_typ
     :param raw_config:
     :return: parsed config
     """
-    if script_name := raw_config.get("script") is None:
+    if (script_name := raw_config.get("script")) is None:
         return raw_config["cli"]
+    print(f'reading script {script_name}')
     script_path = Path(script_name)
 
     sys.path.append(str(script_path.parent))
@@ -213,15 +215,16 @@ def parse_raw_config_by_script(raw_config: raw_config_type) -> nuitka_config_typ
         return raw_config["cli"]
 
     try:
-        parsed_config = script_module.main(raw_config["cli"])
+        parsed_config = script_module.main(raw_config)
     except Exception as e:
         print(f"script {script_path} parse failed ignore it")
         print(e)
+        traceback.print_exc()
         return raw_config["cli"]
 
-    if not isinstance(parsed_config, dict):
-        print(f"script {script_path} parse failed ignore it")
-        return raw_config["cli"]
+    # if not isinstance(parsed_config, dict):
+    #     print(f"script {script_path} parse failed ignore it")
+    #     return raw_config["cli"]
 
     return parsed_config
 
