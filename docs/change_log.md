@@ -2,6 +2,8 @@
 
 ## 0.3.0 (draft)
 
+> logger 继续后延
+
 ### lndl-nuitka
 
 - 重构了一部分解析逻辑

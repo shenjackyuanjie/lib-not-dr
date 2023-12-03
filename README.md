@@ -34,7 +34,7 @@ pip install lib-not-dr[nuitka]
 ### Logger
 
 > WIP
-> 等待 0.3.0
+> 等待 0.4.0
 
 ```python title="logger.py"
 from lib_not_dr.logger.logger import Logger
@@ -69,6 +69,8 @@ main = "main.py"
 # --main=main.py
 standalone = true
 onefile = false
+[tool.lndl.nuitka]
+script = "xxx.py"
 ```
 
 > 通过 `lndl_nuitka` 命令行工具使用
