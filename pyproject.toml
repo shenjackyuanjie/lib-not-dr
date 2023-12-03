@@ -67,6 +67,20 @@ src = [
     "src",
 ]
 
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # pyflakes
+    "I", # isort
+    "W", # pycodestyle
+]
+ignore = ["I001"]
+
+[tool.ruff.lint.isort]
+force-single-line = false
+force-wrap-aliases = false
+combine-as-imports = true
+
 [tool.lndl.nuitka]
 main = "test-only.py"
 onefile = false
