@@ -63,6 +63,8 @@ logger.trace('so this message will be in the same line', tag='same line!')
 > `pyproject.toml` 内的配置
 > Config in `pyproject.toml`
 
+前往 [example/nuitka](/example/nuitka) 查看更多例子
+
 ```toml title="pyproject.toml"
 [tool.lndl.nuitka.cli]
 main = "main.py"
