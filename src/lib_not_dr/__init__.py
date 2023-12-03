@@ -4,12 +4,12 @@
 #  All rights reserved
 #  -------------------------------
 
-_version_ = "0.3.0-alpha.0"
-
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from lib_not_dr import logger, nuitka, types, command
+
+_version_ = "0.3.0-rc.1"
 
 # fmt: off
 __all__ = [
