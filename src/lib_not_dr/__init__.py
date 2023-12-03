@@ -9,15 +9,14 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from lib_not_dr import loggers, nuitka, types, command
 
-_version_ = "0.3.0-rc.1"
+_version_ = "0.3.0-rc.2"
 
 # fmt: off
 __all__ = [
     "_version_",
-    "logger",
+    "loggers",
     "nuitka",
     "types",
     "command",
-    "logger",
 ]
 # fmt: on
