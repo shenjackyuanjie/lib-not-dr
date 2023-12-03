@@ -50,7 +50,7 @@ nuitka = [
 ]
 
 [tool.setuptools.dynamic]
-version = { attr = "lib_not_dr.__version__"}
+version = { attr = "lib_not_dr._version_"}
 
 [project.urls]
 Homepage = "https://github.com/shenjackyuanjie/lib-not-dr"

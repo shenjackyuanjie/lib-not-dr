@@ -197,24 +197,12 @@ def parse_raw_config_by_script(raw_config: raw_config_type) -> nuitka_config_typ
         return raw_config["cli"]
     script_path = Path(script_name)
 
-    if not script_path.exists():
-        print(f"script {script_path} not found ignore it")
-        return raw_config["cli"]
-
-    if not script_path.is_file():
-        print(f"script {script_path} is not a file ignore it")
-        return raw_config["cli"]
-
-    if script_path.suffix != ".py":
-        print(f"script {script_path} is not a python file ignore it")
-        return raw_config["cli"]
-
     sys.path.append(str(script_path.parent))
 
     try:
         script_module = __import__(script_path.stem)
-    except ImportError:
-        print(f"script {script_path} import failed ignore it")
+    except Exception as e:
+        print(f"script {script_path} import failed ignore it\n{e}")
         sys.path.remove(str(script_path.parent))
         return raw_config["cli"]
 
