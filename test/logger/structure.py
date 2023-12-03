@@ -19,7 +19,7 @@ class LogMessageTest(unittest.TestCase):
         message = LogMessage()
         self.assertEqual(message.messages, [])
         self.assertEqual(message.level, 20)
-        self.assertEqual(message.logger_name, 'root')
+        self.assertEqual(message.logger_name, "root")
         self.assertEqual(message.logger_tag, None)
 
     def test_format_message_empty(self):
@@ -28,37 +28,41 @@ class LogMessageTest(unittest.TestCase):
         因为才发现空信息之前的格式化是有问题的(因为没有初始化 messages)
         """
         message = LogMessage()
-        self.assertEqual(message.format_message(), '\n')
+        self.assertEqual(message.format_message(), "\n")
 
     def test_format_message_end(self):
         """
         测试消息的结尾
         """
-        message = LogMessage(messages=['test'],
-                             end='\n')
-        for testing in ('\n', '\r\n', '\r'):
+        message = LogMessage(messages=["test"], end="\n")
+        for testing in ("\n", "\r\n", "\r"):
             message.end = testing
-            self.assertEqual(message.format_message(), 'test' + testing)
+            self.assertEqual(message.format_message(), "test" + testing)
 
     def test_format_message_split(self):
         """
         测试消息的分割
         """
-        message = LogMessage(messages=['test', 'test2'], end='')
-        for testing in (' ', ' | ', ' | '):
+        message = LogMessage(messages=["test", "test2"], end="")
+        for testing in (" ", " | ", " | "):
             message.split = testing
-            self.assertEqual(message.format_message(), 'test' + testing + 'test2')
+            self.assertEqual(
+                message.format_message(), "test" + testing + "test2"
+            )
 
     def test_format_message_end_with_split(self):
         """
         测试消息的结尾和分割
         """
-        message = LogMessage(messages=['test', 'test2'], end='\n')
-        for test_split in (' ', ' | ', ' | '):
-            for test_end in ('\n', '\r\n', '\r'):
+        message = LogMessage(messages=["test", "test2"], end="\n")
+        for test_split in (" ", " | ", " | "):
+            for test_end in ("\n", "\r\n", "\r"):
                 message.split = test_split
                 message.end = test_end
-                self.assertEqual(message.format_message(), 'test' + test_split + 'test2' + test_end)
+                self.assertEqual(
+                    message.format_message(),
+                    "test" + test_split + "test2" + test_end,
+                )
 
     def test_msec_3(self):
         start_time = time.time()

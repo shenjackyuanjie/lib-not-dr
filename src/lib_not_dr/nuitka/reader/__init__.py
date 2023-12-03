@@ -11,10 +11,12 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Union, List
 
-from lib_not_dr.nuitka.reader.arg_parser import (pyproject_toml,
-                                                 toml_path_cli,
-                                                 gen_subprocess_args,
-                                                 subprocess_to_bash)
+from lib_not_dr.nuitka.reader.arg_parser import (
+    pyproject_toml,
+    toml_path_cli,
+    gen_subprocess_args,
+    subprocess_to_bash,
+)
 
 support_config_dict = Dict[str, Union[str, bool, List[Union[str, tuple]]]]
 
@@ -71,6 +73,7 @@ def get_toml_reader():
     # 3.11 + 使用 tomllib
     if sys.version_info >= (3, 11):
         from tomllib import loads
+
         return loads
     for module_name in TOML_READERS:
         try:
@@ -80,9 +83,7 @@ def get_toml_reader():
             continue
     error_msg = """No toml reader found, please install any below by pip:
     %s
-    or use Python 3.11+""" % " ".join(
-        TOML_READERS
-    )
+    or use Python 3.11+""" % " ".join(TOML_READERS)
     raise ImportError(error_msg) from None
 
 
@@ -92,7 +93,7 @@ toml_loads = get_toml_reader()
 def display_config(subprocess_command: list) -> None:
     print(f"The config is:\n\033[34m{subprocess_command} \033[0m")
     print("shell command is:\n\033[34m", end="")
-    print(subprocess_to_bash(subprocess_command), '\033[0m')
+    print(subprocess_to_bash(subprocess_command), "\033[0m")
     print(f"Working Dir: \033[32m {Path().cwd().absolute()} \033[0m")
 
 
@@ -127,12 +128,12 @@ def cli_main() -> None:
     if "--help" in sys.argv or "-h" in sys.argv:
         print(USEAGE)
         sys.exit(0)
-    
+
     if len(sys.argv) < 2:
         print(USEAGE)
         if input("are you sure to run? (y/n)") not in ["y", "Y", "yes", "Yes"]:
             sys.exit(0)
-    
+
     toml_file = toml_path_cli()
 
     with open(toml_file, "r", encoding="utf-8") as f:
@@ -143,8 +144,8 @@ def cli_main() -> None:
     subprocess_command = gen_subprocess_args(nuitka_config)
     display_config(subprocess_command)
 
-    exit_arg = ('-no-run', '-n')
-    confirm_arg = ('-y', '-yes')
+    exit_arg = ("-no-run", "-n")
+    confirm_arg = ("-y", "-yes")
     if any(arg in sys.argv for arg in exit_arg):
         sys.exit(0)
     elif all(arg not in sys.argv for arg in confirm_arg):

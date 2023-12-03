@@ -37,4 +37,3 @@ class Flag:
 class FlagGroup:
     flags: List[Flag]
     exclusive: bool = False
-

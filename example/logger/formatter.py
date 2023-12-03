@@ -7,18 +7,19 @@
 import inspect
 
 from lib_not_dr.logger.structure import LogMessage
-from lib_not_dr.logger.formatter import (StdFormatter)
+from lib_not_dr.logger.formatter import StdFormatter
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     levels = (0, 5, 7, 10, 20, 30, 40, 50)
 
-    log_message = LogMessage(messages=['Hello World!'],
-                             level=7,
-                             stack_trace=inspect.currentframe(),
-                             logger_tag='tester',
-                             logger_name='test')
+    log_message = LogMessage(
+        messages=["Hello World!"],
+        level=7,
+        stack_trace=inspect.currentframe(),
+        logger_tag="tester",
+        logger_name="test",
+    )
 
     print(StdFormatter.info())
     print(StdFormatter().format_message(log_message))
@@ -32,7 +33,7 @@ if __name__ == '__main__':
 
     for test_level in test_levels:
         log_message.level = test_level
-        print(std_format.format_message(log_message), end='')
+        print(std_format.format_message(log_message), end="")
 
     print(std_format.as_markdown())
 
@@ -42,6 +43,6 @@ if __name__ == '__main__':
 
     for test_level in test_levels:
         log_message.level = test_level
-        print(std_format.format_message(log_message), end='')
+        print(std_format.format_message(log_message), end="")
 
     print(std_format.as_markdown())

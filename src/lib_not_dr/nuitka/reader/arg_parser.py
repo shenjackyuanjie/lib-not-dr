@@ -23,7 +23,9 @@ def pyproject_toml(toml_data: dict) -> dict:
         raise ValueError("No lib-not-dr(lndl) section in config file/dict")
 
     if "nuitka" not in toml_data["tool"]["lndl"]:
-        raise ValueError("No lib-not-dr(lndl).nuitka section in config file/dict")
+        raise ValueError(
+            "No lib-not-dr(lndl).nuitka section in config file/dict"
+        )
 
     nuitka_config = toml_data["tool"]["lndl"]["nuitka"]
 
@@ -64,22 +66,22 @@ def get_cli_nuitka_args() -> dict:
     # no -- in sys.argv
     if len(sys.argv) < 2:
         return {}
-    if '--' not in sys.argv:
+    if "--" not in sys.argv:
         return {}
 
     # start from --
-    index = sys.argv.index('--')
-    new_args = sys.argv[index + 1:]
+    index = sys.argv.index("--")
+    new_args = sys.argv[index + 1 :]
     arg_dict = {}
     for arg in new_args:
-        if not arg.startswith('--'):
+        if not arg.startswith("--"):
             warn(f"invalid arg: {arg}")
         else:
             arg = arg[2:]  # remove --
             # arg_name: --<name>=<value>
-        arg_name = arg.split('=')[0]
-        if '=' in arg:
-            arg_value = arg.split('=')[1]
+        arg_name = arg.split("=")[0]
+        if "=" in arg:
+            arg_value = arg.split("=")[1]
         else:
             arg_value = True
         arg_dict[arg_name] = arg_value
@@ -97,20 +99,28 @@ def merge_cli_config(toml_config: dict, cli_config: dict) -> dict:
     """
     for name, value in cli_config.items():
         if name in toml_config:
-            warn(f"\033[33mcli config will overwrite toml config\n{name}:{toml_config[name]} -> {value}\033[0m")
+            warn(
+                f"\033[33mcli config will overwrite toml config\n{name}:{toml_config[name]} -> {value}\033[0m"
+            )
             if isinstance(toml_config[name], bool):
                 if not isinstance(value, bool):
-                    warn(f"cli config {name} is bool but toml config is not\n{value} -> {value}")
+                    warn(
+                        f"cli config {name} is bool but toml config is not\n{value} -> {value}"
+                    )
                     continue
                 toml_config[name] = value
             elif isinstance(toml_config[name], str):
                 if not isinstance(value, str):
-                    warn(f"cli config {name} is str but toml config is not\n{value} -> {value}")
+                    warn(
+                        f"cli config {name} is str but toml config is not\n{value} -> {value}"
+                    )
                     continue
                 toml_config[name] = value
             elif isinstance(toml_config[name], Iterable):
                 if not isinstance(value, str):
-                    warn(f"cli config {name} is Iterable but toml config is not\n{value} -> {value}")
+                    warn(
+                        f"cli config {name} is Iterable but toml config is not\n{value} -> {value}"
+                    )
                     continue
                 toml_config[name].append(value)
         else:
@@ -118,8 +128,9 @@ def merge_cli_config(toml_config: dict, cli_config: dict) -> dict:
     return toml_config
 
 
-def gen_subprocess_args(nuitka_config:
-                        Dict[str, Union[str, bool, List[Union[str, tuple]]]]) -> list:
+def gen_subprocess_args(
+    nuitka_config: Dict[str, Union[str, bool, List[Union[str, tuple]]]]
+) -> list:
     cmd_list = [sys.executable, "-m", "nuitka"]
 
     nuitka_config = merge_cli_config(nuitka_config, get_cli_nuitka_args())
@@ -143,16 +154,16 @@ def gen_subprocess_args(nuitka_config:
             cmd_list.append(f"--{name}={value}")
             continue
         elif isinstance(value, Iterable):
-            if '__spilt__' in value:
+            if "__spilt__" in value:
                 # --<name>=<value1> --<name>=<value2> ...
                 for item in value:
-                    if item == '__spilt__':
+                    if item == "__spilt__":
                         continue
                     cmd_list += parse_value(name, item)
                 continue
             if all(isinstance(item, str) for item in value):
                 # --<name>=<value1>,<value2>,...
-                cmd_list.append(f"--{name}={','.join(value)}") # type: ignore
+                cmd_list.append(f"--{name}={','.join(value)}")  # type: ignore
             elif all(isinstance(item, (tuple, list)) for item in value):
                 # --<name>=<value1>=<value2>
                 # --<name>=<value3>=<value4>,...
@@ -172,5 +183,5 @@ def subprocess_to_bash(cmd_list: List[str]) -> str:
     :param cmd_list: list
     :return: str
     """
-    cmd_list = [item if ' ' not in item else f'"{item}"' for item in cmd_list]
+    cmd_list = [item if " " not in item else f'"{item}"' for item in cmd_list]
     return " ".join(cmd_list)

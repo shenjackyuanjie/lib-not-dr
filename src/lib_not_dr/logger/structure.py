@@ -12,34 +12,35 @@ from typing import List, Optional, Tuple, Dict, Union
 
 from lib_not_dr.types.options import Options
 
-__all__ = ['LogMessage',
-           'FormattingMessage']
+__all__ = ["LogMessage", "FormattingMessage"]
 
 
 class LogMessage:
     # 消息内容本身的属性
     messages: List[str] = []
-    end: str = '\n'
-    split: str = ' '
+    end: str = "\n"
+    split: str = " "
 
     # 消息的属性
     flush: Optional[bool] = None
     level: int = 20
     log_time: float = 0.0  # time.time_ns() if None
-    logger_name: str = 'root'
+    logger_name: str = "root"
     logger_tag: Optional[str] = None
     stack_trace: Optional[FrameType] = None
 
-    def __init__(self,
-                 messages: Optional[List[str]] = None,
-                 end: Optional[str] = '\n',
-                 split: Optional[str] = ' ',
-                 flush: Optional[bool] = None,
-                 level: Optional[int] = 20,
-                 log_time: Optional[float] = None,
-                 logger_name: Optional[str] = 'root',
-                 logger_tag: Optional[str] = None,
-                 stack_trace: Optional[FrameType] = None) -> None:
+    def __init__(
+        self,
+        messages: Optional[List[str]] = None,
+        end: Optional[str] = "\n",
+        split: Optional[str] = " ",
+        flush: Optional[bool] = None,
+        level: Optional[int] = 20,
+        log_time: Optional[float] = None,
+        logger_name: Optional[str] = "root",
+        logger_tag: Optional[str] = None,
+        stack_trace: Optional[FrameType] = None,
+    ) -> None:
         """
         Init for LogMessage
         :param messages: message list for log
@@ -73,29 +74,29 @@ class LogMessage:
 
     def option(self) -> Dict[str, Union[str, int, float, bool]]:
         return {
-            'messages': self.messages,
-            'end': self.end,
-            'split': self.split,
-            'flush': self.flush,
-            'level': self.level,
-            'log_time': self.log_time,
-            'logger_name': self.logger_name,
-            'logger_tag': self.logger_tag,
-            'stack_trace': self.stack_trace,
+            "messages": self.messages,
+            "end": self.end,
+            "split": self.split,
+            "flush": self.flush,
+            "level": self.level,
+            "log_time": self.log_time,
+            "logger_name": self.logger_name,
+            "logger_tag": self.logger_tag,
+            "stack_trace": self.stack_trace,
         }
 
     def format_message(self) -> str:
         if self.split is None:
-            self.split = ' '
+            self.split = " "
         return self.split.join(self.messages) + self.end
 
     def format_for_message(self) -> Dict[str, str]:
         basic_info = self.option()
 
         if self.logger_tag is None:
-            basic_info['logger_tag'] = '   '
+            basic_info["logger_tag"] = "   "
 
-        basic_info['messages'] = self.format_message()
+        basic_info["messages"] = self.format_message()
 
         return basic_info
 

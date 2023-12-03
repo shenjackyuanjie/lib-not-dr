@@ -14,11 +14,14 @@ try:
     from typing import Self
 except ImportError:
     from typing import TypeVar
+
     Self = TypeVar("Self")  # NOQA
 
 from .exception import IllegalName
 
-CallBack = Union[Callable[[str], None], str]  # Equals to `Callable[[str], None] | str`
+CallBack = Union[
+    Callable[[str], None], str
+]  # Equals to `Callable[[str], None] | str`
 # 可调用对象或字符串作为回调
 # A callable or str as callback
 
@@ -42,8 +45,12 @@ def check_name(name: Union[str, List[str]]) -> None:
     """
     if isinstance(name, str) and EMPTY_WORDS.search(name):
         raise IllegalName("The name of argument must not contains empty words.")
-    elif isinstance(name, list) and all((not isinstance(i, str)) and EMPTY_WORDS.search(i) for i in name):
-        raise IllegalName("The name of shortcut must be 'str', and must not contains empty words.")
+    elif isinstance(name, list) and all(
+        (not isinstance(i, str)) and EMPTY_WORDS.search(i) for i in name
+    ):
+        raise IllegalName(
+            "The name of shortcut must be 'str', and must not contains empty words."
+        )
     else:
         raise TypeError("The type of name must be 'str' or 'list[str]'.")
 
@@ -69,7 +76,11 @@ class Literal:
         return self
 
     def __repr__(self):
-        attrs = (k for k in self.__dict__ if not (k.startswith("__") and k.endswith("__")))
+        attrs = (
+            k
+            for k in self.__dict__
+            if not (k.startswith("__") and k.endswith("__"))
+        )
         return f"{self.__class__.__name__}({', '.join(f'{k}={v!r}' for k in attrs if (v := self.__dict__[k]))})"
 
     def arg(self, name: str, types: Optional[Set[type]] = None) -> Self:
@@ -77,17 +88,19 @@ class Literal:
         return self
 
     def opt(
-            self,
-            name: str,
-            shortcuts: Optional[List[str]] = None,
-            optional: bool = True,
-            types: Optional[Set[type]] = None
+        self,
+        name: str,
+        shortcuts: Optional[List[str]] = None,
+        optional: bool = True,
+        types: Optional[Set[type]] = None,
     ) -> Self:
         check_name(name)
         if shortcuts is not None and len(shortcuts) != 0:
             check_name(shortcuts)
         self._opts.append(
-            Option(name=name, shortcuts=shortcuts, optional=optional, types=types)
+            Option(
+                name=name, shortcuts=shortcuts, optional=optional, types=types
+            )
         )
         return self
 
@@ -103,7 +116,6 @@ class Literal:
         return self
 
     def flag_group(self, flags: List[Flag], exclusive: bool = False) -> Self:
-
         ...
         return self
 

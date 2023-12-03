@@ -4,28 +4,31 @@
 #  All rights reserved
 #  -------------------------------
 
-from .options import (Options,
-                      OptionsError,
-                      OptionNotFound,
-                      OptionNameNotDefined,
-                      get_type_hints_)
+from .options import (
+    Options,
+    OptionsError,
+    OptionNotFound,
+    OptionNameNotDefined,
+    get_type_hints_,
+)
 
-from .version import (Version,
-                      VersionRequirement,
-                      VersionParsingError,
-                      ExtraElement)
+from .version import (
+    Version,
+    VersionRequirement,
+    VersionParsingError,
+    ExtraElement,
+)
 
 __all__ = [
     # options
-    'get_type_hints_',
-    'Options',
-    'OptionsError',
-    'OptionNotFound',
-    'OptionNameNotDefined',
-
+    "get_type_hints_",
+    "Options",
+    "OptionsError",
+    "OptionNotFound",
+    "OptionNameNotDefined",
     # version
-    'Version',
-    'VersionRequirement',
-    'VersionParsingError',
-    'ExtraElement'
+    "Version",
+    "VersionRequirement",
+    "VersionParsingError",
+    "ExtraElement",
 ]

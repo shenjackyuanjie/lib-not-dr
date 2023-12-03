@@ -16,47 +16,51 @@ from lib_not_dr.logger.structure import LogMessage, FormattingMessage
 if TYPE_CHECKING:
     from lib_not_dr.logger.formatter.colors import BaseColorFormatter
 
-__all__ = [
-    'BaseFormatter',
-    'MainFormatter',
-    'StdFormatter'
-]
+__all__ = ["BaseFormatter", "MainFormatter", "StdFormatter"]
 
 
 class BaseFormatter(Options):
-    name = 'BaseFormatter'
+    name = "BaseFormatter"
 
-    sub_formatter: List['BaseFormatter'] = []
-    color_formatters: List['BaseColorFormatter'] = []
-    default_template: str = '[${log_time}][${level}]|${logger_name}:${logger_tag}|${messages}'
+    sub_formatter: List["BaseFormatter"] = []
+    color_formatters: List["BaseColorFormatter"] = []
+    default_template: str = (
+        "[${log_time}][${level}]|${logger_name}:${logger_tag}|${messages}"
+    )
 
     @classmethod
     def add_info(cls, match: str, to: str, description: str) -> str:
-        return f'- {to} -> ${{{match}}} : {description}'
+        return f"- {to} -> ${{{match}}} : {description}"
 
     @classmethod
     def info(cls) -> str:
         infos = {BaseFormatter.name: BaseFormatter._info()}
-        cache = ''
+        cache = ""
         for formatter in cls.sub_formatter:
             infos[formatter.name] = formatter._info()
         infos[cls.name] = cls._info()
         for name, info in infos.items():
             cache += f"## {name}\n"
             cache += info
-            cache += '\n'
+            cache += "\n"
         return cache
 
     @classmethod
     def _info(cls) -> str:
-        info = cls.add_info('logger_name', 'logger name', 'The name of the logger')
-        info += '\n'
-        info += cls.add_info('logger_tag', 'logger tag', 'The tag of the logger')
+        info = cls.add_info(
+            "logger_name", "logger name", "The name of the logger"
+        )
+        info += "\n"
+        info += cls.add_info(
+            "logger_tag", "logger tag", "The tag of the logger"
+        )
         return info
 
-    def format_message(self,
-                       message: LogMessage,
-                       template: Optional[Union[Template, str]] = None) -> str:
+    def format_message(
+        self,
+        message: LogMessage,
+        template: Optional[Union[Template, str]] = None,
+    ) -> str:
         """
         Format message
         :param message: 输入的消息
@@ -93,55 +97,65 @@ class BaseFormatter(Options):
     @template.setter
     def template(self, template: str) -> None:
         if not isinstance(template, str):
-            raise TypeError(f'The template must be str, not {type(template)}')
+            raise TypeError(f"The template must be str, not {type(template)}")
         self.default_template = template
 
 
 class MainFormatter(BaseFormatter):
-    name = 'TraceFormatter'
-    sub_formatter: List['BaseFormatter'] = []
+    name = "TraceFormatter"
+    sub_formatter: List["BaseFormatter"] = []
 
-    time_format: str = '%Y-%m-%d %H:%M:%S'
-    msec_time_format: str = '{}-{:03d}'
+    time_format: str = "%Y-%m-%d %H:%M:%S"
+    msec_time_format: str = "{}-{:03d}"
     use_absolute_path: bool = False
 
     default_level: int = 20
     level_get_higher: bool = True
 
     level_name_map = {
-        LogLevel.notset: 'NOTSET',
-        LogLevel.trace:  ' TRACE',
-        LogLevel.fine:   ' FINE ',
-        LogLevel.debug:  ' DEBUG',
-        LogLevel.info:   ' INFO ',
-        LogLevel.warn:   ' WARN ',
-        LogLevel.error:  'ERROR ',
-        LogLevel.fatal:  'FATAL ',
+        LogLevel.notset: "NOTSET",
+        LogLevel.trace: " TRACE",
+        LogLevel.fine: " FINE ",
+        LogLevel.debug: " DEBUG",
+        LogLevel.info: " INFO ",
+        LogLevel.warn: " WARN ",
+        LogLevel.error: "ERROR ",
+        LogLevel.fatal: "FATAL ",
     }
     name_level_map = {
-        'NOTSET': LogLevel.notset,
-        ' TRACE': LogLevel.trace,
-        ' FINE ': LogLevel.fine,
-        ' DEBUG': LogLevel.debug,
-        ' INFO ': LogLevel.info,
-        ' WARN ': LogLevel.warn,
-        'ERROR ': LogLevel.error,
-        'FATAL ': LogLevel.fatal,
+        "NOTSET": LogLevel.notset,
+        " TRACE": LogLevel.trace,
+        " FINE ": LogLevel.fine,
+        " DEBUG": LogLevel.debug,
+        " INFO ": LogLevel.info,
+        " WARN ": LogLevel.warn,
+        "ERROR ": LogLevel.error,
+        "FATAL ": LogLevel.fatal,
     }
 
     @classmethod
     def _info(cls) -> str:
-        info = cls.add_info('log_time', 'formatted time when logging', 'The time format string'
-                                                                       '. See https://docs.python.org/3/library/time'
-                                                                       '.html#time.strftime for more information.')
-        info += '\n'
-        info += cls.add_info('level', 'log level', 'The log level')
-        info += '\n'
-        info += cls.add_info('log_source', 'logging file', 'the logging file name')
-        info += '\n'
-        info += cls.add_info('log_line', 'logging line', 'the logging line number')
-        info += '\n'
-        info += cls.add_info('log_function', 'logging function', 'the logging function name')
+        info = cls.add_info(
+            "log_time",
+            "formatted time when logging",
+            "The time format string"
+            ". See https://docs.python.org/3/library/time"
+            ".html#time.strftime for more information.",
+        )
+        info += "\n"
+        info += cls.add_info("level", "log level", "The log level")
+        info += "\n"
+        info += cls.add_info(
+            "log_source", "logging file", "the logging file name"
+        )
+        info += "\n"
+        info += cls.add_info(
+            "log_line", "logging line", "the logging line number"
+        )
+        info += "\n"
+        info += cls.add_info(
+            "log_function", "logging function", "the logging function name"
+        )
         return info
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
@@ -160,23 +174,25 @@ class MainFormatter(BaseFormatter):
                         level_tag = level
                         break
                 else:
-                    level_tag = 'FATAL'
+                    level_tag = "FATAL"
             else:
                 for level in self.name_level_map:
                     if message[0].level >= self.name_level_map[level]:
                         level_tag = level
                         break
                 else:
-                    level_tag = 'NOTSET'
-        message[1]['level'] = level_tag
+                    level_tag = "NOTSET"
+        message[1]["level"] = level_tag
         return message
 
     def _time_format(self, message: FormattingMessage) -> FormattingMessage:
         time_mark = time.localtime(message[0].log_time / 1000000000)
         if self.msec_time_format:
-            time_mark = self.msec_time_format.format(time.strftime(self.time_format, time_mark),
-                                                     message[0].create_msec_3)
-        message[1]['log_time'] = time_mark
+            time_mark = self.msec_time_format.format(
+                time.strftime(self.time_format, time_mark),
+                message[0].create_msec_3,
+            )
+        message[1]["log_time"] = time_mark
         return message
 
     def _trace_format(self, message: FormattingMessage) -> FormattingMessage:
@@ -185,40 +201,49 @@ class MainFormatter(BaseFormatter):
         raw_path = message[0].stack_trace.f_code.co_filename
         if self.use_absolute_path:
             path = Path(raw_path)
-            message[1]['log_source'] = path.absolute()
+            message[1]["log_source"] = path.absolute()
         else:
-            message[1]['log_source'] = raw_path
-        message[1]['log_line'] = message[0].stack_trace.f_lineno
-        message[1]['log_function'] = message[0].stack_trace.f_code.co_name
+            message[1]["log_source"] = raw_path
+        message[1]["log_line"] = message[0].stack_trace.f_lineno
+        message[1]["log_function"] = message[0].stack_trace.f_code.co_name
         return message
 
 
 class StdFormatter(BaseFormatter):
-    name = 'StdFormatter'
+    name = "StdFormatter"
 
     enable_color: bool = True
 
     sub_formatter: List[BaseFormatter] = [MainFormatter()]
-    from lib_not_dr.logger.formatter.colors import (LevelColorFormatter,
-                                                    LoggerColorFormatter,
-                                                    TimeColorFormatter,
-                                                    TraceColorFormatter,
-                                                    MessageColorFormatter)
-    color_formatters: List[BaseFormatter] = [LevelColorFormatter(),
-                                             LoggerColorFormatter(),
-                                             TimeColorFormatter(),
-                                             TraceColorFormatter(),
-                                             MessageColorFormatter()]
+    from lib_not_dr.logger.formatter.colors import (
+        LevelColorFormatter,
+        LoggerColorFormatter,
+        TimeColorFormatter,
+        TraceColorFormatter,
+        MessageColorFormatter,
+    )
 
-    default_template: str = '[${log_time}][${level}]|${logger_name}:${logger_tag}|${messages}'
+    color_formatters: List[BaseFormatter] = [
+        LevelColorFormatter(),
+        LoggerColorFormatter(),
+        TimeColorFormatter(),
+        TraceColorFormatter(),
+        MessageColorFormatter(),
+    ]
 
-    def __init__(self,
-                 enable_color: bool = True,
-                 sub_formatter: Optional[List[BaseFormatter]] = None,
-                 main_formatter: Optional[MainFormatter] = None,
-                 color_formatters: Optional[List[BaseFormatter]] = None,
-                 default_template: Optional[str] = None,
-                 **kwargs) -> None:
+    default_template: str = (
+        "[${log_time}][${level}]|${logger_name}:${logger_tag}|${messages}"
+    )
+
+    def __init__(
+        self,
+        enable_color: bool = True,
+        sub_formatter: Optional[List[BaseFormatter]] = None,
+        main_formatter: Optional[MainFormatter] = None,
+        color_formatters: Optional[List[BaseFormatter]] = None,
+        default_template: Optional[str] = None,
+        **kwargs,
+    ) -> None:
         """
         Initialize the StdFormatter
         :param enable_color: enable color
@@ -234,7 +259,9 @@ class StdFormatter(BaseFormatter):
             self.sub_formatter = sub_formatter
         if color_formatters is not None:
             self.color_formatters = color_formatters
-        if main_formatter is not None and isinstance(main_formatter, MainFormatter):
+        if main_formatter is not None and isinstance(
+            main_formatter, MainFormatter
+        ):
             self.main_formatter = main_formatter
         else:
             self.main_formatter = MainFormatter()
@@ -255,17 +282,19 @@ class StdFormatter(BaseFormatter):
 
     @classmethod
     def _info(cls) -> str:
-        return 'None'
+        return "None"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import inspect
 
-    log_message = LogMessage(messages=['Hello World!'],
-                             level=7,
-                             stack_trace=inspect.currentframe(),
-                             logger_tag='tester',
-                             logger_name='test')
+    log_message = LogMessage(
+        messages=["Hello World!"],
+        level=7,
+        stack_trace=inspect.currentframe(),
+        logger_tag="tester",
+        logger_name="test",
+    )
 
     print(StdFormatter.info())
     print(StdFormatter().format_message(log_message))
@@ -279,7 +308,7 @@ if __name__ == '__main__':
 
     for test_level in test_levels:
         log_message.level = test_level
-        print(std_format.format_message(log_message), end='')
+        print(std_format.format_message(log_message), end="")
 
     print("without color")
 
@@ -287,6 +316,6 @@ if __name__ == '__main__':
 
     for test_level in test_levels:
         log_message.level = test_level
-        print(std_format.format_message(log_message), end='')
+        print(std_format.format_message(log_message), end="")
 
     print(std_format.as_markdown())

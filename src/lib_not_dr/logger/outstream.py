@@ -19,15 +19,11 @@ from lib_not_dr.types.options import Options
 from lib_not_dr.logger.structure import LogMessage
 from lib_not_dr.logger.formatter import BaseFormatter, StdFormatter
 
-__all__ = [
-    'BaseOutputStream',
-    'StdioOutputStream',
-    'FileCacheOutputStream'
-]
+__all__ = ["BaseOutputStream", "StdioOutputStream", "FileCacheOutputStream"]
 
 
 class BaseOutputStream(Options):
-    name = 'BaseOutputStream'
+    name = "BaseOutputStream"
 
     level: int = LogLevel.info
     enable: bool = True
@@ -35,20 +31,26 @@ class BaseOutputStream(Options):
     formatter: BaseFormatter
 
     def write_stdout(self, message: LogMessage) -> None:
-        raise NotImplementedError(f'{self.__class__.__name__}.write_stdout is not implemented')
+        raise NotImplementedError(
+            f"{self.__class__.__name__}.write_stdout is not implemented"
+        )
 
     def write_stderr(self, message: LogMessage) -> None:
-        raise NotImplementedError(f'{self.__class__.__name__}.write_stderr is not implemented')
+        raise NotImplementedError(
+            f"{self.__class__.__name__}.write_stderr is not implemented"
+        )
 
     def flush(self) -> None:
-        raise NotImplementedError(f'{self.__class__.__name__}.flush is not implemented')
+        raise NotImplementedError(
+            f"{self.__class__.__name__}.flush is not implemented"
+        )
 
     def close(self) -> None:
         self.enable = False
 
 
 class StdioOutputStream(BaseOutputStream):
-    name = 'StdioOutputStream'
+    name = "StdioOutputStream"
 
     level: int = LogLevel.info
     formatter: BaseFormatter = StdFormatter()
@@ -59,7 +61,9 @@ class StdioOutputStream(BaseOutputStream):
             return None
         if message.level < self.level:
             return None
-        print(self.formatter.format_message(message), end='', flush=message.flush)
+        print(
+            self.formatter.format_message(message), end="", flush=message.flush
+        )
         return None
 
     def write_stderr(self, message: LogMessage) -> None:
@@ -68,9 +72,18 @@ class StdioOutputStream(BaseOutputStream):
         if message.level < self.level:
             return None
         if self.use_stderr:
-            print(self.formatter.format_message(message), end='', flush=message.flush, file=sys.stderr)
+            print(
+                self.formatter.format_message(message),
+                end="",
+                flush=message.flush,
+                file=sys.stderr,
+            )
         else:
-            print(self.formatter.format_message(message), end='', flush=message.flush)
+            print(
+                self.formatter.format_message(message),
+                end="",
+                flush=message.flush,
+            )
         return None
 
     def flush(self) -> None:
@@ -78,13 +91,13 @@ class StdioOutputStream(BaseOutputStream):
         flush stdout and stderr
         :return: None
         """
-        print('', end='', flush=True)
-        print('', end='', flush=True, file=sys.stderr)
+        print("", end="", flush=True)
+        print("", end="", flush=True, file=sys.stderr)
         return None
 
 
 class FileCacheOutputStream(BaseOutputStream):
-    name = 'FileCacheOutputStream'
+    name = "FileCacheOutputStream"
 
     level: int = LogLevel.info
     formatter: BaseFormatter = StdFormatter(enable_color=False)
@@ -96,16 +109,16 @@ class FileCacheOutputStream(BaseOutputStream):
     flush_time_limit: int = 10  # time limit in sec, 0 means no limit
     flush_timer: Optional[threading.Timer] = None
 
-    file_path: Path = Path('./logs')
+    file_path: Path = Path("./logs")
     file_name: str
     # file mode: always 'a'
-    file_encoding: str = 'utf-8'
+    file_encoding: str = "utf-8"
     # do file swap or not
     file_swap: bool = False
     at_exit_register: bool = False
 
     file_swap_counter: int = 0
-    file_swap_name_template: str = '${name}-${counter}.log'
+    file_swap_name_template: str = "${name}-${counter}.log"
     # ${name} -> file_name
     # ${counter} -> file_swap_counter
     # ${log_time} -> time when file swap ( round(time.time()) )
@@ -117,7 +130,9 @@ class FileCacheOutputStream(BaseOutputStream):
     # 0 -> no limit
     file_size_limit: int = 0  # size limit in kb
     file_time_limit: int = 0  # time limit in sec 0
-    file_swap_on_both: bool = False  # swap file when both size and time limit reached
+    file_swap_on_both: bool = (
+        False  # swap file when both size and time limit reached
+    )
 
     def init(self, **kwargs) -> bool:
         self.file_start_time = round(time.time())
@@ -140,7 +155,9 @@ class FileCacheOutputStream(BaseOutputStream):
         else:
             if self.flush_time_limit > 0:
                 if self.flush_timer is None or not self.flush_timer.is_alive():
-                    self.flush_timer = threading.Timer(self.flush_time_limit, self.flush)
+                    self.flush_timer = threading.Timer(
+                        self.flush_time_limit, self.flush
+                    )
                     self.flush_timer.daemon = True
                     self.flush_timer.start()
             if not self.at_exit_register:
@@ -176,10 +193,12 @@ class FileCacheOutputStream(BaseOutputStream):
                 self.current_file_name = str(current_file)
                 return current_file
             template = string.Template(self.file_swap_name_template)
-            file_name = template.safe_substitute(name=self.file_name,
-                                                 counter=self.file_swap_counter,
-                                                 log_time=round(time.time()),
-                                                 start_time=self.file_start_time)
+            file_name = template.safe_substitute(
+                name=self.file_name,
+                counter=self.file_swap_counter,
+                log_time=round(time.time()),
+                start_time=self.file_start_time,
+            )
             current_file = Path(self.file_path) / file_name
             self.current_file_name = str(current_file)
         else:
@@ -203,8 +222,9 @@ class FileCacheOutputStream(BaseOutputStream):
             file_time = round(time.time()) - current_file.stat().st_mtime
             if file_time > self.file_time_limit:
                 time_pass = False
-        if (self.file_swap_on_both and size_pass and time_pass) or \
-           (not self.file_swap_on_both and (size_pass or time_pass)):
+        if (self.file_swap_on_both and size_pass and time_pass) or (
+            not self.file_swap_on_both and (size_pass or time_pass)
+        ):
             # 两个都满足
             # 或者只有一个满足
             if size_pass and time_pass:
@@ -219,13 +239,13 @@ class FileCacheOutputStream(BaseOutputStream):
         old_cache, self.text_cache = self.text_cache, new_cache
         text = old_cache.getvalue()
         old_cache.close()  # 关闭旧的缓存
-        if text == '':
+        if text == "":
             return None
         current_file = self.check_flush()
         if not current_file.exists():
             current_file.parent.mkdir(parents=True, exist_ok=True)
             current_file.touch(exist_ok=True)
-        with current_file.open('a', encoding=self.file_encoding) as f:
+        with current_file.open("a", encoding=self.file_encoding) as f:
             f.write(text)
         return None
 

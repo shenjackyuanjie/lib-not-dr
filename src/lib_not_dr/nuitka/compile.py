@@ -19,14 +19,16 @@ def ensure_cmd_readable(cmd: str) -> str:
     :param cmd: 要格式化的命令行参数
     :return: 格式化后的命令行参数
     """
-    if ' ' in str(cmd):
+    if " " in str(cmd):
         return f'"{cmd}"'
     return cmd
 
 
-def format_cmd(arg_name: Optional[str] = None,
-               arg_value: Optional[Union[str, List[str]]] = None,
-               write: Optional[Any] = True) -> List[str]:
+def format_cmd(
+    arg_name: Optional[str] = None,
+    arg_value: Optional[Union[str, List[str]]] = None,
+    write: Optional[Any] = True,
+) -> List[str]:
     """
     用来格式化输出命令行参数
     :param arg_name: 类似 --show-memory 之类的主项
@@ -41,10 +43,12 @@ def format_cmd(arg_name: Optional[str] = None,
     if arg_value is None:
         return [arg_name]
     if isinstance(arg_value, list):
-        arg_value = ','.join([ensure_cmd_readable(value) for value in arg_value])
-        return [f'{arg_name}{arg_value}']
+        arg_value = ",".join(
+            [ensure_cmd_readable(value) for value in arg_value]
+        )
+        return [f"{arg_name}{arg_value}"]
     arg_value = ensure_cmd_readable(arg_value)
-    return [f'{arg_name}{arg_value}']
+    return [f"{arg_name}{arg_value}"]
 
 
 class NuitkaSubConfig(Options):
@@ -52,7 +56,8 @@ class NuitkaSubConfig(Options):
     Nuitka 配置的子项
     Nuitka configuration sub-items
     """
-    name = 'Nuitka Sub Configuration'
+
+    name = "Nuitka Sub Configuration"
 
     def gen_cmd(self) -> List[str]:
         """
@@ -67,7 +72,8 @@ class NuitkaPluginConfig(NuitkaSubConfig):
     控制 nuitka 的 plugin 相关参数的部分
     Control part of nuitka's plugin related parameters
     """
-    name = 'Nuitka Plugin Configuration'
+
+    name = "Nuitka Plugin Configuration"
 
     # --enable-plugin=PLUGIN_NAME
     enable_plugin: List[str] = []
@@ -87,13 +93,33 @@ class NuitkaPluginConfig(NuitkaSubConfig):
 
     def gen_cmd(self) -> List[str]:
         lst = []
-        lst += format_cmd('--enable-plugin=', self.enable_plugin, self.enable_plugin)
-        lst += format_cmd('--disable-plugin=', self.disable_plugin, self.disable_plugin)
-        lst += format_cmd('--plugin-no-detection' if self.plugin_no_detection else None)
-        lst += format_cmd('--user-plugin=', [str(plugin.absolute()) for plugin in self.user_plugin], self.user_plugin)
-        lst += format_cmd('--show-source-changes' if self.show_source_changes else None)
-        lst += format_cmd('--include-plugin-directory=', self.include_plugin_dir, self.include_plugin_dir)
-        lst += format_cmd('--include-plugin-files=', self.include_plugin_files, self.include_plugin_files)
+        lst += format_cmd(
+            "--enable-plugin=", self.enable_plugin, self.enable_plugin
+        )
+        lst += format_cmd(
+            "--disable-plugin=", self.disable_plugin, self.disable_plugin
+        )
+        lst += format_cmd(
+            "--plugin-no-detection" if self.plugin_no_detection else None
+        )
+        lst += format_cmd(
+            "--user-plugin=",
+            [str(plugin.absolute()) for plugin in self.user_plugin],
+            self.user_plugin,
+        )
+        lst += format_cmd(
+            "--show-source-changes" if self.show_source_changes else None
+        )
+        lst += format_cmd(
+            "--include-plugin-directory=",
+            self.include_plugin_dir,
+            self.include_plugin_dir,
+        )
+        lst += format_cmd(
+            "--include-plugin-files=",
+            self.include_plugin_files,
+            self.include_plugin_files,
+        )
         return lst
 
 
@@ -102,7 +128,8 @@ class NuitkaIncludeConfig(NuitkaSubConfig):
     控制 nuitka 的 include 和 数据 相关参数的部分
     Control part of nuitka's include related parameters
     """
-    name = 'Nuitka Include Configuration'
+
+    name = "Nuitka Include Configuration"
 
     # --include-package=PACKAGE
     include_packages: List[str] = []
@@ -117,11 +144,19 @@ class NuitkaIncludeConfig(NuitkaSubConfig):
 
     def gen_cmd(self) -> List[str]:
         lst = []
-        lst += format_cmd('--include-package=', self.include_packages, self.include_packages)
-        lst += format_cmd('--include-module=', self.include_modules, self.include_modules)
-        lst += format_cmd('--prefer-source-code' if self.prefer_source_code else None)
-        lst += format_cmd('--no-prefer-source-code' if not self.prefer_source_code else None)
-        lst += format_cmd('--follow-stdlib' if self.follow_stdlib else None)
+        lst += format_cmd(
+            "--include-package=", self.include_packages, self.include_packages
+        )
+        lst += format_cmd(
+            "--include-module=", self.include_modules, self.include_modules
+        )
+        lst += format_cmd(
+            "--prefer-source-code" if self.prefer_source_code else None
+        )
+        lst += format_cmd(
+            "--no-prefer-source-code" if not self.prefer_source_code else None
+        )
+        lst += format_cmd("--follow-stdlib" if self.follow_stdlib else None)
         return lst
 
 
@@ -130,7 +165,8 @@ class NuitkaDataConfig(NuitkaSubConfig):
     控制 nuitka 的 数据 相关参数的部分
     Control part of nuitka's data related parameters
     """
-    name = 'Nuitka Data Configuration'
+
+    name = "Nuitka Data Configuration"
 
     # --include-package-data=PACKAGE=PACKAGE_PATH
     include_package_data: List[Tuple[Path, Path]] = []
@@ -156,7 +192,8 @@ class NuitkaBinaryInfo(Options):
     nuitka 构建的二进制文件的信息
     nuitka build binary file information
     """
-    name = 'Nuitka Binary Info'
+
+    name = "Nuitka Binary Info"
 
     # --company-name=COMPANY_NAME
     company_name: Optional[str] = None
@@ -202,7 +239,8 @@ class NuitkaOutputConfig(Options):
     nuitka 构建的选项
     nuitka build output information
     """
-    name = 'Nuitka Output Config'
+
+    name = "Nuitka Output Config"
 
     # --output-dir=DIRECTORY
     output_dir: Optional[Path] = None
@@ -247,7 +285,8 @@ class NuitkaDebugConfig(Options):
     nuitka 构建的调试选项
     nuikta build debug information
     """
-    name = 'Nuitka Debug Config'
+
+    name = "Nuitka Debug Config"
 
     # --debug
     debug: bool = False
@@ -280,10 +319,11 @@ class NuitkaTarget(Enum):
     standalone: --standalone
     one_file: --onefile
     """
-    exe = ''
-    module = 'module'
-    standalone = 'standalone'
-    one_file = 'package'
+
+    exe = ""
+    module = "module"
+    standalone = "standalone"
+    one_file = "package"
 
 
 class NuitkaScriptGenerator(Options):
@@ -293,8 +333,9 @@ class NuitkaScriptGenerator(Options):
 
     :arg main 需要编译的文件
     """
-    name = 'Nuitka Script Generator'
-    
+
+    name = "Nuitka Script Generator"
+
     # --main=PATH
     # 可以有多个 输入时需要包在列表里
     main: List[Path]
@@ -324,15 +365,18 @@ class CompilerHelper(Options):
     """
     用于帮助生成 nuitka 构建脚本的类
     Use to help generate nuitka build script
-    
-    """
-    name = 'Nuitka Compiler Helper'
 
-    output_path: Path = Path('./build')
+    """
+
+    name = "Nuitka Compiler Helper"
+
+    output_path: Path = Path("./build")
     src_file: Path
 
-    python_cmd: str = 'python'
-    compat_nuitka_version: VersionRequirement = VersionRequirement("~1.8.0")  # STATIC VERSION
+    python_cmd: str = "python"
+    compat_nuitka_version: VersionRequirement = VersionRequirement(
+        "~1.8.0"
+    )  # STATIC VERSION
 
     # 以下为 nuitka 的参数
     # nuitka options below
@@ -342,7 +386,7 @@ class CompilerHelper(Options):
     use_mingw: bool = False  # --mingw64
 
     onefile: bool = False  # --onefile
-    onefile_tempdir: Optional[str] = ''  # --onefile-tempdir-spec=
+    onefile_tempdir: Optional[str] = ""  # --onefile-tempdir-spec=
     standalone: bool = True  # --standalone
     use_ccache: bool = True  # not --disable-ccache
     enable_console: bool = True  # --enable-console / --disable-console
@@ -351,20 +395,20 @@ class CompilerHelper(Options):
     show_memory: bool = False  # --show-memory
     remove_output: bool = True  # --remove-output
     save_xml: bool = False  # --xml
-    xml_path: Path = Path('build/compile_data.xml')
+    xml_path: Path = Path("build/compile_data.xml")
     save_report: bool = False  # --report
-    report_path: Path = Path('build/compile_report.xml')
+    report_path: Path = Path("build/compile_report.xml")
 
     download_confirm: bool = True  # --assume-yes-for-download
     run_after_build: bool = False  # --run
 
-    company_name: Optional[str] = ''
-    product_name: Optional[str] = ''
+    company_name: Optional[str] = ""
+    product_name: Optional[str] = ""
     file_version: Optional[Version] = None
     product_version: Optional[Version] = None
-    file_description: Optional[str] = ''  # --file-description
+    file_description: Optional[str] = ""  # --file-description
 
-    copy_right: Optional[str] = ''  # --copyright
+    copy_right: Optional[str] = ""  # --copyright
 
     icon_path: Optional[Path] = None
 
@@ -378,14 +422,14 @@ class CompilerHelper(Options):
     disable_plugin: List[str] = []  # --disable-plugin=xxx,xxx
 
     def init(self, **kwargs) -> None:
-        if (compat_version := kwargs.get('compat_nuitka_version')) is not None:
+        if (compat_version := kwargs.get("compat_nuitka_version")) is not None:
             if not self.compat_nuitka_version.accept(compat_version):
                 warnings.warn(
                     f"Nuitka version may not compat with {compat_version}\n"
                     "requirement: {self.compat_nuitka_version}"
                 )
         # 非 windows 平台不使用 msvc
-        if platform.system() != 'Windows':
+        if platform.system() != "Windows":
             self.use_msvc = False
             self.use_mingw = False
         else:
@@ -399,10 +443,10 @@ class CompilerHelper(Options):
         """
         输出编译器帮助信息
         Output compiler help information
-        
+
         Args:
-            longest (Optional[int], optional): 
-                输出信息的最大长度限制 The maximum length of output information. 
+            longest (Optional[int], optional):
+                输出信息的最大长度限制 The maximum length of output information.
                 Defaults to None.
 
         Returns:
@@ -418,58 +462,121 @@ class CompilerHelper(Options):
         Generate nuitka build script
 
         Returns:
-            List[str]: 
+            List[str]:
                 生成的 nuitka 构建脚本
                 Generated nuitka build script
         """
-        warnings.warn("\033[33mlib_not_dr.nuitka.compile is deprecated "
-                      "use lib_not_dr.nuitka.reader.main or lndl-nuitka instead\033[0m",
-                      DeprecationWarning, stacklevel=2)
-        cmd_list = [self.python_cmd, '-m', 'nuitka']
+        warnings.warn(
+            "\033[33mlib_not_dr.nuitka.compile is deprecated "
+            "use lib_not_dr.nuitka.reader.main or lndl-nuitka instead\033[0m",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        cmd_list = [self.python_cmd, "-m", "nuitka"]
         # macos 和 非 macos icon 参数不同
-        if platform.system() == 'Darwin':
-            cmd_list += format_cmd('--macos-app-version=', self.product_version, self.product_version)
-            cmd_list += format_cmd('--macos-app-icon=', self.icon_path.absolute(), self.icon_path)
-        elif platform.system() == 'Windows':
-            cmd_list += format_cmd('--windows-icon-from-ico=', self.icon_path.absolute(), self.icon_path)
-        elif platform.system() == 'Linux':
-            cmd_list += format_cmd('--linux-icon=', self.icon_path.absolute(), self.icon_path)
+        if platform.system() == "Darwin":
+            cmd_list += format_cmd(
+                "--macos-app-version=",
+                self.product_version,
+                self.product_version,
+            )
+            cmd_list += format_cmd(
+                "--macos-app-icon=", self.icon_path.absolute(), self.icon_path
+            )
+        elif platform.system() == "Windows":
+            cmd_list += format_cmd(
+                "--windows-icon-from-ico=",
+                self.icon_path.absolute(),
+                self.icon_path,
+            )
+        elif platform.system() == "Linux":
+            cmd_list += format_cmd(
+                "--linux-icon=", self.icon_path.absolute(), self.icon_path
+            )
 
-        cmd_list += format_cmd('--lto=', 'yes' if self.use_lto else 'no')
-        cmd_list += format_cmd('--clang' if self.use_clang else None)
-        cmd_list += format_cmd('--msvc=latest' if self.use_msvc else None)
-        cmd_list += format_cmd('--mingw64' if self.use_mingw else None)
-        cmd_list += format_cmd('--standalone' if self.standalone else None)
-        cmd_list += format_cmd('--onefile' if self.onefile else None)
-        cmd_list += format_cmd('--onefile-tempdir-spec=', self.onefile_tempdir, self.onefile_tempdir)
+        cmd_list += format_cmd("--lto=", "yes" if self.use_lto else "no")
+        cmd_list += format_cmd("--clang" if self.use_clang else None)
+        cmd_list += format_cmd("--msvc=latest" if self.use_msvc else None)
+        cmd_list += format_cmd("--mingw64" if self.use_mingw else None)
+        cmd_list += format_cmd("--standalone" if self.standalone else None)
+        cmd_list += format_cmd("--onefile" if self.onefile else None)
+        cmd_list += format_cmd(
+            "--onefile-tempdir-spec=",
+            self.onefile_tempdir,
+            self.onefile_tempdir,
+        )
 
-        cmd_list += format_cmd('--disable-ccache' if not self.use_ccache else None)
-        cmd_list += format_cmd('--show-progress' if self.show_progress else None)
-        cmd_list += format_cmd('--show-memory' if self.show_memory else None)
-        cmd_list += format_cmd('--remove-output' if self.remove_output else None)
-        cmd_list += format_cmd('--assume-yes-for-download' if self.download_confirm else None)
-        cmd_list += format_cmd('--run' if self.run_after_build else None)
-        cmd_list += format_cmd('--enable-console' if self.enable_console else '--disable-console')
+        cmd_list += format_cmd(
+            "--disable-ccache" if not self.use_ccache else None
+        )
+        cmd_list += format_cmd(
+            "--show-progress" if self.show_progress else None
+        )
+        cmd_list += format_cmd("--show-memory" if self.show_memory else None)
+        cmd_list += format_cmd(
+            "--remove-output" if self.remove_output else None
+        )
+        cmd_list += format_cmd(
+            "--assume-yes-for-download" if self.download_confirm else None
+        )
+        cmd_list += format_cmd("--run" if self.run_after_build else None)
+        cmd_list += format_cmd(
+            "--enable-console" if self.enable_console else "--disable-console"
+        )
 
-        cmd_list += format_cmd('--xml=', str(self.xml_path.absolute()), self.save_xml)
-        cmd_list += format_cmd('--report=', str(self.report_path.absolute()), self.save_report)
-        cmd_list += format_cmd('--output-dir=', str(self.output_path.absolute()), self.output_path)
-        cmd_list += format_cmd('--company-name=', self.company_name, self.company_name)
-        cmd_list += format_cmd('--product-name=', self.product_name, self.product_name)
-        cmd_list += format_cmd('--file-version=', str(self.file_version), self.file_version)
-        cmd_list += format_cmd('--product-version=', str(self.product_version), self.product_version)
-        cmd_list += format_cmd('--file-description=', self.file_description, self.file_description)
-        cmd_list += format_cmd('--copyright=', self.copy_right, self.copy_right)
+        cmd_list += format_cmd(
+            "--xml=", str(self.xml_path.absolute()), self.save_xml
+        )
+        cmd_list += format_cmd(
+            "--report=", str(self.report_path.absolute()), self.save_report
+        )
+        cmd_list += format_cmd(
+            "--output-dir=", str(self.output_path.absolute()), self.output_path
+        )
+        cmd_list += format_cmd(
+            "--company-name=", self.company_name, self.company_name
+        )
+        cmd_list += format_cmd(
+            "--product-name=", self.product_name, self.product_name
+        )
+        cmd_list += format_cmd(
+            "--file-version=", str(self.file_version), self.file_version
+        )
+        cmd_list += format_cmd(
+            "--product-version=",
+            str(self.product_version),
+            self.product_version,
+        )
+        cmd_list += format_cmd(
+            "--file-description=", self.file_description, self.file_description
+        )
+        cmd_list += format_cmd("--copyright=", self.copy_right, self.copy_right)
 
-        cmd_list += format_cmd('--follow-import-to=', self.follow_import, self.follow_import)
-        cmd_list += format_cmd('--nofollow-import-to=', self.no_follow_import, self.no_follow_import)
-        cmd_list += format_cmd('--enable-plugin=', self.enable_plugin, self.enable_plugin)
-        cmd_list += format_cmd('--disable-plugin=', self.disable_plugin, self.disable_plugin)
+        cmd_list += format_cmd(
+            "--follow-import-to=", self.follow_import, self.follow_import
+        )
+        cmd_list += format_cmd(
+            "--nofollow-import-to=",
+            self.no_follow_import,
+            self.no_follow_import,
+        )
+        cmd_list += format_cmd(
+            "--enable-plugin=", self.enable_plugin, self.enable_plugin
+        )
+        cmd_list += format_cmd(
+            "--disable-plugin=", self.disable_plugin, self.disable_plugin
+        )
 
         if self.include_data_dir:
-            cmd_list += [f"--include-data-dir={src}={dst}" for src, dst in self.include_data_dir]
+            cmd_list += [
+                f"--include-data-dir={src}={dst}"
+                for src, dst in self.include_data_dir
+            ]
         if self.include_packages:
-            cmd_list += [f"--include-package={package}" for package in self.include_packages]
+            cmd_list += [
+                f"--include-package={package}"
+                for package in self.include_packages
+            ]
 
         cmd_list.append(f"--main={self.src_file}")
         return cmd_list
