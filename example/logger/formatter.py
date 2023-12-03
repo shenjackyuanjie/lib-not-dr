@@ -6,8 +6,8 @@
 
 import inspect
 
-from lib_not_dr.logger.structure import LogMessage
-from lib_not_dr.logger.formatter import StdFormatter
+from lib_not_dr.loggers.structure import LogMessage
+from lib_not_dr.loggers.formatter import StdFormatter
 
 
 if __name__ == "__main__":

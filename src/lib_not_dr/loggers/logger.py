@@ -9,10 +9,10 @@ import inspect
 from types import FrameType
 from typing import List, Optional, Union
 
-from lib_not_dr.logger import LogLevel
+from lib_not_dr.loggers import LogLevel
 from lib_not_dr.types.options import Options
-from lib_not_dr.logger.structure import LogMessage
-from lib_not_dr.logger.outstream import BaseOutputStream, StdioOutputStream
+from lib_not_dr.loggers.structure import LogMessage
+from lib_not_dr.loggers.outstream import BaseOutputStream, StdioOutputStream
 
 
 class Logger(Options):
@@ -24,6 +24,20 @@ class Logger(Options):
 
     enable: bool = True
     level: int = 20  # info
+
+    def clone_logger(self) -> "Logger":
+        """
+        Clone a new loggers with the same config.
+
+        Returns:
+            Logger: The cloned loggers.
+        """
+        return Logger(
+            logger_name=self.logger_name,
+            enable=self.enable,
+            level=self.level,
+            outputs=self.outputs.copy(),
+        )
 
     def log_for(self, level: int) -> bool:
         """
@@ -137,25 +151,6 @@ class Logger(Options):
                 output.write_stdout(message)
         # done?
         # 20231106 00:06
-
-    @staticmethod
-    def get_logger_by_name(name: str) -> "Logger":
-        """
-        Get a logger by name.
-
-        Args:
-            name (str): The name of the logger.
-
-        Returns:
-            Logger: The logger with the specified name.
-        """
-        from lib_not_dr.logger.config import storage
-
-        if storage.have_logger(name):
-            return storage.loggers[name]
-        _logger = Logger(logger_name=name)
-        storage.loggers[name] = _logger
-        return _logger
 
     def info(
         self,

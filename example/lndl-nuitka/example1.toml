@@ -1,0 +1,7 @@
+[tool.lndl.nuitka.cli]
+main = 'test.py'
+
+standalone = true
+clang = true
+msvc = 'latest'
+mingw64 = false

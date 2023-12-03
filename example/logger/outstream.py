@@ -7,8 +7,8 @@
 import time
 import inspect
 
-from lib_not_dr.logger.structure import LogMessage
-from lib_not_dr.logger.outstream import FileCacheOutputStream, StdioOutputStream
+from lib_not_dr.loggers.structure import LogMessage
+from lib_not_dr.loggers.outstream import FileCacheOutputStream, StdioOutputStream
 
 if __name__ == "__main__":
     log_message = LogMessage(

@@ -6,10 +6,10 @@
 
 from typing import List, Set, Dict, Optional, Tuple
 
-from lib_not_dr.logger.logger import Logger
-from lib_not_dr.logger.formatter import BaseFormatter
-from lib_not_dr.logger.outstream import BaseOutputStream
-from lib_not_dr.logger import formatter, outstream, LogLevel
+from lib_not_dr.loggers.logger import Logger
+from lib_not_dr.loggers.formatter import BaseFormatter
+from lib_not_dr.loggers.outstream import BaseOutputStream
+from lib_not_dr.loggers import formatter, outstream, LogLevel
 from lib_not_dr.types.options import Options, OptionNameNotDefined
 
 
@@ -25,7 +25,7 @@ class ConfigStorage(Options):
     fail_formatters: Dict[str, dict] = {}
     fail_outputs: Dict[str, dict] = {}
 
-    log: Logger = Logger(logger_name="logger-storage")
+    log: Logger = Logger(logger_name="loggers-storage")
 
     def have_formatter(self, formatter_name: str) -> bool:
         return formatter_name in self.formatters
@@ -266,8 +266,8 @@ class ConfigStorage(Options):
 
     def parse_logger(self, logger_config: Dict[str, dict]) -> None:
         """
-        Parse logger config
-        :param logger_config: config of logger
+        Parse loggers config
+        :param logger_config: config of loggers
         """
         env = ConfigStorage()
         for logger_name, config in logger_config.items():
@@ -315,15 +315,27 @@ class ConfigStorage(Options):
         self.parse_logger(config.get("Logger", {}))
 
 
-def gen_default_storage() -> ConfigStorage:
-    """
-    Generate default storage
-    :return:
-    """
-    _storage = ConfigStorage()
-    _root_logger = Logger(logger_name="root")
-    _storage.loggers["root"] = _root_logger
+_storage = ConfigStorage(loggers={'root': Logger(logger_name='root')})
+
+
+def get_config() -> ConfigStorage:
     return _storage
 
 
-storage = gen_default_storage()
+def get_logger(name: str = 'root', storage: Optional[ConfigStorage] = None) -> Logger:
+    if storage is None:
+        storage = _storage
+
+    if name not in storage.loggers:
+        root_log = storage.loggers['root'].clone_logger()
+        root_log.logger_name = name
+        storage.loggers[name] = root_log
+    return storage.loggers[name]
+
+
+def read_config(log_config: Dict, storage: Optional[ConfigStorage] = None) -> ConfigStorage:
+    if storage is None:
+        storage = _storage
+
+    storage.read_dict_config(log_config)
+    return storage

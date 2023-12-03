@@ -7,7 +7,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from lib_not_dr import logger, nuitka, types, command
+    from lib_not_dr import loggers, nuitka, types, command
 
 _version_ = "0.3.0-rc.1"
 
@@ -17,6 +17,7 @@ __all__ = [
     "logger",
     "nuitka",
     "types",
-    "command"
+    "command",
+    "logger",
 ]
 # fmt: on

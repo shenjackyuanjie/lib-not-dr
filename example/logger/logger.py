@@ -4,7 +4,7 @@
 #  All rights reserved
 #  -------------------------------
 
-from lib_not_dr.logger.logger import Logger
+from lib_not_dr import loggers
 
 import logging
 
@@ -21,7 +21,7 @@ def logging_logger() -> None:
 
 
 def lndl_logger() -> None:
-    logger = Logger.get_logger_by_name("test")
+    logger = loggers.get_logger("test")
     logger.global_level = 20
 
     logger.info("Hello World!")
@@ -34,7 +34,7 @@ def lndl_logger() -> None:
 
 
 def main():
-    logger = Logger.get_logger_by_name("test")
+    logger = loggers.get_logger("test")
     logger.global_level = 0
 
     logger.info("Hello World!")

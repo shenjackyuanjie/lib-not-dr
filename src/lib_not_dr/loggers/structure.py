@@ -49,9 +49,9 @@ class LogMessage:
         :param flush: do flush or not
         :param level: level of message
         :param log_time: time of message (default: time.time_ns())
-        :param logger_name: name of logger
-        :param logger_tag: tag of logger
-        :param stack_trace: stack trace of logger
+        :param logger_name: name of loggers
+        :param logger_tag: tag of loggers
+        :param stack_trace: stack trace of loggers
         """
         # 20231128 23:23
         # 因为 Options 的初始化太慢了 所以改为不继承 直接编写

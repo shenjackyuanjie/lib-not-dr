@@ -14,10 +14,10 @@ import threading
 from pathlib import Path
 from typing import Optional
 
-from lib_not_dr.logger import LogLevel
+from lib_not_dr.loggers import LogLevel
 from lib_not_dr.types.options import Options
-from lib_not_dr.logger.structure import LogMessage
-from lib_not_dr.logger.formatter import BaseFormatter, StdFormatter
+from lib_not_dr.loggers.structure import LogMessage
+from lib_not_dr.loggers.formatter import BaseFormatter, StdFormatter
 
 __all__ = ["BaseOutputStream", "StdioOutputStream", "FileCacheOutputStream"]
 

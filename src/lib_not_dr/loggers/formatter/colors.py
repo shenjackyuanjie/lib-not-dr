@@ -4,9 +4,9 @@
 #  All rights reserved
 #  -------------------------------
 
-from lib_not_dr.logger import LogLevel, COLOR_SUPPORT
-from lib_not_dr.logger.formatter import BaseFormatter
-from lib_not_dr.logger.structure import FormattingMessage
+from lib_not_dr.loggers import LogLevel, COLOR_SUPPORT
+from lib_not_dr.loggers.formatter import BaseFormatter
+from lib_not_dr.loggers.structure import FormattingMessage
 
 __all__ = [
     "BaseColorFormatter",
@@ -116,7 +116,7 @@ class LoggerColorFormatter(BaseColorFormatter):
     @classmethod
     def _info(cls) -> str:
         return cls.add_info(
-            "colored logger name", "logger name", "A colored logger name"
+            "colored loggers name", "loggers name", "A colored loggers name"
         )
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:

@@ -12,6 +12,21 @@
     - `[tool.lndl.nuitka]`
       - `script = "script.py"`
 
+### Logger
+
+- 将 `logger` 模块重命名为 `loggers`
+
+- 添加了 `get_config` 函数
+  - 用于获取全局配置
+  - 我也不确定有啥用捏
+- 添加了 `read_config` 函数
+  - 用于向指定 `ConfigStorage`/全局 `ConfigStorage` 实例中添加配置
+- 添加了 `get_logger` 函数
+  - 用于从指定 `ConfigStorage`/全局 `ConfigStorage` 实例中获取指定名称的 `Logger` 实例
+- `Logger`
+  - 添加了 `clone_logger` 函数
+    - 用于克隆一个新的配置相同的 `Logger` 实例
+
 ## 0.2.3
 
 ### lndl-nuitka

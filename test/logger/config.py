@@ -6,7 +6,7 @@
 
 import unittest
 
-from lib_not_dr.logger.config import ConfigStorage
+from lib_not_dr.loggers.config import ConfigStorage
 
 
 class TestConfigStorage(unittest.TestCase):

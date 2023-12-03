@@ -37,7 +37,7 @@ pip install lib-not-dr[nuitka]
 > 等待 0.4.0
 
 ```python title="logger.py"
-from lib_not_dr.logger.logger import Logger
+from lib_not_dr.loggers.logger import Logger
 
 logger = Logger.get_logger_by_name("test")
 

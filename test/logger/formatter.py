@@ -7,8 +7,8 @@
 import inspect
 import unittest
 
-from lib_not_dr.logger.formatter import BaseFormatter, MainFormatter
-from lib_not_dr.logger.structure import LogMessage
+from lib_not_dr.loggers.formatter import BaseFormatter, MainFormatter
+from lib_not_dr.loggers.structure import LogMessage
 
 
 class FormatterTest(unittest.TestCase):

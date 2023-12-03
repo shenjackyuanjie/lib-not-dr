@@ -7,7 +7,7 @@
 import time
 import unittest
 
-from lib_not_dr.logger.structure import LogMessage
+from lib_not_dr.loggers.structure import LogMessage
 
 
 class LogMessageTest(unittest.TestCase):

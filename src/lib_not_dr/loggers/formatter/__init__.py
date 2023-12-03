@@ -9,12 +9,12 @@ from pathlib import Path
 from string import Template
 from typing import List, Union, Optional, TYPE_CHECKING
 
-from lib_not_dr.logger import LogLevel
+from lib_not_dr.loggers import LogLevel
 from lib_not_dr.types.options import Options
-from lib_not_dr.logger.structure import LogMessage, FormattingMessage
+from lib_not_dr.loggers.structure import LogMessage, FormattingMessage
 
 if TYPE_CHECKING:
-    from lib_not_dr.logger.formatter.colors import BaseColorFormatter
+    from lib_not_dr.loggers.formatter.colors import BaseColorFormatter
 
 __all__ = ["BaseFormatter", "MainFormatter", "StdFormatter"]
 
@@ -48,11 +48,11 @@ class BaseFormatter(Options):
     @classmethod
     def _info(cls) -> str:
         info = cls.add_info(
-            "logger_name", "logger name", "The name of the logger"
+            "logger_name", "loggers name", "The name of the loggers"
         )
         info += "\n"
         info += cls.add_info(
-            "logger_tag", "logger tag", "The tag of the logger"
+            "logger_tag", "loggers tag", "The tag of the loggers"
         )
         return info
 
@@ -215,7 +215,7 @@ class StdFormatter(BaseFormatter):
     enable_color: bool = True
 
     sub_formatter: List[BaseFormatter] = [MainFormatter()]
-    from lib_not_dr.logger.formatter.colors import (
+    from lib_not_dr.loggers.formatter.colors import (
         LevelColorFormatter,
         LoggerColorFormatter,
         TimeColorFormatter,
