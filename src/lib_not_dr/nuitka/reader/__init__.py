@@ -56,7 +56,8 @@ python lndl-nuitka.py (直接运行 会使用当前目录)
 """
 
 TOML_READERS = (
-    "tomllib",  # stdlib toml reader after python 3.11
+    # "tomllib",  # stdlib toml reader after python 3.11
+    # try tomllib first
     "toml",  # slow pure python toml reader
     "rtoml",  # rust based toml reader
     "tomlkit",  # pure python toml reader
@@ -67,6 +68,10 @@ TOML_READERS = (
 
 
 def get_toml_reader():
+    # 3.11 + 使用 tomllib
+    if sys.version_info >= (3, 11):
+        from tomllib import loads
+        return loads
     for module_name in TOML_READERS:
         try:
             loaded = __import__(module_name).loads
