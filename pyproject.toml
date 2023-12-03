@@ -81,7 +81,7 @@ force-single-line = false
 force-wrap-aliases = false
 combine-as-imports = false
 
-[tool.lndl.nuitka]
+[tool.lndl.nuitka.cli]
 main = "test-only.py"
 onefile = false
 standalone = true

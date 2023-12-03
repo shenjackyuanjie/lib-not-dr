@@ -2,6 +2,14 @@
 
 ## 0.3.0 (draft)
 
+### lndl-nuitka
+
+- 重构了一部分解析逻辑
+  - 现在配置路径位于 `[tool.lndl.nuitka.cli]`
+  - 可以添加脚本用于动态解析依赖
+    - `[tool.lndl.nuitka]`
+      - `script = "script.py"`
+
 ## 0.2.3
 
 ### lndl-nuitka

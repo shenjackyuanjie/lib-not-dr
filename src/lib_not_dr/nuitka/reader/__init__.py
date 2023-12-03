@@ -11,14 +11,14 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Union, List
 
+from lib_not_dr.nuitka import nuitka_config_type
+
 from lib_not_dr.nuitka.reader.arg_parser import (
     pyproject_toml,
     toml_path_cli,
     gen_subprocess_args,
     subprocess_to_bash,
 )
-
-support_config_dict = Dict[str, Union[str, bool, List[Union[str, tuple]]]]
 
 #  it will
 # - read the given file or
@@ -109,7 +109,7 @@ def run_nuitka(subprocess_command: list) -> None:
     print(f"Time Elapsed: {end_time - start_time} seconds")
 
 
-def main(config: support_config_dict) -> list:
+def main(config: nuitka_config_type) -> list:
     """
     enter point for python direct call
     :param config: nuitka config dict

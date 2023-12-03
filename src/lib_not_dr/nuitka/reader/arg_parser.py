@@ -8,10 +8,12 @@ import sys
 
 from pathlib import Path
 from warnings import warn
-from typing import Iterable, Dict, Union, List
+from typing import Iterable, List
+
+from lib_not_dr.nuitka import nuitka_config_type, raw_config_type
 
 
-def pyproject_toml(toml_data: dict) -> dict:
+def pyproject_toml(toml_data: dict) -> raw_config_type:
     """
     :param toml_data: dict (from pyproject/ raw dict)
     :return: dict
@@ -29,9 +31,14 @@ def pyproject_toml(toml_data: dict) -> dict:
 
     nuitka_config = toml_data["tool"]["lndl"]["nuitka"]
 
-    if "main" not in nuitka_config:
+    if "cli" not in nuitka_config:
         raise ValueError(
-            "'main' not define in lib-not-dr(lndl).nuitka section\ndefine it with 'main = [<main.py>]'"
+            "No lib-not-dr(lndl).nuitka.cli section in config file/dict"
+        )
+
+    if "main" not in nuitka_config["cli"]:
+        raise ValueError(
+            "'main' not define in lib-not-dr(lndl).nuitka.cli section\ndefine it with 'main = [<main.py>]'"
         )
 
     return nuitka_config
@@ -129,7 +136,7 @@ def merge_cli_config(toml_config: dict, cli_config: dict) -> dict:
 
 
 def gen_subprocess_args(
-    nuitka_config: Dict[str, Union[str, bool, List[Union[str, tuple]]]]
+    nuitka_config: nuitka_config_type
 ) -> list:
     cmd_list = [sys.executable, "-m", "nuitka"]
 
@@ -176,6 +183,59 @@ def gen_subprocess_args(
                 continue
 
     return cmd_list
+
+
+def parse_raw_config_by_script(raw_config: raw_config_type) -> nuitka_config_type:
+    """
+    parse raw config by script
+    整个函数就是一大堆检查加上一点点逻辑
+    真就是逻辑 10 行 安全检查 100 行
+    :param raw_config:
+    :return: parsed config
+    """
+    if script_name := raw_config.get("script") is None:
+        return raw_config["cli"]
+    script_path = Path(script_name)
+
+    if not script_path.exists():
+        print(f"script {script_path} not found ignore it")
+        return raw_config["cli"]
+
+    if not script_path.is_file():
+        print(f"script {script_path} is not a file ignore it")
+        return raw_config["cli"]
+
+    if script_path.suffix != ".py":
+        print(f"script {script_path} is not a python file ignore it")
+        return raw_config["cli"]
+
+    sys.path.append(str(script_path.parent))
+
+    try:
+        script_module = __import__(script_path.stem)
+    except ImportError:
+        print(f"script {script_path} import failed ignore it")
+        sys.path.remove(str(script_path.parent))
+        return raw_config["cli"]
+
+    sys.path.remove(str(script_path.parent))
+
+    if not hasattr(script_module, "main"):
+        print(f"script {script_path} has no paser function ignore it")
+        return raw_config["cli"]
+
+    try:
+        parsed_config = script_module.main(raw_config["cli"])
+    except Exception as e:
+        print(f"script {script_path} parse failed ignore it")
+        print(e)
+        return raw_config["cli"]
+
+    if not isinstance(parsed_config, dict):
+        print(f"script {script_path} parse failed ignore it")
+        return raw_config["cli"]
+
+    return parsed_config
 
 
 def subprocess_to_bash(cmd_list: List[str]) -> str:

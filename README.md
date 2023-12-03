@@ -64,7 +64,7 @@ logger.trace('so this message will be in the same line', tag='same line!')
 > Config in `pyproject.toml`
 
 ```toml title="pyproject.toml"
-[tool.lndl.nuitka]
+[tool.lndl.nuitka.cli]
 main = "main.py"
 # --main=main.py
 standalone = true
