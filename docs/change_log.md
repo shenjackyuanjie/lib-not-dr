@@ -26,6 +26,9 @@
 - `Logger`
   - 添加了 `clone_logger` 函数
     - 用于克隆一个新的配置相同的 `Logger` 实例
+- `LogMessage`
+  - 现在通过判断是否在 `message` `end` `spilt` 中有 `\n` 自动判定是否需要刷新
+  - 
 
 ## 0.2.3
 
