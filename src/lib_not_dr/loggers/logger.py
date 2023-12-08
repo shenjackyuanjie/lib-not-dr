@@ -133,7 +133,7 @@ class Logger(Options):
                     stack_trace = stack
 
         message = LogMessage(
-            messages=messages,
+            messages=messages, # type: ignore
             end=end,
             split=split,
             flush=flush,

@@ -62,7 +62,7 @@ lndl_nuitka = "lndl_nuitka:main"
 
 [tool.ruff]
 target-version = "py38"
-line-length = 80
+line-length = 100
 src = [
     "src",
 ]

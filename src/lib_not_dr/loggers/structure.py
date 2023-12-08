@@ -10,8 +10,6 @@ from pathlib import Path
 from types import FrameType
 from typing import List, Optional, Tuple, Dict, Union
 
-from lib_not_dr.types.options import Options
-
 __all__ = ["LogMessage", "FormattingMessage"]
 
 
@@ -23,7 +21,7 @@ class LogMessage:
 
     # 消息的属性
     flush: Optional[bool] = None
-    level: int = 20
+    level: int = 20  # info
     log_time: float = 0.0  # time.time_ns() if None
     logger_name: str = "root"
     logger_tag: Optional[str] = None
@@ -32,12 +30,12 @@ class LogMessage:
     def __init__(
         self,
         messages: Optional[List[str]] = None,
-        end: Optional[str] = "\n",
-        split: Optional[str] = " ",
+        end: str = "\n",
+        split: str = " ",
         flush: Optional[bool] = None,
-        level: Optional[int] = 20,
+        level: int = 20,
         log_time: Optional[float] = None,
-        logger_name: Optional[str] = "root",
+        logger_name: str = "root",
         logger_tag: Optional[str] = None,
         stack_trace: Optional[FrameType] = None,
     ) -> None:
@@ -68,11 +66,12 @@ class LogMessage:
             log_time = time.time_ns()
         self.log_time = log_time
 
-        if not isinstance(flush, bool) and flush is not None:
+        if flush is not None and not isinstance(flush, bool):
             flush = True if flush else False
+
         self.flush = flush
 
-    def option(self) -> Dict[str, Union[str, int, float, bool]]:
+    def option(self) -> dict:
         return {
             "messages": self.messages,
             "end": self.end,

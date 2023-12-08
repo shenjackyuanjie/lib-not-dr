@@ -85,7 +85,7 @@ class ConfigStorage(Options):
                 cycles_set.update(cycle)
         return sorted(cycles_set)  # 返回排序后的循环列表
 
-    def parse_level(self, level_config: Dict[str, str]) -> Optional[int]:
+    def parse_level(self, level_config: dict) -> Optional[int]:
         """ """
         level_found: Tuple[Optional[int], Optional[str]] = (
             level_config.get("level"),
