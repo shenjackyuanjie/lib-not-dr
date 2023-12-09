@@ -5,7 +5,7 @@
 #  -------------------------------
 import sys
 
-from typing import Dict
+from typing import Dict, TYPE_CHECKING
 
 from lib_not_dr.types.options import Options
 
@@ -97,7 +97,14 @@ class LogLevel(Options):
 
 
 # fmt: off
-from lib_not_dr.loggers.config import get_logger, get_config, read_config
+from lib_not_dr.loggers.config import get_logger, get_config, read_config  # noqa: E402
+
+if TYPE_CHECKING:
+    from lib_not_dr.loggers import logger
+    from lib_not_dr.loggers import formatter
+    from lib_not_dr.loggers import outstream
+    from lib_not_dr.loggers import structure
+    from lib_not_dr.loggers import config
 
 __all__ = [
     # modules
