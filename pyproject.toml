@@ -48,6 +48,7 @@ nuitka = [
     "tomli >= 2.0.1",
     "nuitka", # any version
 ]
+dev = ["twine"]
 
 [tool.pdm.scripts]
 pub = { call = "scripts.pub:main" }
