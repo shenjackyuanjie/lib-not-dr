@@ -21,7 +21,7 @@ classifiers = [
     # 系统支持.
     "Operating System :: OS Independent",
 ]
-license = { file = "LICENSE" }
+license = "MPL-2.0"
 dynamic = ["version"]
 
 [build-system]

@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from lib_not_dr import loggers, nuitka, types, command
 
-_version_ = "0.3.0"
+_version_ = "0.3.1"
 
 # fmt: off
 __all__ = [
