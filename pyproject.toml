@@ -49,6 +49,11 @@ nuitka = [
     "nuitka", # any version
 ]
 
+[tool.pdm.scripts]
+pub = { call = "scripts.pub:main" }
+pre_build = { call = "scripts.pub:clean_build" }
+post_publist = { call = "scripts.pub:upload_gitea" }
+
 [tool.setuptools.dynamic]
 version = { attr = "lib_not_dr._version_"}
 
