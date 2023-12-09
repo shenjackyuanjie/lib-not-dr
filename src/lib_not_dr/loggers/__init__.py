@@ -94,6 +94,7 @@ class LogLevel(Options):
             for level in reversed(cls.level_name_map):
                 if level_int >= level:
                     return cls.level_name_map[level]
+        return cls.notset_name
 
 
 # fmt: off
