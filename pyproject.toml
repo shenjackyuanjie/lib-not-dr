@@ -55,7 +55,7 @@ version = { attr = "lib_not_dr._version_"}
 [project.urls]
 Homepage = "https://github.com/shenjackyuanjie/lib-not-dr"
 Repository = "https://github.com/shenjackyuanjie/lib-not-dr"
-Changelog = "https://github.com/shenjackyuanjie/lib-not-dr/blob/main/docs/change_log.md"
+Changelog = "https://github.com/shenjackyuanjie/lib-not-dr/blob/main/docs/change_logs"
 
 [project.scripts]
 lndl_nuitka = "lndl_nuitka:main"
