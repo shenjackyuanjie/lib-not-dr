@@ -19,7 +19,13 @@ from lib_not_dr.types.options import Options
 from lib_not_dr.loggers.structure import LogMessage
 from lib_not_dr.loggers.formatter import BaseFormatter, StdFormatter
 
-__all__ = ["BaseOutputStream", "StdioOutputStream", "FileCacheOutputStream"]
+# fmt: off
+__all__ = [
+    "BaseOutputStream",
+    "StdioOutputStream",
+    "FileCacheOutputStream"
+]
+# fmt: on
 
 
 class BaseOutputStream(Options):
@@ -31,19 +37,13 @@ class BaseOutputStream(Options):
     formatter: BaseFormatter
 
     def write_stdout(self, message: LogMessage) -> None:
-        raise NotImplementedError(
-            f"{self.__class__.__name__}.write_stdout is not implemented"
-        )
+        raise NotImplementedError(f"{self.__class__.__name__}.write_stdout is not implemented")
 
     def write_stderr(self, message: LogMessage) -> None:
-        raise NotImplementedError(
-            f"{self.__class__.__name__}.write_stderr is not implemented"
-        )
+        raise NotImplementedError(f"{self.__class__.__name__}.write_stderr is not implemented")
 
     def flush(self) -> None:
-        raise NotImplementedError(
-            f"{self.__class__.__name__}.flush is not implemented"
-        )
+        raise NotImplementedError(f"{self.__class__.__name__}.flush is not implemented")
 
     def close(self) -> None:
         self.enable = False
@@ -61,9 +61,10 @@ class StdioOutputStream(BaseOutputStream):
             return None
         if message.level < self.level:
             return None
-        print(
-            self.formatter.format_message(message), end="", flush=message.flush
-        )
+        if message.flush is not None:
+            print(self.formatter.format_message(message), end="", flush=message.flush)
+        else:
+            print(self.formatter.format_message(message), end="", flush=True)
         return None
 
     def write_stderr(self, message: LogMessage) -> None:
@@ -72,18 +73,22 @@ class StdioOutputStream(BaseOutputStream):
         if message.level < self.level:
             return None
         if self.use_stderr:
-            print(
-                self.formatter.format_message(message),
-                end="",
-                flush=message.flush,
-                file=sys.stderr,
-            )
+            if message.flush is not None:
+                print(
+                    self.formatter.format_message(message),
+                    end="",
+                    flush=message.flush,
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    self.formatter.format_message(message),
+                    end="",
+                    flush=True,
+                    file=sys.stderr,
+                )
         else:
-            print(
-                self.formatter.format_message(message),
-                end="",
-                flush=message.flush,
-            )
+            self.write_stdout(message)
         return None
 
     def flush(self) -> None:
@@ -130,9 +135,7 @@ class FileCacheOutputStream(BaseOutputStream):
     # 0 -> no limit
     file_size_limit: int = 0  # size limit in kb
     file_time_limit: int = 0  # time limit in sec 0
-    file_swap_on_both: bool = (
-        False  # swap file when both size and time limit reached
-    )
+    file_swap_on_both: bool = False  # swap file when both size and time limit reached
 
     def init(self, **kwargs) -> bool:
         self.file_start_time = round(time.time())
@@ -155,9 +158,7 @@ class FileCacheOutputStream(BaseOutputStream):
         else:
             if self.flush_time_limit > 0:
                 if self.flush_timer is None or not self.flush_timer.is_alive():
-                    self.flush_timer = threading.Timer(
-                        self.flush_time_limit, self.flush
-                    )
+                    self.flush_timer = threading.Timer(self.flush_time_limit, self.flush)
                     self.flush_timer.daemon = True
                     self.flush_timer.start()
             if not self.at_exit_register:
