@@ -45,6 +45,7 @@ builder = Literal('test1')(
 ```
 
 build
+
 - test
 - main
   - arg:text
@@ -52,8 +53,7 @@ build
   - arg:int
     - run
 
-
-- command: 主节点 
+- command: 主节点
 - literal: 字面量节点
 
 ## 设计思路

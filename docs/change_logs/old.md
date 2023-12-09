@@ -1,34 +1,4 @@
-# Change log / 更新日志
-
-## 0.3.0 (draft)
-
-> logger 继续后延
-
-### lndl-nuitka
-
-- 重构了一部分解析逻辑
-  - 现在配置路径位于 `[tool.lndl.nuitka.cli]`
-  - 可以添加脚本用于动态解析依赖
-    - `[tool.lndl.nuitka]`
-      - `script = "script.py"`
-
-### Logger
-
-- 将 `logger` 模块重命名为 `loggers`
-
-- 添加了 `get_config` 函数
-  - 用于获取全局配置
-  - 我也不确定有啥用捏
-- 添加了 `read_config` 函数
-  - 用于向指定 `ConfigStorage`/全局 `ConfigStorage` 实例中添加配置
-- 添加了 `get_logger` 函数
-  - 用于从指定 `ConfigStorage`/全局 `ConfigStorage` 实例中获取指定名称的 `Logger` 实例
-- `Logger`
-  - 添加了 `clone_logger` 函数
-    - 用于克隆一个新的配置相同的 `Logger` 实例
-- `LogMessage`
-  - 现在通过判断是否在 `message` `end` `spilt` 中有 `\n` 自动判定是否需要刷新
-  - 
+# lndl 老版本的更新日志
 
 ## 0.2.3
 
@@ -153,7 +123,7 @@
 
 - 优化了 `CompilerHelper` 的一些周围实现
   - 参数喜加一
-   - `--report`
+  - `--report`
 
 ## 0.1.5
 

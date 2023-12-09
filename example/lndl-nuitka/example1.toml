@@ -5,3 +5,5 @@ standalone = true
 clang = true
 msvc = 'latest'
 mingw64 = false
+
+# python -m nuitka --main=test.py --standalone --clang --msvc=latest
