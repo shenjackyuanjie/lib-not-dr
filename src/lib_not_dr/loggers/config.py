@@ -86,7 +86,11 @@ class ConfigStorage(Options):
         return sorted(cycles_set)  # 返回排序后的循环列表
 
     def parse_level(self, level_config: dict) -> Optional[int]:
-        """ """
+        """
+        Parse level config
+        :param level_config:
+        :return:
+        """
         level_found: Tuple[Optional[int], Optional[str]] = (
             level_config.get("level"),
             level_config.get("level_name"),
@@ -273,19 +277,20 @@ class ConfigStorage(Options):
         for logger_name, config in logger_config.items():
             # get output for logger
             if "outputs" in config:
-                if self.outputs.get(config["outputs"]) is None:
-                    if self.fail_outputs.get(config["outputs"]) is None:
-                        self.log.error(
-                            f'Logger {logger_name} output {config["output"]} not found, ignored'
-                        )
+                for i, output_name in enumerate(config["outputs"]):
+                    if self.outputs.get(output_name) is None:
+                        if self.fail_outputs.get(output_name) is None:
+                            self.log.error(
+                                f'Logger {logger_name} output {output_name} not found, ignored'
+                            )
+                        else:
+                            self.log.error(
+                                f'Logger {logger_name} require a fail output {output_name}, ignored'
+                            )
+                        env.fail_loggers[logger_name] = config
+                        continue
                     else:
-                        self.log.error(
-                            f'Logger {logger_name} require a fail output {config["output"]}, ignored'
-                        )
-                    env.fail_loggers[logger_name] = config
-                    continue
-                else:
-                    config["outputs"] = self.outputs[config["outputs"]]
+                        config["outputs"][i] = self.outputs[output_name]
             if level := self.parse_level(config) is not None:
                 config["level"] = level
             if "level_name" in config:

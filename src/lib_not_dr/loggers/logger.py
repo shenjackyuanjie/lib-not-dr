@@ -103,17 +103,17 @@ class Logger(Options):
             output.level = level
 
     def make_log(
-        self,
-        messages: Union[list, tuple],
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        level: int = 20,  # info
-        # log_time: Optional[float] = None,
-        # logger_name: str = 'root',
-        # logger_tag: Optional[str] = None,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            messages: Union[list, tuple],
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            level: int = 20,  # info
+            # log_time: Optional[float] = None,
+            # logger_name: str = 'root',
+            # logger_tag: Optional[str] = None,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         # 检查是否需要记录
         if not self.log_for(level):
@@ -133,7 +133,7 @@ class Logger(Options):
                     stack_trace = stack
 
         message = LogMessage(
-            messages=messages, # type: ignore
+            messages=messages,  # type: ignore
             end=end,
             split=split,
             flush=flush,
@@ -153,13 +153,13 @@ class Logger(Options):
         # 20231106 00:06
 
     def info(
-        self,
-        *message,
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            *message,
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.info):
             return
@@ -174,13 +174,13 @@ class Logger(Options):
         )
 
     def trace(
-        self,
-        *message,
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            *message,
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.trace):
             return
@@ -195,13 +195,13 @@ class Logger(Options):
         )
 
     def fine(
-        self,
-        *message,
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            *message,
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.fine):
             return
@@ -216,13 +216,13 @@ class Logger(Options):
         )
 
     def debug(
-        self,
-        *message,
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            *message,
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.debug):
             return
@@ -237,13 +237,13 @@ class Logger(Options):
         )
 
     def warn(
-        self,
-        *message,
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            *message,
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.warn):
             return
@@ -258,13 +258,13 @@ class Logger(Options):
         )
 
     def error(
-        self,
-        *message,
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            *message,
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.error):
             return
@@ -279,13 +279,13 @@ class Logger(Options):
         )
 
     def fatal(
-        self,
-        *message,
-        tag: Optional[str] = None,
-        end: str = "\n",
-        split: str = " ",
-        flush: bool = True,
-        stack_trace: Optional[FrameType] = None,
+            self,
+            *message,
+            tag: Optional[str] = None,
+            end: str = "\n",
+            split: str = " ",
+            flush: bool = True,
+            stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.fatal):
             return

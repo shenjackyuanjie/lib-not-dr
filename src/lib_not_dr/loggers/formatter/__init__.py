@@ -75,10 +75,11 @@ class BaseFormatter(Options):
         elif isinstance(template, str):
             template = Template(template)
 
+        print(message, info, template)
         try:
-            return template.substitute(**info)
+            return template.substitute(info)
         except (KeyError, ValueError):
-            return template.safe_substitute(**info)
+            return template.safe_substitute(info)
 
     def _format(self, message: FormattingMessage) -> FormattingMessage:
         """

@@ -115,7 +115,7 @@ class FileCacheOutputStream(BaseOutputStream):
     flush_timer: Optional[threading.Timer] = None
 
     file_path: Path = Path("./logs")
-    # if contain {time} -> time.strftime("%Y-%m-%d %H-%M-%S", time.gmtime(time.time)
+    # if contain {time} -> time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime(time.time)
     file_name: str
     # file mode: always 'a'
     file_encoding: str = "utf-8"
@@ -144,7 +144,7 @@ class FileCacheOutputStream(BaseOutputStream):
         # 初始化文件名
         if "{time}" in self.file_name:
             self.file_name = self.file_name.format(time=time.strftime(
-                "%Y-%m-%d|%H-%M-%S", time.gmtime(self.file_start_time)
+                "%Y-%m-%d_%H-%M-%S", time.gmtime(self.file_start_time)
             ))
         # 初始化缓存
         if self.text_cache is None:

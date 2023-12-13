@@ -44,6 +44,8 @@ class BaseColorFormatter(BaseFormatter):
     }
 
     def get_color(self, message: FormattingMessage) -> str:
+        if message[0].level in self.color:
+            return self.color[message[0].level]
         for level in self.color:
             if message[0].level <= level:
                 break
