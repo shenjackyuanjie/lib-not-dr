@@ -25,10 +25,6 @@ pip install lib-not-dr[nuitka]
 # install with nuitka support
 ```
 
-## 发布计划 / Release Plan
-
-> [文档/Docs](/docs/release-plan/summary.md)
-
 ## 使用/Usage
 
 ### Logger
