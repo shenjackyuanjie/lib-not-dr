@@ -13,4 +13,13 @@ nuitka_config_type = Dict[str, Union[str, bool, List[Union[str, tuple]]]]
 raw_config_type = Dict[str, Union[nuitka_config_type, str]]
 parse_config_function = Callable[[raw_config_type], nuitka_config_type]
 
-__all__ = ["reader", "compile", "raw_config_type", "parse_config_function", "nuitka_config_type"]
+# fmt: off
+__all__ = [
+    "reader",
+    "compile",
+    "raw_config_type",
+    "parse_config_function",
+    "nuitka_config_type"
+]
+# fmt: on
+

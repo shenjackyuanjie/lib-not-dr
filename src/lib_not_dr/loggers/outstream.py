@@ -115,6 +115,7 @@ class FileCacheOutputStream(BaseOutputStream):
     flush_timer: Optional[threading.Timer] = None
 
     file_path: Path = Path("./logs")
+    # if contain {time} -> time.strftime("%Y-%m-%d %H-%M-%S", time.gmtime(time.time)
     file_name: str
     # file mode: always 'a'
     file_encoding: str = "utf-8"
@@ -138,9 +139,17 @@ class FileCacheOutputStream(BaseOutputStream):
     file_swap_on_both: bool = False  # swap file when both size and time limit reached
 
     def init(self, **kwargs) -> bool:
+        # 时间取整
         self.file_start_time = round(time.time())
+        # 初始化文件名
+        if "{time}" in self.file_name:
+            self.file_name = self.file_name.format(time=time.strftime(
+                "%Y-%m-%d %H-%M-%S", time.gmtime(self.file_start_time)
+            ))
+        # 初始化缓存
         if self.text_cache is None:
             self.text_cache = io.StringIO()
+        # 检查文件名
         self.get_file_path()
         return False
 
@@ -224,8 +233,7 @@ class FileCacheOutputStream(BaseOutputStream):
             if file_time > self.file_time_limit:
                 time_pass = False
         if (self.file_swap_on_both and size_pass and time_pass) or (
-            not self.file_swap_on_both and (size_pass or time_pass)
-        ):
+                not self.file_swap_on_both and (size_pass or time_pass)):
             # 两个都满足
             # 或者只有一个满足
             if size_pass and time_pass:
@@ -243,6 +251,7 @@ class FileCacheOutputStream(BaseOutputStream):
         if text == "":
             return None
         current_file = self.check_flush()
+        # 检查文件是否存在
         if not current_file.exists():
             current_file.parent.mkdir(parents=True, exist_ok=True)
             current_file.touch(exist_ok=True)
