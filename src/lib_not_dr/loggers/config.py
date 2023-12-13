@@ -324,11 +324,13 @@ _storage = ConfigStorage(loggers={'root': Logger(logger_name='root')})
 
 
 def get_config() -> ConfigStorage:
+    global _storage
     return _storage
 
 
 def get_logger(name: str = 'root', storage: Optional[ConfigStorage] = None) -> Logger:
     if storage is None:
+        global _storage
         storage = _storage
 
     if name not in storage.loggers:
@@ -338,9 +340,42 @@ def get_logger(name: str = 'root', storage: Optional[ConfigStorage] = None) -> L
     return storage.loggers[name]
 
 
+def get_logger_from_old(name: str, old_name: str = 'root', storage: Optional[ConfigStorage] = None) -> Logger:
+    if storage is None:
+        global _storage
+        storage = _storage
+
+    if name not in storage.loggers:
+        root_log = get_logger(old_name, storage).clone_logger()
+        root_log.logger_name = name
+        storage.loggers[name] = root_log
+    return storage.loggers[name]
+
+
+def add_logger(name: str, logger: Logger, storage: Optional[ConfigStorage] = None) -> None:
+    if storage is None:
+        global _storage
+        storage = _storage
+
+    storage.loggers[name] = logger
+
+
 def read_config(log_config: Dict, storage: Optional[ConfigStorage] = None) -> ConfigStorage:
     if storage is None:
+        global _storage
         storage = _storage
 
     storage.read_dict_config(log_config)
     return storage
+
+
+# fmt: off
+__all__ = [
+    "get_config",
+    "get_logger",
+    "_storage",
+    "read_config",
+    "ConfigStorage",
+]
+# 整的跟 export 一样
+# fmt: on
