@@ -291,7 +291,7 @@ class ConfigStorage(Options):
                         continue
                     else:
                         config["outputs"][i] = self.outputs[output_name]
-            if level := self.parse_level(config) is not None:
+            if (level := self.parse_level(config)) is not None:
                 config["level"] = level
             if "level_name" in config:
                 config.pop("level_name")

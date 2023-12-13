@@ -61,10 +61,11 @@ class StdioOutputStream(BaseOutputStream):
             return None
         if message.level < self.level:
             return None
+        out_msg = self.formatter.format_message(message)
         if message.flush is not None:
-            print(self.formatter.format_message(message), end="", flush=message.flush)
+            print(out_msg, end="", flush=message.flush)
         else:
-            print(self.formatter.format_message(message), end="", flush=True)
+            print(out_msg, end="", flush=True)
         return None
 
     def write_stderr(self, message: LogMessage) -> None:

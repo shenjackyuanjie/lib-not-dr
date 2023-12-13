@@ -75,7 +75,6 @@ class BaseFormatter(Options):
         elif isinstance(template, str):
             template = Template(template)
 
-        print(message, info, template)
         try:
             return template.substitute(info)
         except (KeyError, ValueError):
