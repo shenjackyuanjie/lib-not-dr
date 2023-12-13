@@ -9,7 +9,6 @@ import platform
 import subprocess
 
 from pathlib import Path
-from typing import Dict, Union, List
 
 from lib_not_dr.nuitka import nuitka_config_type
 
@@ -141,7 +140,6 @@ def cli_main() -> None:
         toml = toml_loads(f.read())
 
     nuitka_config = pyproject_toml(toml)
-    print(f"config is: {nuitka_config}")
     cli_config = parse_raw_config_by_script(nuitka_config)
 
     subprocess_command = gen_subprocess_args(cli_config)

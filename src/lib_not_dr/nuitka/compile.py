@@ -480,16 +480,17 @@ class CompilerHelper(Options):
                 self.product_version,
                 self.product_version,
             )
-            cmd_list += format_cmd(
-                "--macos-app-icon=", self.icon_path.absolute(), self.icon_path
-            )
-        elif platform.system() == "Windows":
+            if self.icon_path is not None:
+                cmd_list += format_cmd(
+                    "--macos-app-icon=", self.icon_path.absolute(), self.icon_path
+                )
+        elif platform.system() == "Windows" and self.icon_path is not None:
             cmd_list += format_cmd(
                 "--windows-icon-from-ico=",
                 self.icon_path.absolute(),
                 self.icon_path,
             )
-        elif platform.system() == "Linux":
+        elif platform.system() == "Linux" and self.icon_path is not None:
             cmd_list += format_cmd(
                 "--linux-icon=", self.icon_path.absolute(), self.icon_path
             )

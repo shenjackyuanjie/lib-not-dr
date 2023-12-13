@@ -94,7 +94,6 @@ def get_cli_nuitka_args() -> dict:
             arg_value = True
         arg_dict[arg_name] = arg_value
 
-    print(f"cli config: {arg_dict}")
     return arg_dict
 
 
@@ -221,10 +220,6 @@ def parse_raw_config_by_script(raw_config: raw_config_type) -> nuitka_config_typ
         print(e)
         traceback.print_exc()
         return raw_config["cli"]
-
-    # if not isinstance(parsed_config, dict):
-    #     print(f"script {script_path} parse failed ignore it")
-    #     return raw_config["cli"]
 
     return parsed_config
 
