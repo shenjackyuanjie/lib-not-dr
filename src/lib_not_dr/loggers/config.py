@@ -272,9 +272,9 @@ class ConfigStorage(Options):
         env = ConfigStorage()
         for logger_name, config in logger_config.items():
             # get output for logger
-            if "output" in config:
-                if self.outputs.get(config["output"]) is None:
-                    if self.fail_outputs.get(config["output"]) is None:
+            if "outputs" in config:
+                if self.outputs.get(config["outputs"]) is None:
+                    if self.fail_outputs.get(config["outputs"]) is None:
                         self.log.error(
                             f'Logger {logger_name} output {config["output"]} not found, ignored'
                         )
@@ -285,7 +285,7 @@ class ConfigStorage(Options):
                     env.fail_loggers[logger_name] = config
                     continue
                 else:
-                    config["output"] = self.outputs[config["output"]]
+                    config["outputs"] = self.outputs[config["outputs"]]
             if level := self.parse_level(config) is not None:
                 config["level"] = level
             if "level_name" in config:
