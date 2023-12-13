@@ -6,12 +6,12 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ## Information/信息
 
-- Version / 版本: 0.3.5
+- Version / 版本: 0.3.6
 - Author / 作者: shenjackyuanjie <3695888@qq.com>
 
 [shenjackyuanjie](https://github.com/shenjackyuanjie)
 
-> [更新日志|Change Log](docs/change_log.md)
+> [更新日志|Change Log](docs/change_logs)
 
 ### License/许可证
 

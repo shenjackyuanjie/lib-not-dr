@@ -34,7 +34,7 @@ class BaseColorFormatter(BaseFormatter):
         # Debug: cyan
         LogLevel.debug: "\033[0;36m",
         # Info: white
-        LogLevel.info: "\033[0;37m",
+        LogLevel.info: "\033[0;38;2;255;255;255m",
         # Warn: yellow
         LogLevel.warn: "\033[0;33m",
         # Error: red
@@ -67,7 +67,7 @@ class LevelColorFormatter(BaseColorFormatter):
         # Debug: cyan
         LogLevel.debug: "\033[38;2;133;138;149m",
         # Info: white
-        LogLevel.info: "\033[0;37m",
+        LogLevel.info: "\033[0;38;2;255;255;255m",
         # Warn: yellow
         LogLevel.warn: "\033[0;33m",
         # Error: red
@@ -106,7 +106,7 @@ class LoggerColorFormatter(BaseColorFormatter):
         # Debug: cyan
         LogLevel.debug: "\033[0;36m",
         # Info: white
-        LogLevel.info: "\033[0;37m",
+        LogLevel.info: "\033[0;38;2;255;255;255m",
         # Warn: yellow
         LogLevel.warn: "\033[0;33m",
         # Error: red
@@ -153,7 +153,7 @@ class TimeColorFormatter(BaseColorFormatter):
         # Debug: cyan
         LogLevel.debug: "\033[0;36m",
         # Info: white
-        LogLevel.info: "\033[0;37m",
+        LogLevel.info: "\033[0;38;2;255;255;255m",
         # Warn: yellow
         LogLevel.warn: "\033[0;33m",
         # Error: red
@@ -194,7 +194,7 @@ class TraceColorFormatter(BaseColorFormatter):
         # Debug: cyan
         LogLevel.debug: "\033[38;2;0;255;180m",
         # Info: white
-        LogLevel.info: "\033[38;2;0;255;180m",
+        LogLevel.info: "\033[0;38;2;255;255;255m",
         # Warn: yellow
         LogLevel.warn: "\033[38;2;0;255;180m",
         # Error: red
@@ -247,7 +247,7 @@ class MessageColorFormatter(BaseColorFormatter):
         # Debug: blue
         LogLevel.debug: "\033[38;2;138;173;244m",
         # Info: no color
-        LogLevel.info: "",
+        LogLevel.info: "\033[0;38;2;255;255;255m",
         # Warn: yellow
         LogLevel.warn: "\033[0;33m",
         # Error: red
