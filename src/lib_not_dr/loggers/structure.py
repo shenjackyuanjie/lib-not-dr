@@ -87,7 +87,7 @@ class LogMessage:
     def format_message(self) -> str:
         if self.split is None:
             self.split = " "
-        return self.split.join(self.messages) + self.end
+        return self.split.join(str(item) for item in self.messages) + self.end
 
     def format_for_message(self) -> Dict[str, str]:
         basic_info = self.option()
