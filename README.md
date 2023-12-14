@@ -6,7 +6,7 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ## Information/信息
 
-- Version / 版本: 0.3.8
+- Version / 版本: 0.3.9
 - Author / 作者: shenjackyuanjie <3695888@qq.com>
 
 [shenjackyuanjie](https://github.com/shenjackyuanjie)
@@ -23,6 +23,7 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 pip install lib-not-dr
 pip install lib-not-dr[nuitka]
 # install with nuitka support
+# 安装支持 nuitka 的版本
 ```
 
 ## 使用/Usage
@@ -75,6 +76,8 @@ script = "xxx.py"
 > 通过 `lndl_nuitka` 命令行工具使用
 >
 > Use with `lndl_nuitka` command line tool
+
+> 建议使用 `pip install lib-not-dr[nuitka]` 安装 lib-not-dr
 
 ```bash
 lndl_nuitka .

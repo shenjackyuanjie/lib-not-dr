@@ -81,9 +81,11 @@ def get_toml_reader():
             return loaded
         except ImportError:
             continue
-    error_msg = """No toml reader found, please install any below by pip:
-    %s
-    or use Python 3.11+""" % " ".join(TOML_READERS)
+    error_msg = """\033[31mNo toml reader found, please install any below by pip:
+    {toml} or use Python 3.11+ or install lib-not-dr with lib_not_dr[nuitka] option
+    没有找到 toml 解析器, 请考虑安装下列之一的 toml 库
+    {toml} 或者使用 Python 3.11+ 或者使用 lib_not_dr[nuitka] 安装 lib-not-dr\033[0m
+    """.format(toml="\n    ".join(TOML_READERS))
     raise ImportError(error_msg) from None
 
 
