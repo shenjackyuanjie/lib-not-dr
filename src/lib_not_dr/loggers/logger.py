@@ -21,6 +21,7 @@ class Logger(Options):
     outputs: List[BaseOutputStream] = [StdioOutputStream()]
 
     logger_name: str = "root"
+    default_tag: Optional[str] = None
 
     enable: bool = True
     level: int = 20  # info
@@ -37,6 +38,7 @@ class Logger(Options):
             enable=self.enable,
             level=self.level,
             outputs=self.outputs.copy(),
+            default_tag=self.default_tag,
         )
 
     def log_for(self, level: int) -> bool:
@@ -54,28 +56,53 @@ class Logger(Options):
     def add_output(self, output: BaseOutputStream) -> None:
         """
         Add an output to the list of outputs.
-
-        Args:
-            output (BaseOutputStream): The output to be added.
-
-        Returns:
-            None
+        :param output:
+        :return:
         """
         self.outputs.append(output)
         self.level = min(self.level, output.level)
 
     def remove_output(self, output: BaseOutputStream) -> None:
         """
-        Removes the specified output from the list of outputs.
-
-        Args:
-            output (BaseOutputStream): The output to be removed.
-
-        Returns:
-            None
+        Remove an output from the list of outputs.
+        :param output: BaseOutputStream
+        :return:
         """
         self.outputs.remove(output)
         self.level = max(self.level, *[output.level for output in self.outputs])
+
+    @property
+    def tag(self):
+        """
+        Get the default tag.
+        :return:
+        """
+        return self.default_tag
+
+    @tag.setter
+    def tag(self, tag: str) -> None:
+        """
+        Set the default tag.
+        :param tag: str
+        :return: None
+        """
+        self.default_tag = tag
+
+    def set_tag(self, tag: str) -> "Logger":
+        """
+        Set the default tag.
+        :param tag: str
+        :return: None
+        """
+        self.default_tag = tag
+        return self
+
+    def clear_tag(self) -> None:
+        """
+        Clear the default tag.
+        :return:
+        """
+        self.default_tag = None
 
     @property
     def global_level(self) -> int:
@@ -131,6 +158,9 @@ class Logger(Options):
                         stack_trace = up_stack
                 else:
                     stack_trace = stack
+        # 处理标签
+        if tag is None and self.default_tag is not None:
+            tag = self.default_tag
 
         message = LogMessage(
             messages=messages,  # type: ignore
