@@ -135,7 +135,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             level: int = 20,  # info
             # log_time: Optional[float] = None,
             # logger_name: str = 'root',
@@ -188,7 +188,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.info):
@@ -209,7 +209,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.trace):
@@ -230,7 +230,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.fine):
@@ -251,7 +251,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.debug):
@@ -272,7 +272,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.warn):
@@ -293,7 +293,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.error):
@@ -314,7 +314,7 @@ class Logger(Options):
             tag: Optional[str] = None,
             end: str = "\n",
             split: str = " ",
-            flush: bool = True,
+            flush: bool = None,
             stack_trace: Optional[FrameType] = None,
     ) -> None:
         if not self.log_for(LogLevel.fatal):
