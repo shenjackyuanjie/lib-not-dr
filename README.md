@@ -6,7 +6,7 @@ A python lib came from [Difficult Rocket](https://github.com/shenjackyuanjie/Dif
 
 ## Information/信息
 
-- Version / 版本: 0.3.10
+- Version / 版本: 0.3.11
 - Author / 作者: shenjackyuanjie <3695888@qq.com>
 
 [shenjackyuanjie](https://github.com/shenjackyuanjie)
