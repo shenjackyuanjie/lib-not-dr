@@ -21,13 +21,16 @@ from typing import (
     Iterable,
 )
 
+# fmt: off
 __all__ = [
     "get_type_hints_",
     "Options",
     "OptionsError",
     "OptionNotFound",
+    "OptionNotFilled",
     "OptionNameNotDefined",
 ]
+# fmt: on
 
 
 def get_type_hints_(cls: Type):
@@ -61,6 +64,10 @@ class OptionNotFound(OptionsError):
     """某个选项没有找到"""
 
 
+class OptionNotFilled(OptionsError):
+    """某个选项没有填写"""
+
+
 class Options:
     """
     一个用于存储选项 / 提供 API 定义 的类
@@ -73,11 +80,17 @@ class Options:
             定义 一些需要的方法
             子类: 继承 新的 Options 类
                 实现定义的方法
+    _check_options: 用于检查是否输入的选项都是已经定义的选项
+    _check_filled: 用于检查是否所有的选项都已经填写
     """
 
     name = "Option Base"
     cached_options: Dict[str, Union[str, Any]] = {}
+
+    # 用于检查是否输入的选项都是已经定义的选项
     _check_options: bool = True
+    # 用于检查是否所有的选项都已经填写
+    _check_filled: bool = False
 
     def __init__(self, **kwargs):
         """
@@ -88,12 +101,21 @@ class Options:
         if TYPE_CHECKING:
             self._options: Dict[str, Union[Callable, object]] = {}
         self.flush_option()
+        miss_list = []
+        if self._check_filled:
+            miss_list = [key for key in self.cached_options]
         for option, value in kwargs.items():
             if option not in self.cached_options and self._check_options:
                 raise OptionNameNotDefined(
                     f"option: {option} with value: {value} is not defined"
                 )
             setattr(self, option, value)
+            if self._check_filled:
+                miss_list.remove(option)
+        if self._check_filled and miss_list:
+            raise OptionNotFilled(
+                f"option: {miss_list} is not filled in {self.name}"
+            )
         run_load_file = True
         if hasattr(self, "init"):
             run_load_file = self.init(**kwargs)  # 默认 False/None
