@@ -39,7 +39,8 @@ def pyproject_toml(toml_data: dict) -> raw_config_type:
 
     if "main" not in nuitka_config["cli"]:
         raise ValueError(
-            "'main' not define in lib-not-dr(lndl).nuitka.cli section\ndefine it with 'main = [<main.py>]'"
+            "'main' not define in lib-not-dr(lndl).nuitka.cli section\n"
+            "define it with 'main = [<main.py>]'"
         )
 
     return nuitka_config
@@ -107,7 +108,8 @@ def merge_cli_config(toml_config: dict, cli_config: dict) -> dict:
     for name, value in cli_config.items():
         if name in toml_config:
             warn(
-                f"\033[33mcli config will overwrite toml config\n{name}:{toml_config[name]} -> {value}\033[0m"
+                "\033[33mcli config will overwrite toml config\n"
+                f"{name}:{toml_config[name]} -> {value}\033[0m"
             )
             if isinstance(toml_config[name], bool):
                 if not isinstance(value, bool):
@@ -195,8 +197,11 @@ def parse_raw_config_by_script(raw_config: raw_config_type) -> nuitka_config_typ
     :param raw_config:
     :return: parsed config
     """
-    if (script_name := raw_config.get("script")) is None:
-        return raw_config["cli"]
+    raw_cli_config: nuitka_config_type = raw_config.get("cli", {})  # type: ignore
+
+    if (script_name := raw_config.get("script")) is None:  # type: ignore
+        return raw_cli_config
+    script_name: str
     print(f'reading script {script_name}')
     script_path = Path(script_name)
 
@@ -207,21 +212,22 @@ def parse_raw_config_by_script(raw_config: raw_config_type) -> nuitka_config_typ
     except Exception as e:
         print(f"script {script_path} import failed ignore it\n{e}")
         sys.path.remove(str(script_path.parent))
-        return raw_config["cli"]
+        return raw_cli_config
 
     sys.path.remove(str(script_path.parent))
 
     if not hasattr(script_module, "main"):
         print(f"script {script_path} has no paser function ignore it")
-        return raw_config["cli"]
+        return raw_cli_config
 
+    parse_func: parse_config_function = getattr(script_module, "main")
     try:
-        parsed_config = script_module.main(raw_config)
+        parsed_config = parse_func(raw_config)
     except Exception as e:
         print(f"script {script_path} parse failed ignore it")
         print(e)
         traceback.print_exc()
-        return raw_config["cli"]
+        return raw_cli_config
 
     return parsed_config
 
