@@ -143,18 +143,19 @@ def gen_subprocess_args(
     nuitka_config = merge_cli_config(nuitka_config, get_cli_nuitka_args())
 
     def parse_value(arg_name, arg_value) -> list:
-        if isinstance(value, bool):
+        if isinstance(arg_value, bool):
             warn(f"bool value is not supported in list config {arg_name}")
             return []
-        elif isinstance(value, str):
+        elif isinstance(arg_value, str):
             return [f"--{arg_name}={arg_value}"]
         else:
             return [f"--{arg_name}={arg_value[0]}={arg_value[1]}"]
 
     for name, value in nuitka_config.items():
-        if value is True:
+        if isinstance(value, bool):
             # --<name>
-            cmd_list.append(f"--{name}")
+            if value:
+                cmd_list.append(f"--{name}")
             continue
         elif isinstance(value, str):
             # --<name>=<value>
@@ -181,6 +182,7 @@ def gen_subprocess_args(
                 for item in value:
                     cmd_list += parse_value(name, item)
                 continue
+        warn(f"invalid config {name}:{value}")
 
     return cmd_list
 
