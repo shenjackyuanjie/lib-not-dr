@@ -62,10 +62,11 @@ TOML_READERS = (
     # try tomllib first
     "toml",  # slow pure python toml reader
     "rtoml",  # rust based toml reader
-    "tomlkit",  # pure python toml reader
     "tomli",  # pure python toml reader
     "pytomlpp",  # cpp based toml reader
     "qtoml",  # pure python toml reader, but faster than toml
+    # "tomlkit",  # pure python toml reader
+    # tomlkit 需要特殊处理, 先不用了
 )
 
 
