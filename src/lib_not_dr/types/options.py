@@ -159,8 +159,9 @@ class Options:
         """
         values = {}
         for ann in self.__annotations__:  # 获取类型注释
-            values[ann] = getattr(self, ann, None)
-            if values[ann] is None:
+            try:
+                values[ann] = getattr(self, ann)
+            except AttributeError:
                 values[ann] = self.__annotations__[ann]
 
         if not hasattr(self, "_options"):
