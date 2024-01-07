@@ -185,7 +185,7 @@ def gen_subprocess_args(
                     cmd_list += parse_value(name, item)
             continue
         else:
-            warn(f"invalid config {name}:{value}")
+            warn(f"invalid config {name}:{value} {type(value)}")
 
     return cmd_list
 
