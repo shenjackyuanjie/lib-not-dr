@@ -183,8 +183,9 @@ def gen_subprocess_args(
                 # 处理混杂的情况
                 for item in value:
                     cmd_list += parse_value(name, item)
-                continue
-        warn(f"invalid config {name}:{value}")
+            continue
+        else:
+            warn(f"invalid config {name}:{value}")
 
     return cmd_list
 
