@@ -112,10 +112,6 @@ class Options:
             setattr(self, option, value)
             if self._check_filled:
                 miss_list.remove(option)
-        if self._check_filled and miss_list:
-            raise OptionNotFilled(
-                f"option: {miss_list} is not filled in {self.name}"
-            )
         run_load_file = True
         if hasattr(self, "init"):
             run_load_file = self.init(**kwargs)  # 默认 False/None
@@ -125,6 +121,10 @@ class Options:
                 self.load_file()
             except Exception:
                 traceback.print_exc()
+        if self._check_filled and miss_list:
+            raise OptionNotFilled(
+                f"option: {miss_list} is not filled in {self.name}"
+            )
         self.flush_option()
 
     def __str__(self):
@@ -140,12 +140,12 @@ class Options:
     if TYPE_CHECKING:
         _options: Dict[str, Union[Callable, object]] = {}
 
-        def init(self, **kwargs) -> bool:
+        def init(self, **kwargs) -> bool:  # type: ignore
             """如果子类定义了这个函数，则会在 __init__ 之后调用这个函数
             返回值为 True 则不会调用 load_file 函数
             """
 
-        def load_file(self) -> bool:
+        def load_file(self) -> bool:  # type: ignore
             """如果子类定义了这个函数，则会在 __init__ 和 init 之后再调用这个函数
 
             请注意，这个函数请尽量使用 try 包裹住可能出现错误的部分
@@ -238,7 +238,7 @@ class Options:
             max_len_value = max(max_len_value, len(str(value)))
             max_len_value_t = max(max_len_value_t, len(str(value_t)))
             option_list.append([key, value, value_t])
-        return [option_list, max_len_key, max_len_value, max_len_value_t]  # noqa
+        return [option_list, max_len_key, max_len_value, max_len_value_t]  # type: ignore
 
     def as_markdown(self, longest: Optional[int] = None) -> str:
         """
@@ -296,14 +296,15 @@ class Options:
         # 所以可以直接修改 string
         for v in value[0]:
             if len(str(v[0])) > option_len:
-                v[0] = f"{str(v[0])[:value_len - 3]}..."
+                v[0] = f"{str(v[0])[:value_len - 3]}..."  # type: ignore
             if len(str(v[1])) > value_len:
-                v[1] = f"{str(v[1])[:value_len - 3]}..."
+                v[1] = f"{str(v[1])[:value_len - 3]}..."  # type: ignore
             if len(str(v[2])) > value_type_len:
-                v[2] = f"{str(v[2])[:value_len - 3]}.."
+                v[2] = f"{str(v[2])[:value_len - 3]}.."  # type: ignore
 
         cache.write(
-            f"| Option{' ' * (option_len - 3)}| Value{' ' * (value_len - 2)}| Value Type{' ' * (value_type_len - 7)}|\n"
+            f"| Option{' ' * (option_len - 3)}| Value{' ' * (value_len - 2)}"
+            f"| Value Type{' ' * (value_type_len - 7)}|\n"
         )
         cache.write(
             f'|:{"-" * (option_len + 3)}|:{"-" * (value_len + 3)}|:{"-" * (value_type_len + 3)}|\n'
