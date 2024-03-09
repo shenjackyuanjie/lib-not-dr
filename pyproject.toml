@@ -59,6 +59,7 @@ post_publish = { call = "scripts.pub:upload_gitea" }
 version = { attr = "lib_not_dr._version_"}
 
 [project.urls]
+Issues = "https://github.com/shenjackyuanjie/lib-not-dr/issues"
 Homepage = "https://github.com/shenjackyuanjie/lib-not-dr"
 Repository = "https://github.com/shenjackyuanjie/lib-not-dr"
 Changelog = "https://github.com/shenjackyuanjie/lib-not-dr/blob/main/docs/change_logs"

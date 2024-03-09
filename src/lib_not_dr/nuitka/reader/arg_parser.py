@@ -79,7 +79,13 @@ def get_cli_nuitka_args() -> dict:
         return {}
 
     # start from --
-    index = sys.argv.index("--")
+    try:
+        index = sys.argv.index("--")
+    except ValueError:
+        # 按理来说不应该出现这种情况
+        # 毕竟是先找到 -- 再进来的
+        warn("-- not found in sys.argv, but entered the get_cli_nuitka_args()")
+        return {}
     new_args = sys.argv[index + 1 :]
     arg_dict = {}
     for arg in new_args:
@@ -87,11 +93,14 @@ def get_cli_nuitka_args() -> dict:
             warn(f"invalid arg: {arg}")
         else:
             arg = arg[2:]  # remove --
-            # arg_name: --<name>=<value>
-        arg_name = arg.split("=")[0]
         if "=" in arg:
-            arg_value = arg.split("=")[1]
+            # arg: --<name>=<value>
+            spilter = arg.find("=")
+            arg_name = arg[:spilter]
+            arg_value = arg[spilter + 1 :]
         else:
+            # arg: --<name>
+            arg_name = arg
             arg_value = True
         arg_dict[arg_name] = arg_value
 
