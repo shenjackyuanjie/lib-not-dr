@@ -4,6 +4,9 @@
 #  All rights reserved
 #  -------------------------------
 
+from __future__ import annotations
+# 兼容 3.8
+
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
